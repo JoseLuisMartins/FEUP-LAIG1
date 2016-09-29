@@ -11,40 +11,40 @@
     <!-- cc: character "x" or "y" or "z" -->
     <!-- tt: "0" or "1" with Boolean significance -->
 
-    
+
 <dsx>
 
 
     <!-- deve definir-se um objeto para raiz do grafo , assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
     <scene root="rute" axis_length="0.5" />
-    
-    
+
+
     <views default="view_default" >
-    
+
         <!-- declaracao obrigatoria de pelo menos uma vista; -->
         <!-- se varias vistas declaradas, o default e' a -->
         <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
-        <!-- a vista muda para a proxima da lista; da --> 
+        <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="p1" near="0.1" far="500" angle="0.4">
-            <from x="5" y="0" z="10" />
+            <from x="15" y="15" z="15" />
             <to x="0" y="0" z="0" />
         </perspective>
-        
+
     </views>
-    
+
 
     <illumination doublesided="1" local="1" >
-    
+
         <ambient r="0.5" g="0.5" b="0.5" a="0.8" />
         <background r="0.1" g="0.1" b="0.8" a="1" />
-        
+
     </illumination>
-    
-    
+
+
     <lights>
-    
+
         <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <omni id="omni1" enabled="1" >
@@ -53,7 +53,7 @@
             <diffuse r="0.5" g="0.5" b="0.5" a="0.5" />
             <specular r="0.5" g="0.8" b="0.5" a="0.5" />
         </omni>
-        
+
         <spot id="spot1" enabled="1" angle="0" exponent="1">
             <!-- atencao, "target" e' diferente de "direction" -->
             <target x="3" y="3" z="0.5" />
@@ -63,10 +63,10 @@
             <specular r="0.5" g="0.5" b="0.5" a="0.5" />
         </spot>
     </lights>
-    
-    
+
+
     <textures>
-    
+
         <!-- Deve existir um ou mais blocos "texture" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <!-- length_s e length_t sao fatores de escala de textura:-->
@@ -79,13 +79,13 @@
         <!-- objetos respetivos podem a violar esta regra.         -->
         <!-- Nao necessario aplicar fatores de escala em  -->
         <!-- quadricas (esfera, ciclindro...) -->
-        <texture id="ss" file="ss" length_s="ff" length_t="ff" />  
-        
+        <texture id="ss" file="ss" length_s="ff" length_t="ff" />
+
     </textures>
 
-    
+
     <materials>
-    
+
         <!-- Deve existir um ou mais blocos "material" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <material id="ss" >
@@ -95,12 +95,12 @@
             <specular r="ff" g="ff" b="ff" a="ff" />
             <shininess value="ff" />
         </material>
-        
+
     </materials>
-    
-    
+
+
     <transformations>
-    
+
         <!-- Deve existir um ou mais blocos "transformation" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <transformation id="ss">
@@ -110,12 +110,12 @@
            <rotate axis="cc" angle="ff" />
            <scale x="ff" y="ff" z="ff" />
         </transformation>
-        
+
     </transformations>
-    
-    
+
+
     <primitives>
-    
+
         <!-- Deve existir um ou mais blocos "primitive" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <primitive id="rectangle">
@@ -125,37 +125,37 @@
             <!-- em OpenGL/GLUT; o cilindro deve adicionalmente ter tampas -->
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
-		
+
 		<primitive id="triangle">
-            <triangle x1="0" y1="0" z1="1" x2="-0.5" y2="0" z2="0" x3="0.5" y3="0" z3="0" />   
+            <triangle x1="0" y1="0" z1="1" x2="-0.5" y2="0" z2="0" x3="0.5" y3="0" z3="0" />
         </primitive>
-		
+
 		<primitive id="cylinder">
             <cylinder base="0.5" top="1" height="1" slices="10" stacks="10" />
         </primitive>
-		
+
 		<primitive id="sphere">
             <sphere radius="1" slices="20" stacks="10" />
         </primitive>
-		
+
 		<primitive id="torus">
             <torus inner="0.5" outer="1" slices="20" loops="5" />
         </primitive>
-        
+
     </primitives>
-    
-    
+
+
     <components>
-        
+
         <component id="ss">
-        
+
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-            
+
                 <!-- deve conter uma referencia a uma das "transformation" -->
                 <!-- declaradas anteriormente -->
                 <transformationref id="ss" />
-                
+
                 <!-- ou, ALTERNATIVAMENTE, transformacoes explicitas, -->
                 <!-- usando zero ou mais das instrucoes seguintes, sem -->
                 <!-- limite nem ordem -->
@@ -164,37 +164,37 @@
                 <rotate axis="cc" angle="ff" />
                 <scale x="ff" y="ff" z="ff" />
             </transformation>
-       
+
             <!-- declaracao obrigatoria de pelo menos um material; -->
             <!-- o material id="inherit", mantem (herda) material do "pai" -->
             <!-- se varios materiais declarados, o default e' o -->
             <!-- primeiro material; de cada vez que se pressione a tecla m/M, -->
-            <!-- o material muda para o proximo material da lista; do --> 
+            <!-- o material muda para o proximo material da lista; do -->
             <!-- ultimo material da lista volta ao primeiro -->
             <materials>
                 <material id="ss" />
             </materials>
-                         
+
             <!-- declaracao obrigatoria de texture -->
             <!-- id="inherit" mantem (herda) a textura do objecto "pai" -->
             <!-- id="none" remove a textura recebida do pai -->
             <!-- a textura declarada sobrepoe a textura recebida do -->
             <!-- objecto "pai" -->
             <texture id="ss" />
-            
+
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
-            
+
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
                 <componentref id="ss" />
                 <primitiveref id="ss" />
-                
+
             </children>
-            
+
         </component>
-        
+
     </components>
 
 </dsx>
