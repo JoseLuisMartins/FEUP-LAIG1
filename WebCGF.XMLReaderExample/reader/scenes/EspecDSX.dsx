@@ -20,7 +20,7 @@
     <scene root="rute" axis_length="0.5" />
 
 
-    <views default="view_default" >
+    <views default="p1" >
 
         <!-- declaracao obrigatoria de pelo menos uma vista; -->
         <!-- se varias vistas declaradas, o default e' a -->
@@ -29,6 +29,11 @@
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="p1" near="0.1" far="500" angle="0.4">
             <from x="15" y="15" z="15" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+
+        <perspective id="p2" near="0.1" far="500" angle="0.4">
+            <from x="5" y="5" z="5" />
             <to x="0" y="0" z="0" />
         </perspective>
 
@@ -54,7 +59,7 @@
             <specular r="0.5" g="0.8" b="0.5" a="0.5" />
         </omni>
 
-        <spot id="spot1" enabled="1" angle="0" exponent="1">
+        <spot id="spot1" enabled="1" angle="0.4" exponent="0.5">
             <!-- atencao, "target" e' diferente de "direction" -->
             <target x="3" y="3" z="0.5" />
             <location x="0" y="0" z="1" />
