@@ -74,20 +74,9 @@ MySceneGraph.prototype.loadViews= function(rootElement) {
 		far = this.reader.getFloat(perspectivesTmp[i], 'far');
 		angle = this.reader.getFloat(perspectivesTmp[i], 'angle');
 
-		var fromTmp = perspectivesTmp[i].getElementsByTagName('from')[0];
-		if (fromTmp == null)
-		onXMLError("Error loading 'from'.");
+		var from = this.getPoint3Element(perspectivesTmp[i].getElementsByTagName('from')[0]);
+		var to = this.getPoint3Element(perspectivesTmp[i].getElementsByTagName('to')[0]);
 
-		var from = new Point3(this.reader.getFloat(fromTmp, 'x'), this.reader.getFloat(fromTmp, 'y'),
-		this.reader.getFloat(fromTmp, 'z'));
-
-
-		var toTmp = perspectivesTmp[i].getElementsByTagName('to')[0];
-		if (toTmp == null)
-		onXMLError("Error loading 'to'.");
-
-		var to = new Point3(this.reader.getFloat(toTmp, 'x'), this.reader.getFloat(toTmp, 'y'),
-		this.reader.getFloat(toTmp, 'z'));
 
 		this.perspectives[i] = new PerspectiveInfo(id, near, far, angle, from, to);
 
@@ -140,16 +129,10 @@ MySceneGraph.prototype.loadSpotLights= function(lightElements) {
 		var angle = this.reader.getFloat(spotTmp[i], 'angle');
 		var exponent = this.reader.getFloat(spotTmp[i], 'exponent');
 
-		var targetTmp = spotTmp[i].getElementsByTagName('target')[0];
-
-		var target = new Point3(this.reader.getFloat(targetTmp, 'x'), this.reader.getFloat(targetTmp, 'y'),
-		this.reader.getFloat(targetTmp, 'z'));
+		var target = this.getPoint3Element(spotTmp[i].getElementsByTagName('target')[0]);
+		var location = this.getPoint3Element(spotTmp[i].getElementsByTagName('location')[0]);
 
 
-		var locationTmp = spotTmp[i].getElementsByTagName('location')[0];
-
-		var location = new Point3(this.reader.getFloat(locationTmp, 'x'), this.reader.getFloat(locationTmp, 'y'),
-		this.reader.getFloat(locationTmp, 'z'));
 
 		this.spotLights[i] = new Spot(lightElement,angle,exponent,target,location);
 	}
@@ -233,6 +216,17 @@ MySceneGraph.prototype.getRGBAElement=function (element) {
 
 	return res;
 }
+
+MySceneGraph.prototype.getPoint3Element=function (element) {
+	if (element == null)
+		onXMLError("Error loading 'Point3' element .");
+
+	var res = new Point3(this.reader.getFloat(element, 'x'), this.reader.getFloat(element, 'y'),
+	this.reader.getFloat(element, 'z'));
+
+	return res;
+}
+
 /*
 * Callback to be executed on any read error
 */
