@@ -24,6 +24,12 @@ XMLscene.prototype.init = function (application) {
   this.gl.depthFunc(this.gl.LEQUAL);
 
   this.axis=new CGFaxis(this);
+
+  // TODO esfera para ir com o caralho
+  this.appearance = new CGFappearance(this);
+  this.appearance.loadTexture("resources\\images\\trash.jpg")
+
+  this.sphere = new Torus(this, 0.5, 1, 20, 10);
 };
 
 XMLscene.prototype.initLights = function () {
@@ -136,5 +142,8 @@ XMLscene.prototype.display = function () {
   if (this.graph.loadedOk)
   {
     this.updateLights();
+
+    this.appearance.apply();
+    this.sphere.display();
   };
 };
