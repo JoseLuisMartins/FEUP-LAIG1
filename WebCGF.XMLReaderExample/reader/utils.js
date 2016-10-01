@@ -59,3 +59,24 @@ class Spot extends Light{
   }
 
 }
+
+class Texture {
+  constructor(id, file, lengthS, lengthT) {
+    this.id = id;
+    this.file = file;
+    this.lengthS = lengthS;
+    this.lengthT = lengthT;
+  }
+}
+
+
+class Material {
+  constructor(id, emission, ambient, diffuse, specular, shininess) {
+    this.id = id;
+    this.emission = emission;
+    this.ambient = ambient;
+    this.diffuse = diffuse;
+		this.specular = specular;
+		this.shininess = shininess;
+  }
+}

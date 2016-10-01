@@ -11,8 +11,8 @@ function MySceneGraph(filename, scene) {
 	this.illumination;
 	this.omniLights;
 	this.spotLights;
-	this.textures;
-	this.materials;
+	this.textures = {};
+	this.materials = {};
 	this.nodes;
 	this.leaves;
 
@@ -39,14 +39,10 @@ MySceneGraph.prototype.onXMLReady=function()
 	var rootElement = this.reader.xmlDoc.documentElement;
 
 	// Here should go the calls for different functions to parse the various blocks
-	var error = this.loadViews(rootElement);
-
-	if (error != null) {
-		this.onXMLError(error);
-		return;
-	}
-
+	this.loadViews(rootElement);
 	this.loadLights(rootElement);
+	this.loadTextures(rootElement);
+	this.loadMaterials(rootElement);
 
 	this.loadedOk=true;
 
@@ -165,33 +161,78 @@ MySceneGraph.prototype.loadLightsCommon = function(lightElement) {
 	id = this.reader.getString(lightElement, 'id');
 	enabled = this.reader.getBoolean(lightElement, 'enabled');
 
-	var ambientTmp = lightElement.getElementsByTagName('ambient')[0];
-	if (ambientTmp == null)
-	onXMLError("Error loading 'to'.");
 
-	var ambient = new ColorRGBA(this.reader.getFloat(ambientTmp, 'r'), this.reader.getFloat(ambientTmp, 'g'),
-	this.reader.getFloat(ambientTmp, 'b'), this.reader.getFloat(ambientTmp, 'a'));
+	var ambient = this.getRGBAElement(lightElement.getElementsByTagName('ambient')[0]);
+	var diffuse = this.getRGBAElement(lightElement.getElementsByTagName('diffuse')[0]);
+	var specular = this.getRGBAElement(lightElement.getElementsByTagName('specular')[0]);
 
 
-	var diffuseTmp = lightElement.getElementsByTagName('diffuse')[0];
-	if (diffuseTmp == null)
-	onXMLError("Error loading 'to'.");
-
-	var diffuse = new ColorRGBA(this.reader.getFloat(diffuseTmp, 'r'), this.reader.getFloat(diffuseTmp, 'g'),
-	this.reader.getFloat(diffuseTmp, 'b'), this.reader.getFloat(diffuseTmp, 'a'));
-
-
-	var specularTmp = lightElement.getElementsByTagName('specular')[0];
-	if (specularTmp == null)
-	onXMLError("Error loading 'to'.");
-
-	var specular = new ColorRGBA(this.reader.getFloat(specularTmp, 'r'), this.reader.getFloat(specularTmp, 'g'),
-	this.reader.getFloat(specularTmp, 'b'), this.reader.getFloat(specularTmp, 'a'));
-
-	return new Light(id, enabled, location, ambient, diffuse, specular);
+	return new Light(id, enabled,location, ambient, diffuse, specular);
 }
 
 
+MySceneGraph.prototype.loadTextures= function(rootElement) {
+	var textures = rootElement.getElementsByTagName('textures')[0];
+
+	if (textures == null)
+		onXMLError("Error loading textures.");
+
+
+	var texturesTmp = textures.getElementsByTagName('texture');
+
+
+	var id,file, lengthS, lengthT;
+
+	for (var i = 0; i < texturesTmp.length; i++) {
+
+		id = this.reader.getString(texturesTmp[i], 'id');
+		file = this.reader.getString(texturesTmp[i], 'file');
+		lengthS = this.reader.getFloat(texturesTmp[i], 'length_s');
+		lengthT = this.reader.getFloat(texturesTmp[i], 'length_t');
+
+		this.textures[id]= new Texture(id, file, lengthS, lengthT);
+
+	}
+}
+
+MySceneGraph.prototype.loadMaterials= function(rootElement) {
+	var materials = rootElement.getElementsByTagName('materials')[0];
+
+	if (materials == null)
+		onXMLError("Error loading materials.");
+
+
+	var materialsTmp = materials.getElementsByTagName('material');
+
+
+	var emission,ambient,diffuse,specular,shininessElement,shininess;
+
+	for (var i = 0; i < materialsTmp.length; i++) {
+
+		id = this.reader.getString(materialsTmp[i], 'id');
+
+		emission = this.getRGBAElement(materialsTmp[i].getElementsByTagName('emission')[0]);
+		ambient = this.getRGBAElement(materialsTmp[i].getElementsByTagName('ambient')[0]);
+		diffuse = this.getRGBAElement(materialsTmp[i].getElementsByTagName('diffuse')[0]);
+		specular = this.getRGBAElement(materialsTmp[i].getElementsByTagName('specular')[0]);
+
+		shininessElement = materialsTmp[i].getElementsByTagName('shininess')[0];
+		shininess = this.reader.getFloat(shininessElement, 'value');
+
+		this.materials[id]= new Material(id, emission, ambient, diffuse, specular, shininess);
+
+	}
+}
+
+MySceneGraph.prototype.getRGBAElement=function (element) {
+	if (element == null)
+		onXMLError("Error loading 'RGBA' element .");
+
+	var res = new ColorRGBA(this.reader.getFloat(element, 'r'), this.reader.getFloat(element, 'g'),
+	this.reader.getFloat(element, 'b'), this.reader.getFloat(element, 'a'));
+
+	return res;
+}
 /*
 * Callback to be executed on any read error
 */
