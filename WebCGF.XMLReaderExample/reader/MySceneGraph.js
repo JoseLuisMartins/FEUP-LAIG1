@@ -150,7 +150,7 @@ MySceneGraph.prototype.loadLightsCommon = function(lightElement) {
 	var specular = this.getRGBAElement(lightElement.getElementsByTagName('specular')[0]);
 
 
-	return new Light(id, enabled,location, ambient, diffuse, specular);
+	return new Light(id, enabled, ambient, diffuse, specular);
 }
 
 
