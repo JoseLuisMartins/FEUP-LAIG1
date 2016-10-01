@@ -6,7 +6,8 @@ function MySceneGraph(filename, scene) {
 	this.scene = scene;
 	scene.graph=this;
 
-
+	this.rootId;
+	this.axis_length;
 	this.perspectives;
 	this.illumination;
 	this.omniLights;
@@ -39,7 +40,9 @@ MySceneGraph.prototype.onXMLReady=function()
 	var rootElement = this.reader.xmlDoc.documentElement;
 
 	// Here should go the calls for different functions to parse the various blocks
+	this.loadScene(rootElement);
 	this.loadViews(rootElement);
+	this.loadIllumination(rootElement);
 	this.loadLights(rootElement);
 	this.loadTextures(rootElement);
 	this.loadMaterials(rootElement);
@@ -53,7 +56,14 @@ MySceneGraph.prototype.onXMLReady=function()
 
 
 MySceneGraph.prototype.loadScene= function(rootElement) {
-	var elems = rootElement.getElementsByTagName('scene');
+	var scene = rootElement.getElementsByTagName('scene')[0];
+
+	if (scene == null)
+	onXMLError("Error loading scene.");
+
+	this.rootId=this.reader.getString(scene,'root');
+	this.axis_length=this.reader.getFloat(scene,'axis_length');
+
 }
 
 MySceneGraph.prototype.loadViews= function(rootElement) {
@@ -81,6 +91,21 @@ MySceneGraph.prototype.loadViews= function(rootElement) {
 		this.perspectives[i] = new PerspectiveInfo(id, near, far, angle, from, to);
 
 	}
+}
+
+
+MySceneGraph.prototype.loadIllumination= function(rootElement) {
+	var illumination = rootElement.getElementsByTagName('illumination')[0];
+
+
+	var doublesided = this.reader.getBoolean(illumination,'doublesided');
+	var local=this.reader.getBoolean(illumination,'local');
+	var ambient = this.getRGBAElement(illumination.getElementsByTagName('ambient')[0]);
+	var background = this.getRGBAElement(illumination.getElementsByTagName('background')[0]);
+
+
+	this.illumination = new Illumination(doublesided, local, ambient, background);
+
 }
 
 MySceneGraph.prototype.loadLights= function(rootElement) {

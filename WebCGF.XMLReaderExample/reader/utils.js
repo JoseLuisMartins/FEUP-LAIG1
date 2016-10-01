@@ -33,7 +33,15 @@ var PerspectiveInfo = function(id, near, far, angle, from, to) {
 	this.to = to;
 }
 
+class Illumination {
+  constructor(doublesided, local, ambient, background) {
+    this.doublesided = doublesided;
+    this.local = local;
+    this.ambient = ambient;
+    this.background = background;
+  }
 
+}
 
 
 class Light {
