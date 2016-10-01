@@ -1,10 +1,15 @@
-var Point = function(x, y, z) {
+var Point2 = function(x, y) {
+	this.x = x;
+	this.y = y;
+}
+
+var Point3 = function(x, y, z) {
 	this.x = x;
 	this.y = y;
 	this.z = z;
 }
 
-var PointW = function(x, y, z, w) {
+var Point3W = function(x, y, z, w) {
   this.x = x;
   this.y = y;
   this.z = z;
@@ -55,7 +60,7 @@ class Spot extends Light{
     this.angle = angle;
     this.exponent = exponent;
     this.location = location;
-    this.direction = new Point(target.x - location.x, target.y - location.y, target.z - location.z);
+    this.direction = new Point3(target.x - location.x, target.y - location.y, target.z - location.z);
   }
 
 }
@@ -76,7 +81,7 @@ class Material {
     this.emission = emission;
     this.ambient = ambient;
     this.diffuse = diffuse;
-		this.specular = specular;
-		this.shininess = shininess;
+	this.specular = specular;
+	this.shininess = shininess;
   }
 }

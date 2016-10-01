@@ -29,7 +29,7 @@ XMLscene.prototype.init = function (application) {
   this.appearance = new CGFappearance(this);
   this.appearance.loadTexture("resources\\images\\trash.jpg")
 
-  this.sphere = new Torus(this, 0.5, 1, 20, 10);
+  this.sphere = new Rectangle(this, new Point2(0,0), new Point2(5, 5));
 };
 
 XMLscene.prototype.initLights = function () {

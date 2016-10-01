@@ -78,7 +78,7 @@ MySceneGraph.prototype.loadViews= function(rootElement) {
 		if (fromTmp == null)
 		onXMLError("Error loading 'from'.");
 
-		var from = new Point(this.reader.getFloat(fromTmp, 'x'), this.reader.getFloat(fromTmp, 'y'),
+		var from = new Point3(this.reader.getFloat(fromTmp, 'x'), this.reader.getFloat(fromTmp, 'y'),
 		this.reader.getFloat(fromTmp, 'z'));
 
 
@@ -86,7 +86,7 @@ MySceneGraph.prototype.loadViews= function(rootElement) {
 		if (toTmp == null)
 		onXMLError("Error loading 'to'.");
 
-		var to = new Point(this.reader.getFloat(toTmp, 'x'), this.reader.getFloat(toTmp, 'y'),
+		var to = new Point3(this.reader.getFloat(toTmp, 'x'), this.reader.getFloat(toTmp, 'y'),
 		this.reader.getFloat(toTmp, 'z'));
 
 		this.perspectives[i] = new PerspectiveInfo(id, near, far, angle, from, to);
@@ -120,7 +120,7 @@ MySceneGraph.prototype.loadOmniLights= function(lightElements) {
 
 		var locationTmp = omniTmp[i].getElementsByTagName('location')[0];
 
-		var location = new PointW(this.reader.getFloat(locationTmp, 'x'), this.reader.getFloat(locationTmp, 'y'),
+		var location = new Point3W(this.reader.getFloat(locationTmp, 'x'), this.reader.getFloat(locationTmp, 'y'),
 		this.reader.getFloat(locationTmp, 'z'),this.reader.getFloat(locationTmp, 'w'));
 
 		this.omniLights[i] = new Omni(lightElement,location);
@@ -142,13 +142,13 @@ MySceneGraph.prototype.loadSpotLights= function(lightElements) {
 
 		var targetTmp = spotTmp[i].getElementsByTagName('target')[0];
 
-		var target = new Point(this.reader.getFloat(targetTmp, 'x'), this.reader.getFloat(targetTmp, 'y'),
+		var target = new Point3(this.reader.getFloat(targetTmp, 'x'), this.reader.getFloat(targetTmp, 'y'),
 		this.reader.getFloat(targetTmp, 'z'));
 
 
 		var locationTmp = spotTmp[i].getElementsByTagName('location')[0];
 
-		var location = new Point(this.reader.getFloat(locationTmp, 'x'), this.reader.getFloat(locationTmp, 'y'),
+		var location = new Point3(this.reader.getFloat(locationTmp, 'x'), this.reader.getFloat(locationTmp, 'y'),
 		this.reader.getFloat(locationTmp, 'z'));
 
 		this.spotLights[i] = new Spot(lightElement,angle,exponent,target,location);
