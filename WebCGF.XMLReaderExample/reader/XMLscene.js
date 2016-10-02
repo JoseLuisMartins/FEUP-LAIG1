@@ -28,7 +28,7 @@ XMLscene.prototype.init = function (application) {
   this.axis=new CGFaxis(this);
 
   // TODO esfera para ir com o caralho
-  this.sphere = new Sphere(this, 20, 20);
+  this.sphere = new Sphere(this, 2, 20, 20);
   this.appearance = new CGFappearance(this);
   this.appearance.loadTexture("resources\\images\\world.png");
 };
