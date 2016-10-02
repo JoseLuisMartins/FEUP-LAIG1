@@ -12,6 +12,8 @@ XMLscene.prototype.constructor = XMLscene;
 XMLscene.prototype.init = function (application) {
   CGFscene.prototype.init.call(this, application);
 
+  this.enableTextures(true);
+
   this.initCameras();
 
   this.initLights();
@@ -26,16 +28,19 @@ XMLscene.prototype.init = function (application) {
   this.axis=new CGFaxis(this);
 
   // TODO esfera para ir com o caralho
+  this.sphere = new Sphere(this, 20, 20);
   this.appearance = new CGFappearance(this);
-  this.appearance.loadTexture("resources\\images\\trash.jpg")
-
-  this.sphere = new Rectangle(this, new Point2(0,0), new Point2(5, 5));
+  this.appearance.loadTexture("resources\\images\\world.png");
 };
 
 XMLscene.prototype.initLights = function () {
 
   this.lights[0].setPosition(2, 3, 3, 1);
-  this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
+  this.lights[0].setAmbient(0, 0, 0, 1);
+  this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
+  this.lights[0].setSpecular(1.0, 1.0, 1.0, 1.0);
+  this.lights[0].setVisible(true);
+  this.lights[0].enable();
   this.lights[0].update();
 };
 
@@ -52,7 +57,7 @@ XMLscene.prototype.setDefaultAppearance = function () {
 
 // Handler called when the graph is finally loaded.
 // As loading is asynchronous, this may be called already after the application has started the run loop
-XMLscene.prototype.onGraphLoaded = function (){
+XMLscene.prototype.onGraphLoaded = function () {
   this.gl.clearColor(this.graph.illumination.background.r,this.graph.illumination.background.g,this.graph.illumination.background.b,this.graph.illumination.background.a);
   this.lights[0].setVisible(true);
   this.lights[0].enable();
@@ -141,12 +146,9 @@ XMLscene.prototype.display = function () {
   // This is one possible way to do it
   if (this.graph.loadedOk)
   {
-
-    this.multMatrix(this.graph.transformations["oi"]);
-
     this.updateLights();
-
-    this.appearance.apply();
-    this.sphere.display();
   };
+
+  this.appearance.apply();
+  this.sphere.display();
 };

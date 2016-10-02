@@ -1,92 +1,62 @@
-/**
- * Sphere
- * @constructor
- */
- function Sphere(scene, slices, stacks) {
- 	CGFobject.call(this,scene);
+function Sphere(scene, slices, stacks) {
+   CGFobject.call(this,scene);
 
-	this.slices = slices;
-	this.stacks = stacks;
+   this.slices = slices;
+   this.stacks = stacks;
 
-	this.textS = 1.0 / this.slices;
-  this.textT = 1.0 / this.stacks;
- 	this.initBuffers();
- };
+   this.initBuffers();
+};
 
- Sphere.prototype = Object.create(CGFobject.prototype);
- Sphere.prototype.constructor = Sphere;
+Sphere.prototype = Object.create(CGFobject.prototype);
+Sphere.prototype.constructor = Sphere;
 
- Sphere.prototype.initBuffers = function() {
-
-	this.vertices = new Array();
-	this.indices = new Array();
-	this.normals = new Array();
-	this.texCoords = new Array();
+Sphere.prototype.initBuffers = function() {
 
 
-	var hor_ang = (2*Math.PI) / this.slices;
-	var ver_ang = (2*Math.PI) / this.stacks;
-	var rect = Math.PI / 2;
+   this.angulo = (Math.PI*2)/this.slices;
+   this.angulo2= (Math.PI)/this.stacks;
 
-	for (i = 0; i < this.slices; i++) {
-		var x = Math.sin(rect)*Math.cos(i*hor_ang);
-		var y = Math.sin(rect)*Math.sin(i*hor_ang);
-		var z = Math.cos(rect);
-		var s = Math.asin(x)/Math.PI + 0.5;
-		var t = Math.asin(y)/Math.PI + 0.5;
+   this.vertices = [];
+   this.indices = [];
+   this.normals = [];
+   this.texCoords = [];
 
-		this.vertices.push(x, y, z);
-		this.normals.push(x, y, z);
-		this.texCoords.push(s, t);
-	}
+   var ang=0;
+   var ang2=0;
+   var x,y;
 
 
-	var top = this.slices;
-	var bottom = 0;
+   for(k = 0; k <= this.stacks; k++){
+       this.vertices.push(Math.cos(ang2), 0, Math.sin(ang2));
+       this.normals.push(Math.cos(ang2), 0, Math.sin(ang2));
+       this.texCoords.push(0,Math.sin(ang2));
+       ang=0;
 
-	for (k = 1; k <= this.stacks; k++) {
+       for(i = 0; i < this.slices; i++){
 
-		var x = Math.sin(rect - k*ver_ang)*Math.cos(0);
-		var y = Math.sin(rect - k*ver_ang)*Math.sin(0);
-		var z = Math.cos(rect - k*ver_ang);
-		var s = Math.asin(x)/Math.PI + 0.5;
-		var t = Math.asin(y)/Math.PI + 0.5;
+               if(i!=(this.slices-1)){
+                   ang+=this.angulo;
+                   x = Math.cos(ang);
+                   y = Math.sin(ang);
+                   this.vertices.push(x * Math.cos(ang2), y * Math.cos(ang2), Math.sin(ang2));
+                   this.normals.push(x * Math.cos(ang2), y * Math.cos(ang2), Math.sin(ang2));
+                   this.texCoords.push((i+1)/this.slices,Math.sin(ang2));
+               }
 
-		this.vertices.push(x, y, z);
-		this.normals.push(x, y, z);
-		this.texCoords.push(s, t);
+           if(k > 0){
+               if(i==(this.slices-1)){
+                   this.indices.push(((k-1)*this.slices)+i,((k-1)*this.slices),(k*this.slices)+i);
+                   this.indices.push((k*this.slices)+i,((k-1)*this.slices),(k*this.slices));
+               }else{
+                   this.indices.push(((k-1)*this.slices)+i,((k-1)*this.slices)+1+i,(k*this.slices)+i);
+                   this.indices.push((k*this.slices)+i,((k-1)*this.slices)+1+i,(k*this.slices)+1+i);
+                   }
+           }
+       }
 
-		for (i = 1; i < this.slices; i++) {
+       ang2+=this.angulo2;
+   }
 
-			x = Math.sin(rect - k*ver_ang)*Math.cos(i*hor_ang);
-			y = Math.sin(rect - k*ver_ang)*Math.sin(i*hor_ang);
-			z = Math.cos(rect - k*ver_ang);
-			s = Math.asin(x)/Math.PI + 0.5;
-			t = Math.asin(y)/Math.PI + 0.5;
-
-			this.vertices.push(x, y, z);
-			this.normals.push(x, y, z);
-			this.texCoords.push(s,t);
-
-			this.indices.push(top);
-			this.indices.push(bottom+1);
-			this.indices.push(top+1);
-			this.indices.push(bottom);
-			this.indices.push(bottom+1);
-			this.indices.push(top);
-
-			top++;
-			bottom++;
-		}
-
-		top++;
-		bottom++;
-
-		this.indices.push(top - 1, bottom - this.slices, top - this.slices);
-		this.indices.push(bottom - 1, bottom - this.slices, top - 1);
-	}
-
-
- 	this.primitiveType = this.scene.gl.TRIANGLES;
- 	this.initGLBuffers();
- };
+   this.primitiveType = this.scene.gl.TRIANGLES;
+   this.initGLBuffers();
+};

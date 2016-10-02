@@ -35,14 +35,34 @@
       0, 0, 1,
     ]
 
-/*
     this.texCoords = [
-      this.minS, this.maxT,
-      this.maxS, this.maxT,
-      this.minS, this.minT,
-      this.maxS, this.minT
+      0, 0,
+      1, 0,
+      0.5, 1
     ]
-    */
 
  	this.initGLBuffers();
  };
+
+/*
+Triangle.prototype.makeVector = function(point1, point2) {
+    return new Point3(point2.x - point1.x, point2.y - point1.y, point2.z - point1.z)
+}
+
+Triangle.prototype.dotProduct = function(point1, point2) {
+    return (point1.x * point2.x) + (point1.y * point2.y) + (point1.z * point2.z);
+}
+
+ Triangle.prototype.calculateLength = function(vec) {
+     return Math.sqrt( (vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z) );
+ }
+
+ Triangle.prototype.getVectorsProperties = function(vec1, vec2) {
+     var length1 = this.calculateLength(vec1);
+     var length2 = this.calculateLength(vec2);
+     var dot = this.dotProduct(vec1, vec2);
+     var angle = Math.acos(dot / (length1 * length2));
+
+     return [length1, length2, angle];
+ }
+*/
