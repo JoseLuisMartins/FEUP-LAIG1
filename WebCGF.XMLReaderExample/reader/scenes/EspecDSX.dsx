@@ -130,7 +130,7 @@
            <!-- deve existir pelo menos uma transformacao -->
            <translate x="0" y="1" z="0" />
            <translate x="1" y="0" z="0" />
-           
+
         </transformation>
     </transformations>
 
@@ -144,9 +144,10 @@
             <!--     rectangle, triangle, cylinder, sphere, torus -->
             <!-- os parametros devem ser interpretados, genericamente como-->
             <!-- em OpenGL/GLUT; o cilindro deve adicionalmente ter tampas -->
-            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
+            <rectangle x1="-0.6" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
 
+        
 		<primitive id="triangle">
             <triangle x1="0" y1="0" z1="1" x2="-0.5" y2="0" z2="0" x3="0.5" y3="0" z3="0" />
         </primitive>
@@ -162,6 +163,8 @@
 		<primitive id="torus">
             <torus inner="0.5" outer="1" slices="20" loops="5" />
         </primitive>
+
+
 
     </primitives>
 

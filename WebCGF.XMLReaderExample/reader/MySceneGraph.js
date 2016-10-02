@@ -15,8 +15,8 @@ function MySceneGraph(filename, scene) {
 	this.textures = {};
 	this.materials = {};
 	this.transformations = {};
-	this.nodes;
-	this.leaves;
+	this.primitives= {};
+	this.components= {};
 
 
 	// File reading
@@ -48,6 +48,8 @@ MySceneGraph.prototype.onXMLReady=function()
 	this.loadTextures(rootElement);
 	this.loadMaterials(rootElement);
 	this.loadTranformations(rootElement);
+	this.loadPrimitives(rootElement);
+
 
 
 	this.loadedOk=true;
@@ -298,6 +300,92 @@ MySceneGraph.prototype.loadTranformations= function(rootElement) {
 
 }
 
+
+
+MySceneGraph.prototype.loadPrimitives=function (rootElement) {
+	var primitives = rootElement.getElementsByTagName('primitives')[0];
+
+	if (primitives == null)
+		this.onXMLError("Error loading primitives.");
+
+
+	var primitiveTmp = primitives.getElementsByTagName('primitive');
+
+
+
+
+	for (var i = 0; i < primitiveTmp.length; i++) {
+			if(primitiveTmp[i].children.length != 1){
+				this.onXMLError("Error loading primitives (more than one tag).");
+				continue;
+			}
+
+			var id = this.reader.getString(primitiveTmp[i],'id');
+			var primitiveTag = primitiveTmp[i].children[0];
+			var primitiveName = primitiveTag.tagName;
+
+			switch (primitiveName) {
+				case 'rectangle':
+							var x1=this.reader.getFloat(primitiveTag,'x1');
+							var y1=this.reader.getFloat(primitiveTag,'y1');
+							var x2=this.reader.getFloat(primitiveTag,'x2');
+							var y2=this.reader.getFloat(primitiveTag,'y2');
+
+							this.primitives[id]= new RectangleData(id,new Point2(x1,y1),new Point2(x2,y2));
+
+					break;
+				case 'triangle':
+							var x1=this.reader.getFloat(primitiveTag,'x1');
+							var y1=this.reader.getFloat(primitiveTag,'y1');
+							var z1=this.reader.getFloat(primitiveTag,'z1');
+							var x2=this.reader.getFloat(primitiveTag,'x2');
+							var y2=this.reader.getFloat(primitiveTag,'y2');
+							var z2=this.reader.getFloat(primitiveTag,'z2');
+							var x3=this.reader.getFloat(primitiveTag,'x3');
+							var y3=this.reader.getFloat(primitiveTag,'y3');
+							var z3=this.reader.getFloat(primitiveTag,'z3');
+
+							this.primitives[id]= new TriangleData(id,new Point3(x1,y1,z1),new Point3(x2,y2,z2),new Point3(x3,y3,z3));
+
+					break;
+				case 'cylinder':
+							var base=this.reader.getFloat(primitiveTag,'base');
+							var top=this.reader.getFloat(primitiveTag,'top');
+							var height=this.reader.getFloat(primitiveTag,'height');
+							var slices=this.reader.getInteger(primitiveTag,'slices');
+							var stacks=this.reader.getInteger(primitiveTag,'stacks');
+
+
+							this.primitives[id]= new CylinderData(id,base,top,height,slices,stacks);
+
+					break;
+				case 'sphere':
+							var radius=this.reader.getFloat(primitiveTag,'radius');
+							var slices=this.reader.getInteger(primitiveTag,'slices');
+							var stacks=this.reader.getInteger(primitiveTag,'stacks');
+
+							this.primitives[id]= new SphereData(id,radius,slices,stacks);
+					break;
+				case 'torus':
+							var inner=this.reader.getFloat(primitiveTag,'inner');
+							var outer=this.reader.getFloat(primitiveTag,'outer');
+							var slices=this.reader.getInteger(primitiveTag,'slices');
+							var loops=this.reader.getInteger(primitiveTag,'loops');
+
+
+
+							this.primitives[id]= new TorusData(id,inner,outer,slices,loops);
+					break;
+				default:
+						this.onXMLError("Error loading primitives(invalid primitive tag).");
+			}
+				console.log(this.primitives[id]);
+	}
+
+
+}
+
+
 MySceneGraph.prototype.getRGBAElement=function (element) {
 	if (element == null)
 		onXMLError("Error loading 'RGBA' element .");
@@ -317,6 +405,14 @@ MySceneGraph.prototype.getPoint3Element=function (element) {
 
 	return res;
 }
+
+
+
+
+
+
+
+
 
 /*
 * Callback to be executed on any read error

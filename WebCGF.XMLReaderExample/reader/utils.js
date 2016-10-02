@@ -93,3 +93,53 @@ class Material {
 	this.shininess = shininess;
   }
 }
+
+
+class RectangleData {
+  constructor(id,p1,p2) {
+		this.id=id;
+    this.p1=p1;
+		this.p2=p2;
+  }
+}
+
+class  TriangleData{
+  constructor(id,p1,p2,p3) {
+		this.id=id;
+    this.p1=p1;
+		this.p2=p2;
+		this.p3=p3;
+  }
+}
+
+class  CylinderData{
+  constructor(id,base,top,height,slices,stacks) {
+		this.id=id;
+    this.base=base;
+		this.top=top;
+		this.height=height;
+		this.slices=slices;
+		this.stacks=stacks;
+  }
+}
+
+
+class  SphereData{
+  constructor(id,radius,slices,stacks) {
+		this.id=id;
+		this.radius=radius;
+		this.slices=slices;
+		this.stacks=stacks;
+  }
+}
+
+
+class  TorusData{
+  constructor(id,inner,outer,slices,loops) {
+		this.id=id;
+		this.inner=inner;
+		this.outer=outer;
+		this.slices=slices;
+		this.loops=loops;
+  }
+}
