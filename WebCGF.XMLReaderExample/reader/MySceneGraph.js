@@ -14,6 +14,7 @@ function MySceneGraph(filename, scene) {
 	this.spotLights;
 	this.textures = {};
 	this.materials = {};
+	this.transformations = {};
 	this.nodes;
 	this.leaves;
 
@@ -46,6 +47,8 @@ MySceneGraph.prototype.onXMLReady=function()
 	this.loadLights(rootElement);
 	this.loadTextures(rootElement);
 	this.loadMaterials(rootElement);
+	this.loadTranformations(rootElement);
+
 
 	this.loadedOk=true;
 
@@ -230,6 +233,69 @@ MySceneGraph.prototype.loadMaterials= function(rootElement) {
 		this.materials[id]= new Material(id, emission, ambient, diffuse, specular, shininess);
 
 	}
+}
+
+MySceneGraph.prototype.loadTranformations= function(rootElement) {
+	var transformations = rootElement.getElementsByTagName('transformations')[0];
+
+	if (transformations == null)
+			onXMLError("Error loading transformations.");
+
+	var transformationsTmp = transformations.getElementsByTagName('transformation');
+
+
+
+	for (var i = 0; i < transformationsTmp.length; i++) {
+			var id=this.reader.getString(transformationsTmp[i],'id');
+
+			var m = [
+				1, 0, 0, 0,
+				0, 1, 0, 0,
+				0, 0, 1, 0,
+				0, 0, 0, 1
+			];
+
+			for (var j = 0; j < transformationsTmp[i].children.length; j++) {
+				var transformation =	transformationsTmp[i].children[j];
+				var transformationName = transformation.tagName;
+
+
+					switch (transformationName) {
+						case 'translate':
+
+							var translateCoords = this.getPoint3Element(transformation);
+							mat4.translate(m,m,[translateCoords.x,translateCoords.y,translateCoords.z]);
+
+							break;
+						case 'rotate':
+									var rotationAxis=this.reader.getString(transformation,'axis');
+									var angle=	this.reader.getFloat(transformation,'angle');
+
+								  switch (rotationAxis) {
+								  	case 'x':
+								  				mat4.rotate(m,m,angle,[1,0,0]);
+								  		break;
+										case 'y':
+									  		  mat4.rotate(m,m,angle,[0,1,0]);
+									  	break;
+										case 'z':
+										  		mat4.rotate(m,m,angle,[0,0,1]);
+											break;
+								  }
+
+							break;
+						case 'scale':
+
+							var scaleCoords = this.getPoint3Element(transformation);
+							mat4.scale(m,m,[scaleCoords.x,scaleCoords.y,scaleCoords.z]);
+
+							break;
+						}
+			}
+
+				this.transformations[id]=m;
+	}
+
 }
 
 MySceneGraph.prototype.getRGBAElement=function (element) {

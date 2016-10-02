@@ -141,6 +141,9 @@ XMLscene.prototype.display = function () {
   // This is one possible way to do it
   if (this.graph.loadedOk)
   {
+
+    this.multMatrix(this.graph.transformations["oi"]);
+
     this.updateLights();
 
     this.appearance.apply();
