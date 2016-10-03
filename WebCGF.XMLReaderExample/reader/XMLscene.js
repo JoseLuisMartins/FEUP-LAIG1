@@ -147,8 +147,11 @@ XMLscene.prototype.display = function () {
   if (this.graph.loadedOk)
   {
     this.updateLights();
+    //this.multMatrix(this.graph.transformations["oi"]);
+    
   };
 
   this.appearance.apply();
+
   this.sphere.display();
 };

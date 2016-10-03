@@ -143,3 +143,14 @@ class  TorusData{
 		this.loops=loops;
   }
 }
+
+class  Component{
+  constructor(id,transformationId,materialIds,textureId,componentIds,primitiveIds) {
+		this.id=id;
+		this.transformationId=transformationId;
+		this.materialIds=materialIds;
+		this.textureId=textureId;
+		this.componentIds=componentIds;
+		this.primitiveIds=primitiveIds;
+  }
+}
