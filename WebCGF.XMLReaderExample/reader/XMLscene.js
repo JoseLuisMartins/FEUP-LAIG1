@@ -28,7 +28,7 @@ XMLscene.prototype.init = function (application) {
   this.axis=new CGFaxis(this);
 
   // TODO esfera para ir com o caralho
-  this.sphere = new Sphere(this, 2, 20, 20);
+  this.sphere = new Triangle(this,new Point3(0,0,0),new Point3(2,0,0),new Point3(1,2,0));
   this.appearance = new CGFappearance(this);
   this.appearance.loadTexture("resources\\images\\world.png");
 };
@@ -120,6 +120,7 @@ XMLscene.prototype.updateLights = function () {
 }
 
 
+
 XMLscene.prototype.display = function () {
   // ---- BEGIN Background, camera and axis setup
 
@@ -147,11 +148,16 @@ XMLscene.prototype.display = function () {
   if (this.graph.loadedOk)
   {
     this.updateLights();
-    //this.multMatrix(this.graph.transformations["oi"]);
-    
+
+    for (var i = 0; i < this.graph.displayables.length; i++) {
+      this.pushMatrix();
+      this.multMatrix(this.graph.displayables[i].transformation);
+      this.graph.displayables[i].primitive.display();
+      this.popMatrix();
+
+    }
   };
 
   this.appearance.apply();
-
-  this.sphere.display();
+  //this.sphere.display();
 };

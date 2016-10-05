@@ -17,7 +17,7 @@
 
     <!-- deve definir-se um objeto para raiz do grafo , assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
-    <scene root="rute" axis_length="7" />
+    <scene root="comp1" axis_length="7" />
 
 
     <views default="p1" >
@@ -84,8 +84,8 @@
         <!-- objetos respetivos podem a violar esta regra.         -->
         <!-- Nao necessario aplicar fatores de escala em  -->
         <!-- quadricas (esfera, ciclindro...) -->
-        <texture id="ss" file="/resources/images/black.png" length_s="0.5" length_t="1.3" />
-        <texture id="s2" file="/resources/images/black.png" length_s="0.4" length_t="1.2" />
+        <texture id="t1" file="/resources/images/clock.png" length_s="0.5" length_t="1.3" />
+        <texture id="t2" file="/resources/images/world.png" length_s="0.4" length_t="1.2" />
     </textures>
 
 
@@ -93,7 +93,7 @@
 
         <!-- Deve existir um ou mais blocos "material" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <material id="ss" >
+        <material id="m1" >
             <emission r="0.2" g="0.2" b="0.2" a="0.2" />
             <ambient r="0.3" g="0.3" b="0.3" a="0.3" />
             <diffuse r="0.4" g="0.4" b="0.4" a="0.4" />
@@ -101,7 +101,7 @@
             <shininess value="0.8" />
         </material>
 
-        <material id="s2" >
+        <material id="m2" >
             <emission r="0.2" g="0.2" b="0.2" a="0.2" />
             <ambient r="0.3" g="0.3" b="0.3" a="0.3" />
             <diffuse r="0.4" g="0.4" b="0.4" a="0.4" />
@@ -171,7 +171,7 @@
 
     <components>
 
-        <component id="cmp">
+        <component id="comp1">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
@@ -185,8 +185,6 @@
                 <!-- limite nem ordem -->
                 <!-- ex: bloco transformation pode ficar sem conteudo -->
                 <translate x="2" y="2" z="2" />
-                <rotate axis="y" angle="0" />
-                <scale x="1" y="1" z="2" />
             </transformation>
 
             <!-- declaracao obrigatoria de pelo menos um material; -->
@@ -196,9 +194,8 @@
             <!-- o material muda para o proximo material da lista; do -->
             <!-- ultimo material da lista volta ao primeiro -->
             <materials>
-                <material id="mat" />
-                <material id="inherit" />
-                <material id="default" />
+                <material id="m1" />
+                <material id="m2" />
             </materials>
 
             <!-- declaracao obrigatoria de texture -->
@@ -206,7 +203,7 @@
             <!-- id="none" remove a textura recebida do pai -->
             <!-- a textura declarada sobrepoe a textura recebida do -->
             <!-- objecto "pai" -->
-            <texture id="texturaca" />
+            <texture id="t1" />
 
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
@@ -214,11 +211,10 @@
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
-                <componentref id="ss" />
-                <componentref id="s1" />
-                <componentref id="s2" />
-                <primitiveref id="ssdasda" />
-                <primitiveref id="sasda" />
+                <componentref id="cmp2" />
+                <componentref id="cmp3" />
+                <primitiveref id="torus" />
+
             </children>
 
         </component>
@@ -228,49 +224,47 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
 
-                <!-- deve conter uma referencia a uma das "transformation" -->
-                <!-- declaradas anteriormente -->
-                <!-- <transformationref id="sa" /> -->
-
-                <!-- ou, ALTERNATIVAMENTE, transformacoes explicitas, -->
-                <!-- usando zero ou mais das instrucoes seguintes, sem -->
-                <!-- limite nem ordem -->
-                <!-- ex: bloco transformation pode ficar sem conteudo -->
-                <translate x="2" y="2" z="2" />
-                <rotate axis="y" angle="0" />
-                <scale x="1" y="1" z="2" />
+                <translate x="1" y="1" z="1" />
             </transformation>
 
-            <!-- declaracao obrigatoria de pelo menos um material; -->
-            <!-- o material id="inherit", mantem (herda) material do "pai" -->
-            <!-- se varios materiais declarados, o default e' o -->
-            <!-- primeiro material; de cada vez que se pressione a tecla m/M, -->
-            <!-- o material muda para o proximo material da lista; do -->
-            <!-- ultimo material da lista volta ao primeiro -->
             <materials>
                 <material id="mat" />
                 <material id="inherit" />
                 <material id="default" />
             </materials>
 
-            <!-- declaracao obrigatoria de texture -->
-            <!-- id="inherit" mantem (herda) a textura do objecto "pai" -->
-            <!-- id="none" remove a textura recebida do pai -->
-            <!-- a textura declarada sobrepoe a textura recebida do -->
-            <!-- objecto "pai" -->
-            <texture id="texturaca" />
 
-            <!-- bloco "children" obrigatorio num "component" -->
+            <texture id="t1" />
+
+
             <children>
 
-                <!-- deve existir uma ou mais tags "componentref" e/ou -->
-                <!-- "primitiveref", identificando outros -->
-                <!-- componentes ou primitivas -->
-                <componentref id="ss" />
-                <componentref id="s1" />
-                <componentref id="s2" />
-                <primitiveref id="ssdasda" />
-                <primitiveref id="sasda" />
+                <primitiveref id="rectangle" />
+            </children>
+
+        </component>
+
+        <component id="cmp3">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+
+                <translate x="5" y="5" z="5" />
+            </transformation>
+
+            <materials>
+                <material id="mat" />
+                <material id="inherit" />
+                <material id="default" />
+            </materials>
+
+
+            <texture id="t1" />
+
+
+            <children>
+
+                <primitiveref id="triangle" />
             </children>
 
         </component>
