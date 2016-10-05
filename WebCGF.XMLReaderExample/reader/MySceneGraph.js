@@ -6,27 +6,17 @@ function MySceneGraph(filename, scene) {
 	this.scene = scene;
 	scene.graph=this;
 
-	this.rootId;
+	this.rootID;
 	this.axis_length;
-	this.perspectives;
+	this.perspectives = [];
 	this.illumination;
-	this.omniLights;
-	this.spotLights;
+	this.omniLights = [];
+	this.spotLights = [];
 	this.textures = {};
 	this.materials = {};
 	this.transformations = {};
 	this.nodes = {};
 	this.displayables = [];
-
-
-	//current
-  this.currentTexture;
-  this.currentMaterial;
-  this.currentTransformation = mat4.create();
-  //stacks
-  this.textureStack = [];
-  this.materialStack = [];
-  this.transformationStack = [];
 
 
 	// File reading
@@ -60,7 +50,7 @@ MySceneGraph.prototype.onXMLReady=function()
 	this.loadTranformations(rootElement);
 	this.loadPrimitives(rootElement);
 	this.loadComponents(rootElement);
-	this.visitGraph(this.rootId);
+	this.loadGraph();
 
 
 	this.loadedOk=true;
@@ -71,60 +61,57 @@ MySceneGraph.prototype.onXMLReady=function()
 
 
 
-MySceneGraph.prototype.loadScene= function(rootElement) {
+MySceneGraph.prototype.loadScene = function(rootElement) {
 	var scene = rootElement.getElementsByTagName('scene')[0];
 
 	if (scene == null)
 	onXMLError("Error loading scene.");
 
-	this.rootId=this.reader.getString(scene,'root');
-	this.axis_length=this.reader.getFloat(scene,'axis_length');
+	this.rootID = this.reader.getString(scene, 'root');
+	this.axis_length = this.reader.getFloat(scene, 'axis_length');
 
 }
 
-MySceneGraph.prototype.loadViews= function(rootElement) {
+MySceneGraph.prototype.loadViews = function(rootElement) {
+	var viewElement, perspectiveElements, id, near, far, angle, from, to;
 
-	var view = rootElement.getElementsByTagName('views')[0];
-	if (view == null)
-	onXMLError("Error loading view.");
-
-
-	var perspectivesTmp = view.getElementsByTagName('perspective');
-	this.perspectives = new Array(perspectivesTmp.length);
-
-	var id,near, far, angle;
-	for (var i = 0; i < perspectivesTmp.length; i++) {
-
-		id = this.reader.getString(perspectivesTmp[i], 'id');
-		near = this.reader.getFloat(perspectivesTmp[i], 'near');
-		far = this.reader.getFloat(perspectivesTmp[i], 'far');
-		angle = this.reader.getFloat(perspectivesTmp[i], 'angle');
-
-		var from = this.getPoint3Element(perspectivesTmp[i].getElementsByTagName('from')[0]);
-		var to = this.getPoint3Element(perspectivesTmp[i].getElementsByTagName('to')[0]);
+	viewElement = rootElement.getElementsByTagName('views')[0];
+	if (viewElement == null)
+		onXMLError("Error loading view.");
 
 
-		this.perspectives[i] = new PerspectiveInfo(id, near, far, angle, from, to);
+	perspectiveElements = viewElement.getElementsByTagName('perspective');
 
+
+	for (var perspectiveElement of perspectiveElements) {
+		id = this.reader.getString(perspectiveElement, 'id');
+		near = this.reader.getFloat(perspectiveElement, 'near');
+		far = this.reader.getFloat(perspectiveElement, 'far');
+		angle = this.reader.getFloat(perspectiveElement, 'angle');
+		from = this.getPoint3Element(perspectiveElement.getElementsByTagName('from')[0]);
+		to = this.getPoint3Element(perspectiveElement.getElementsByTagName('to')[0]);
+
+		this.perspectives.push(new PerspectiveInfo(id, near, far, angle, from, to));
 	}
 }
 
 
 MySceneGraph.prototype.loadIllumination= function(rootElement) {
-	var illumination = rootElement.getElementsByTagName('illumination')[0];
+	var illuminationElement, doublesided, local, ambient, background;
+
+	illuminationElement = rootElement.getElementsByTagName('illumination')[0];
 
 
-	var doublesided = this.reader.getBoolean(illumination,'doublesided');
-	var local=this.reader.getBoolean(illumination,'local');
-	var ambient = this.getRGBAElement(illumination.getElementsByTagName('ambient')[0]);
-	var background = this.getRGBAElement(illumination.getElementsByTagName('background')[0]);
-
+	doublesided = this.reader.getBoolean(illuminationElement, 'doublesided');
+	local = this.reader.getBoolean(illuminationElement, 'local');
+	ambient = this.getRGBAElement(illuminationElement.getElementsByTagName('ambient')[0]);
+	background = this.getRGBAElement(illuminationElement.getElementsByTagName('background')[0]);
 
 	this.illumination = new Illumination(doublesided, local, ambient, background);
-
 }
 
-MySceneGraph.prototype.loadLights= function(rootElement) {
+
+MySceneGraph.prototype.loadLights = function(rootElement) {
 	var lightElements = rootElement.getElementsByTagName('lights')[0];
 
 	if (lightElements == null)
@@ -138,269 +125,238 @@ MySceneGraph.prototype.loadLights= function(rootElement) {
 
 }
 
-MySceneGraph.prototype.loadOmniLights= function(lightElements) {
 
-	var omniTmp = lightElements.getElementsByTagName('omni');
+MySceneGraph.prototype.loadOmniLights = function(lightElements) {
+	var omniElements, lightElement, locationElement, location;
 
-	if(omniTmp.length > 0)
-		this.omniLights = new Array(omniTmp.length);
+	omniElements = lightElements.getElementsByTagName('omni');
 
-	for (var i = 0; i < omniTmp.length; i++) {
-		var lightElement = this.loadLightsCommon(omniTmp[i]);
+	for (var omniElement of omniElements) {
+		lightElement = this.loadLightsCommon(omniElement);
 
-		var locationTmp = omniTmp[i].getElementsByTagName('location')[0];
+		locationElement = omniElement.getElementsByTagName('location')[0];
+		location = new Point3W(this.reader.getFloat(locationElement, 'x'), this.reader.getFloat(locationElement, 'y'),
+			this.reader.getFloat(locationElement, 'z'),this.reader.getFloat(locationElement, 'w'));
 
-		var location = new Point3W(this.reader.getFloat(locationTmp, 'x'), this.reader.getFloat(locationTmp, 'y'),
-		this.reader.getFloat(locationTmp, 'z'),this.reader.getFloat(locationTmp, 'w'));
-
-		this.omniLights[i] = new Omni(lightElement,location);
-
+		this.omniLights.push(new Omni(lightElement, location));
 	}
 }
 
-MySceneGraph.prototype.loadSpotLights= function(lightElements) {
 
-	var spotTmp = lightElements.getElementsByTagName('spot');
+MySceneGraph.prototype.loadSpotLights = function(lightElements) {
+	var spotElements, lightElement, angle, exponent, target, location;
 
-	if(spotTmp.length > 0)
-		this.spotLights = new Array(spotTmp.length);
+	var spotElements = lightElements.getElementsByTagName('spot');
 
-	for (var i = 0; i < spotTmp.length; i++) {
-		var lightElement = this.loadLightsCommon(spotTmp[i]);
-		var angle = this.reader.getFloat(spotTmp[i], 'angle');
-		var exponent = this.reader.getFloat(spotTmp[i], 'exponent');
+	for (var spotElement of spotElements) {
+		lightElement = this.loadLightsCommon(spotElement);
+		angle = this.reader.getFloat(spotElement, 'angle');
+		exponent = this.reader.getFloat(spotElement, 'exponent');
+		target = this.getPoint3Element(spotElement.getElementsByTagName('target')[0]);
+		location = this.getPoint3Element(spotElement.getElementsByTagName('location')[0]);
 
-		var target = this.getPoint3Element(spotTmp[i].getElementsByTagName('target')[0]);
-		var location = this.getPoint3Element(spotTmp[i].getElementsByTagName('location')[0]);
-
-
-
-		this.spotLights[i] = new Spot(lightElement,angle,exponent,target,location);
+		this.spotLights.push(new Spot(lightElement, angle, exponent, target, location));
 	}
 }
+
 
 MySceneGraph.prototype.loadLightsCommon = function(lightElement) {
-	var id,enabled;
+	var id, enabled, ambient, diffuse, specular;
 
 	id = this.reader.getString(lightElement, 'id');
 	enabled = this.reader.getBoolean(lightElement, 'enabled');
-
-
-	var ambient = this.getRGBAElement(lightElement.getElementsByTagName('ambient')[0]);
-	var diffuse = this.getRGBAElement(lightElement.getElementsByTagName('diffuse')[0]);
-	var specular = this.getRGBAElement(lightElement.getElementsByTagName('specular')[0]);
-
+	ambient = this.getRGBAElement(lightElement.getElementsByTagName('ambient')[0]);
+	diffuse = this.getRGBAElement(lightElement.getElementsByTagName('diffuse')[0]);
+	specular = this.getRGBAElement(lightElement.getElementsByTagName('specular')[0]);
 
 	return new Light(id, enabled, ambient, diffuse, specular);
 }
 
 
-MySceneGraph.prototype.loadTextures= function(rootElement) {
-	var textures = rootElement.getElementsByTagName('textures')[0];
+MySceneGraph.prototype.loadTextures = function(rootElement) {
+	var texturesElement, textureElements, id, file, lengthS, lengthT;
 
-	if (textures == null)
+	var texturesElement = rootElement.getElementsByTagName('textures')[0];
+	if (texturesElement == null)
 		onXMLError("Error loading textures.");
 
+	textureElements = texturesElement.getElementsByTagName('texture');
 
-	var texturesTmp = textures.getElementsByTagName('texture');
+	for (var textureElement of textureElements) {
+		id = this.reader.getString(textureElement, 'id');
+		file = this.reader.getString(textureElement, 'file');
+		lengthS = this.reader.getFloat(textureElement, 'length_s');
+		lengthT = this.reader.getFloat(textureElement, 'length_t');
 
-
-	var id,file, lengthS, lengthT;
-
-	for (var i = 0; i < texturesTmp.length; i++) {
-
-		id = this.reader.getString(texturesTmp[i], 'id');
-		file = this.reader.getString(texturesTmp[i], 'file');
-		lengthS = this.reader.getFloat(texturesTmp[i], 'length_s');
-		lengthT = this.reader.getFloat(texturesTmp[i], 'length_t');
-
-		this.textures[id]= new Texture(id, file, lengthS, lengthT);
-
+		this.textures[id] = new Texture(id, file, lengthS, lengthT);
 	}
 }
 
-MySceneGraph.prototype.loadMaterials= function(rootElement) {
-	var materials = rootElement.getElementsByTagName('materials')[0];
 
-	if (materials == null)
+MySceneGraph.prototype.loadMaterials = function(rootElement) {
+	var materialsElement, materialElements, id, emission,
+	ambient, diffuse, specular, shininessElement, shininess;
+
+	var materialsElement = rootElement.getElementsByTagName('materials')[0];
+	if (materialsElement == null)
 		onXMLError("Error loading materials.");
 
+	materialElements = materialsElement.getElementsByTagName('material');
 
-	var materialsTmp = materials.getElementsByTagName('material');
+	for (var materialElement of materialElements) {
+		id = this.reader.getString(materialElement, 'id');
+		emission = this.getRGBAElement(materialElement.getElementsByTagName('emission')[0]);
+		ambient = this.getRGBAElement(materialElement.getElementsByTagName('ambient')[0]);
+		diffuse = this.getRGBAElement(materialElement.getElementsByTagName('diffuse')[0]);
+		specular = this.getRGBAElement(materialElement.getElementsByTagName('specular')[0]);
 
-
-	var id,emission,ambient,diffuse,specular,shininessElement,shininess;
-
-	for (var i = 0; i < materialsTmp.length; i++) {
-
-		id = this.reader.getString(materialsTmp[i], 'id');
-
-		emission = this.getRGBAElement(materialsTmp[i].getElementsByTagName('emission')[0]);
-		ambient = this.getRGBAElement(materialsTmp[i].getElementsByTagName('ambient')[0]);
-		diffuse = this.getRGBAElement(materialsTmp[i].getElementsByTagName('diffuse')[0]);
-		specular = this.getRGBAElement(materialsTmp[i].getElementsByTagName('specular')[0]);
-
-		shininessElement = materialsTmp[i].getElementsByTagName('shininess')[0];
+		shininessElement = materialElement.getElementsByTagName('shininess')[0];
 		shininess = this.reader.getFloat(shininessElement, 'value');
 
 		this.materials[id]= new Material(id, emission, ambient, diffuse, specular, shininess);
-
 	}
 }
 
-MySceneGraph.prototype.loadTranformations= function(rootElement) {
-	var transformations = rootElement.getElementsByTagName('transformations')[0];
 
-	if (transformations == null)
+MySceneGraph.prototype.loadTranformations = function(rootElement) {
+	var transformationsElement, transformationElements, id;
+
+	transformationsElement = rootElement.getElementsByTagName('transformations')[0];
+	if (transformationsElement == null)
 			onXMLError("Error loading transformations.");
 
-	var transformationsTmp = transformations.getElementsByTagName('transformation');
+	transformationElements = transformationsElement.getElementsByTagName('transformation');
 
-
-
-	for (var i = 0; i < transformationsTmp.length; i++) {
-			var id=this.reader.getString(transformationsTmp[i],'id');
-
-			this.transformations[id]=this.getTranformationMatrix(transformationsTmp[i]);
-
+	for (transformationElement of transformationElements) {
+		id = this.reader.getString(transformationElement, 'id');
+		this.transformations[id] = this.getTranformationMatrix(transformationElement);
 	}
-
 }
 
-MySceneGraph.prototype.getTranformationMatrix=function (transformationElement) {
-	var m = [
-		1, 0, 0, 0,
-		0, 1, 0, 0,
-		0, 0, 1, 0,
-		0, 0, 0, 1
-	];
 
-	for (var j = 0; j < transformationElement.children.length; j++) {
-		var transformation =	transformationElement.children[j];
+MySceneGraph.prototype.getTranformationMatrix = function(transformationElement) {
+	var matrix = mat4.create();
+
+	for (var transformation of transformationElement.children) {
 		var transformationName = transformation.tagName;
 
+		switch (transformationName) {
+			case 'translate':
+				var translateCoords;
 
-			switch (transformationName) {
-				case 'translate':
+				translateCoords = this.getPoint3Element(transformation);
+				mat4.translate(matrix, matrix, translateCoords.toArray())
+				break;
 
-					var translateCoords = this.getPoint3Element(transformation);
-					mat4.translate(m,m,[translateCoords.x,translateCoords.y,translateCoords.z]);
+			case 'rotate':
+				var rotationAxis, angle, rotation;
 
-					break;
-				case 'rotate':
-							var rotationAxis=this.reader.getString(transformation,'axis');
-							var angle=	this.reader.getFloat(transformation,'angle');
+				rotationAxis = this.reader.getString(transformation, 'axis');
+				angle = this.reader.getFloat(transformation, 'angle');
 
-							switch (rotationAxis) {
-								case 'x':
-											mat4.rotate(m,m,angle,[1,0,0]);
-									break;
-								case 'y':
-											mat4.rotate(m,m,angle,[0,1,0]);
-									break;
-								case 'z':
-											mat4.rotate(m,m,angle,[0,0,1]);
-									break;
-							}
+				if (rotationAxis == 'x') 			rotation = [1,0,0];
+				else if (rotationAxis == 'y') rotation = [0,1,0];
+				else if (rotationAxis == 'z') rotation = [0,0,1];
 
-					break;
-				case 'scale':
+				mat4.rotate(matrix, matrix, angle, rotation);
+				break;
 
-					var scaleCoords = this.getPoint3Element(transformation);
-					mat4.scale(m,m,[scaleCoords.x,scaleCoords.y,scaleCoords.z]);
+			case 'scale':
+				var scaleCoords;
 
-					break;
-				}
+				scaleCoords = this.getPoint3Element(transformation);
+				mat4.scale(matrix, matrix, scaleCoords.toArray());
+				break;
+		}
 	}
 
-	return m;
+	return matrix;
 }
 
-MySceneGraph.prototype.loadPrimitives=function (rootElement) {
-	var primitives = rootElement.getElementsByTagName('primitives')[0];
 
-	if (primitives == null)
+MySceneGraph.prototype.loadPrimitives = function(rootElement) {
+	var primitivesElement, primitiveElements, id, primitiveTag, primitiveName;
+
+	var primitivesElement = rootElement.getElementsByTagName('primitives')[0];
+	if (primitivesElement == null)
 		this.onXMLError("Error loading primitives.");
 
+	primitiveElements = primitivesElement.getElementsByTagName('primitive');
 
-	var primitiveTmp = primitives.getElementsByTagName('primitive');
+	for (var primitiveElement of primitiveElements) {
+		if (primitiveElement.children.length != 1) {
+			this.onXMLError("Error loading primitives (more than one tag).");
+			continue;
+		}
 
+		id = this.reader.getString(primitiveElement, 'id');
+		primitiveTag = primitiveElement.children[0];
+		primitiveName = primitiveTag.tagName;
 
+		var primitive = this.createPrimitive(primitiveName, primitiveTag);
+		if (primitive == null)	;
 
-
-	for (var i = 0; i < primitiveTmp.length; i++) {
-			if(primitiveTmp[i].children.length != 1){
-				this.onXMLError("Error loading primitives (more than one tag).");
-				continue;
-			}
-
-			var id = this.reader.getString(primitiveTmp[i],'id');
-			var primitiveTag = primitiveTmp[i].children[0];
-			var primitiveName = primitiveTag.tagName;
-
-			switch (primitiveName) {
-				case 'rectangle':
-							var x1=this.reader.getFloat(primitiveTag,'x1');
-							var y1=this.reader.getFloat(primitiveTag,'y1');
-							var x2=this.reader.getFloat(primitiveTag,'x2');
-							var y2=this.reader.getFloat(primitiveTag,'y2');
-
-							this.nodes[id]= new Rectangle(this.scene,new Point2(x1,y1),new Point2(x2,y2));
-
-					break;
-				case 'triangle':
-							var x1=this.reader.getFloat(primitiveTag,'x1');
-							var y1=this.reader.getFloat(primitiveTag,'y1');
-							var z1=this.reader.getFloat(primitiveTag,'z1');
-							var x2=this.reader.getFloat(primitiveTag,'x2');
-							var y2=this.reader.getFloat(primitiveTag,'y2');
-							var z2=this.reader.getFloat(primitiveTag,'z2');
-							var x3=this.reader.getFloat(primitiveTag,'x3');
-							var y3=this.reader.getFloat(primitiveTag,'y3');
-							var z3=this.reader.getFloat(primitiveTag,'z3');
-
-							this.nodes[id]= new Triangle(this.scene,new Point3(x1,y1,z1),new Point3(x2,y2,z2),new Point3(x3,y3,z3));
-
-					break;
-				case 'cylinder':
-							var base=this.reader.getFloat(primitiveTag,'base');
-							var top=this.reader.getFloat(primitiveTag,'top');
-							var height=this.reader.getFloat(primitiveTag,'height');
-							var slices=this.reader.getInteger(primitiveTag,'slices');
-							var stacks=this.reader.getInteger(primitiveTag,'stacks');
-
-
-							this.nodes[id]= new Cylinder(this.scene,base,top,height,slices,stacks);
-
-					break;
-				case 'sphere':
-							var radius=this.reader.getFloat(primitiveTag,'radius');
-							var slices=this.reader.getInteger(primitiveTag,'slices');
-							var stacks=this.reader.getInteger(primitiveTag,'stacks');
-
-							this.nodes[id]= new Sphere(this.scene,radius,slices,stacks);
-					break;
-				case 'torus':
-							var inner=this.reader.getFloat(primitiveTag,'inner');
-							var outer=this.reader.getFloat(primitiveTag,'outer');
-							var slices=this.reader.getInteger(primitiveTag,'slices');
-							var loops=this.reader.getInteger(primitiveTag,'loops');
-
-
-
-							this.nodes[id]= new Torus(this.scene,inner,outer,slices,loops);
-					break;
-				default:
-						this.onXMLError("Error loading primitives(invalid primitive tag).");
-			}
-
+		this.nodes[id] = primitive;
 	}
-
-
 }
 
 
-MySceneGraph.prototype.loadComponents= function(rootElement) {
+MySceneGraph.prototype.createPrimitive = function(primitiveName, primitiveTag) {
+	var primitive;
+
+	switch (primitiveName) {
+		case 'rectangle':
+			var point1 = new Point2(this.reader.getFloat(primitiveTag, 'x1'), this.reader.getFloat(primitiveTag, 'y1'));
+			var point2 = new Point2(this.reader.getFloat(primitiveTag, 'x2'), this.reader.getFloat(primitiveTag, 'y2'));
+
+			primitive = new Rectangle(this.scene, point1, point2);
+			break;
+
+		case 'triangle':
+			var point1 = new Point3(this.reader.getFloat(primitiveTag, 'x1'), this.reader.getFloat(primitiveTag, 'y1'), this.reader.getFloat(primitiveTag, 'z1'));
+			var point2 = new Point3(this.reader.getFloat(primitiveTag, 'x2'), this.reader.getFloat(primitiveTag, 'y2'), this.reader.getFloat(primitiveTag, 'z2'));
+			var point3 = new Point3(this.reader.getFloat(primitiveTag, 'x3'), this.reader.getFloat(primitiveTag, 'y3'), this.reader.getFloat(primitiveTag, 'z3'));
+
+			primitive = new Triangle(this.scene, point1, point2, point3);
+			break;
+
+		case 'cylinder':
+			var base = this.reader.getFloat(primitiveTag, 'base');
+			var top = this.reader.getFloat(primitiveTag, 'top');
+			var height = this.reader.getFloat(primitiveTag, 'height');
+			var slices = this.reader.getInteger(primitiveTag, 'slices');
+			var stacks = this.reader.getInteger(primitiveTag, 'stacks');
+
+			primitive = new Cylinder(this.scene, base, top, height, slices, stacks);
+			break;
+
+		case 'sphere':
+			var radius = this.reader.getFloat(primitiveTag, 'radius');
+			var slices = this.reader.getInteger(primitiveTag, 'slices');
+			var stacks = this.reader.getInteger(primitiveTag, 'stacks');
+
+			primitive = new Sphere(this.scene, radius, slices, stacks);
+			break;
+
+		case 'torus':
+			var inner = this.reader.getFloat(primitiveTag, 'inner');
+			var outer = this.reader.getFloat(primitiveTag, 'outer');
+			var slices = this.reader.getInteger(primitiveTag, 'slices');
+			var loops = this.reader.getInteger(primitiveTag, 'loops');
+
+			primitive = new Torus(this.scene, inner, outer, slices, loops);
+			break;
+
+		default:
+			this.onXMLError("Error loading primitives (invalid primitive tag).");
+			return null;
+	}
+
+	return primitive;
+}
+
+
+MySceneGraph.prototype.loadComponents = function(rootElement) {
 	var components = rootElement.getElementsByTagName('components')[0];
 
 	if (components == null)
@@ -409,7 +365,7 @@ MySceneGraph.prototype.loadComponents= function(rootElement) {
 
 	var componentTmp = components.getElementsByTagName('component');
 
-	var id,tranformation,materials,texture,componentIds,primitiveIds;
+	var id,tranformation,materials,texture,componentIDs,primitiveIDs;
 
 	for (var i = 0; i < componentTmp.length; i++) {
 		//load  component id
@@ -447,17 +403,17 @@ MySceneGraph.prototype.loadComponents= function(rootElement) {
 		var childrenTmp=	componentTmp[i].getElementsByTagName('children')[0];
 		var componentTag=childrenTmp.getElementsByTagName('componentref');
 		var primitiveTag=childrenTmp.getElementsByTagName('primitiveref');
-		childrenIds = new Array(componentTag.length + primitiveTag.length);
+		childrenIDs = new Array(componentTag.length + primitiveTag.length);
 		for (var j = 0; j < componentTag.length; j++) {
-			childrenIds[j]=this.reader.getString(componentTag[j],'id');
+			childrenIDs[j]=this.reader.getString(componentTag[j],'id');
 
 		}
 
 		for (var j = componentTag.length; j < primitiveTag.length + componentTag.length; j++) {
-			childrenIds[j]=this.reader.getString(primitiveTag[j-componentTag.length],'id');
+			childrenIDs[j]=this.reader.getString(primitiveTag[j-componentTag.length],'id');
 		}
 
-		this.nodes[id]=new Component(id,tranformation,materials,texture,childrenIds);
+		this.nodes[id]=new Component(id,tranformation,materials,texture,childrenIDs);
 
 	}
 
@@ -498,28 +454,34 @@ MySceneGraph.prototype.onXMLError=function (message) {
 
 
 
-MySceneGraph.prototype.visitGraph = function (root) {
-    var node = this.nodes[root];
+MySceneGraph.prototype.loadGraph = function() {
+  var textureStack = new Structure.stack();
+  var materialStack = new Structure.stack();
+  var transformationStack = new Structure.stack();
+
+	transformationStack.push(mat4.create());
+	this.visitGraph(this.rootID, transformationStack);
+}
+
+
+MySceneGraph.prototype.visitGraph = function (root, transformationStack) {
+    var node, currentTransformation;
+
+		node = this.nodes[root];
 
     if(node instanceof Component){//component
+				currentTransformation = mat4.create();
+				mat4.multiply(currentTransformation, transformationStack.top(), this.transformations[node.transformationID]);
+				transformationStack.push(currentTransformation);
 
-        mat4.multiply(this.currentTransformation,this.currentTransformation,this.transformations[node.transformationId]);
-
-				var tmp = this.currentTransformation;
-        this.transformationStack.push(tmp);
-
-        for (var i = 0; i < node.childrenIds.length; i++) {
-          this.visitGraph(node.childrenIds[i]);
+        for (var i = 0; i < node.childrenIDs.length; i++) {
+          this.visitGraph(node.childrenIDs[i], transformationStack);
         }
 
-				this.transformationStack.pop();
-        this.currentTransformation=this.transformationStack.pop();
-				var temp = this.currentTransformation;
-				this.transformationStack.push(temp);
+				transformationStack.pop();
 
     } else { //primitive
-
-			var displayable = new Displayable(node, this.currentTransformation, 1);
+			var displayable = new Displayable(node, transformationStack.top(), 1);
 			this.displayables.push(displayable);
     }
 
