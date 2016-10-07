@@ -174,7 +174,7 @@ MySceneGraph.prototype.loadLightsCommon = function(lightElement) {
 
 
 MySceneGraph.prototype.loadTextures = function(rootElement) {
-	var texturesElement, textureElements, id, file, lengthS, lengthT;
+	var texturesElement, textureElements, id, texture, lengthS, lengthT;
 
 	var texturesElement = rootElement.getElementsByTagName('textures')[0];
 	if (texturesElement == null)
@@ -184,11 +184,11 @@ MySceneGraph.prototype.loadTextures = function(rootElement) {
 
 	for (var textureElement of textureElements) {
 		id = this.reader.getString(textureElement, 'id');
-		file = this.reader.getString(textureElement, 'file');
+		texture = new CGFtexture(this.scene,this.reader.getString(textureElement, 'file'));
 		lengthS = this.reader.getFloat(textureElement, 'length_s');
 		lengthT = this.reader.getFloat(textureElement, 'length_t');
 
-		this.textures[id] = new Texture(id, file, lengthS, lengthT);
+		this.textures[id] = new Texture(id, texture, lengthS, lengthT);
 	}
 }
 
@@ -213,7 +213,14 @@ MySceneGraph.prototype.loadMaterials = function(rootElement) {
 		shininessElement = materialElement.getElementsByTagName('shininess')[0];
 		shininess = this.reader.getFloat(shininessElement, 'value');
 
-		this.materials[id]= new Material(id, emission, ambient, diffuse, specular, shininess);
+		var appearance=new CGFappearance(this.scene);
+		appearance.setEmission(emission.r,emission.g,emission.b,emission.a);
+		appearance.setAmbient(ambient.r,ambient.g,ambient.b,ambient.a);
+		appearance.setDiffuse(diffuse.r,diffuse.g,diffuse.b,diffuse.a);
+		appearance.setSpecular(specular.r,specular.g,specular.b,specular.a);
+		appearance.setShininess(shininess);
+
+		this.materials[id]= appearance;
 	}
 }
 
@@ -326,8 +333,8 @@ MySceneGraph.prototype.createPrimitive = function(primitiveName, primitiveTag) {
 			var height = this.reader.getFloat(primitiveTag, 'height');
 			var slices = this.reader.getInteger(primitiveTag, 'slices');
 			var stacks = this.reader.getInteger(primitiveTag, 'stacks');
-
-			primitive = new Cylinder(this.scene, base, top, height, slices, stacks);
+			//ver parametros do cilindro !!!
+			primitive = new Cylinder(this.scene, slices, stacks);
 			break;
 
 		case 'sphere':
@@ -441,8 +448,6 @@ MySceneGraph.prototype.getPoint3Element=function (element) {
 
 
 
-
-
 /*
 * Callback to be executed on any read error
 */
@@ -460,28 +465,52 @@ MySceneGraph.prototype.loadGraph = function() {
   var transformationStack = new Structure.stack();
 
 	transformationStack.push(mat4.create());
-	this.visitGraph(this.rootID, transformationStack);
+	this.visitGraph(this.rootID, transformationStack,materialStack,textureStack);
 }
 
 
-MySceneGraph.prototype.visitGraph = function (root, transformationStack) {
-    var node, currentTransformation;
+MySceneGraph.prototype.visitGraph = function (root, transformationStack,materialStack,textureStack) {
+    var node, currentTransformation,curren;
 
 		node = this.nodes[root];
 
     if(node instanceof Component){//component
+
+				//Tranformations--------------------------
 				currentTransformation = mat4.create();
 				mat4.multiply(currentTransformation, transformationStack.top(), this.transformations[node.transformationID]);
 				transformationStack.push(currentTransformation);
 
+				//Materials--------------------------------
+				var materialId=node.materialIDs[0];//para agora só esta a usar o primeiro material do componente, depois ver aquilo de mudar material
+
+				if(materialId == "inherit")
+					materialStack.push(materialStack.top());
+				else
+					materialStack.push(this.materials[materialId]);
+
+				//Textures------------------------------
+					var textureId=node.textureID;
+					if(textureId == "inherit")
+						textureStack.push(textureStack.top());
+					else if(textureId == "none")
+						textureStack.push("none");
+					else
+						textureStack.push(this.textures[textureId].texture);
+
+
         for (var i = 0; i < node.childrenIDs.length; i++) {
-          this.visitGraph(node.childrenIDs[i], transformationStack);
+          this.visitGraph(node.childrenIDs[i], transformationStack,materialStack,textureStack);
         }
 
 				transformationStack.pop();
+				materialStack.pop();
+				textureStack.pop();
 
     } else { //primitive
-			var displayable = new Displayable(node, transformationStack.top(), 1);
+
+			var displayable = new Displayable(node, transformationStack.top(), materialStack.top(),textureStack.top());
+
 			this.displayables.push(displayable);
     }
 

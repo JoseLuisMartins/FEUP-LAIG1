@@ -92,23 +92,11 @@ class Spot extends Light{
 
 
 class Texture {
-  constructor(id, file, lengthS, lengthT) {
+  constructor(id, texture, lengthS, lengthT) {
     this.id = id;
-    this.file = file;
+    this.texture = texture;
     this.lengthS = lengthS;
     this.lengthT = lengthT;
-  }
-}
-
-
-class Material {
-  constructor(id, emission, ambient, diffuse, specular, shininess) {
-    this.id = id;
-    this.emission = emission;
-    this.ambient = ambient;
-    this.diffuse = diffuse;
-	this.specular = specular;
-	this.shininess = shininess;
   }
 }
 
@@ -125,9 +113,10 @@ class  Component {
 
 
 class Displayable {
-	constructor(primitive, transformation, appearance) {
+	constructor(primitive, transformation, appearance,texture) {
 		this.primitive = primitive;
 		this.transformation = transformation;
 		this.appearance = appearance;
+		this.texture = texture;
 	}
 }

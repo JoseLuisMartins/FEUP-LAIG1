@@ -53,7 +53,7 @@
         <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <omni id="omni1" enabled="1" >
-            <location x="5" y="5" z="0.5" w="0.2" />
+            <location x="3" y="3" z="3" w="0.2" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
             <specular r="1" g="1" b="1" a="1" />
@@ -84,8 +84,9 @@
         <!-- objetos respetivos podem a violar esta regra.         -->
         <!-- Nao necessario aplicar fatores de escala em  -->
         <!-- quadricas (esfera, ciclindro...) -->
-        <texture id="t1" file="/resources/images/clock.png" length_s="0.5" length_t="1.3" />
-        <texture id="t2" file="/resources/images/world.png" length_s="0.4" length_t="1.2" />
+        <texture id="t1" file="resources\\images\\trash.jpg" length_s="0.5" length_t="1.3" />
+        <texture id="t2" file="resources\\images\\world.png" length_s="0.4" length_t="1.2" />
+        <texture id="t3" file="resources\\images\\clock.png" length_s="0.4" length_t="1.2" />
     </textures>
 
 
@@ -96,17 +97,33 @@
         <material id="m1" >
             <emission r="0.2" g="0.2" b="0.2" a="0.2" />
             <ambient r="0.3" g="0.3" b="0.3" a="0.3" />
-            <diffuse r="0.4" g="0.4" b="0.4" a="0.4" />
-            <specular r="0.5" g="0.5" b="0.5" a="0.5" />
+            <diffuse r="0" g="0" b="0" a="0" />
+            <specular r="0" g="0" b="1.0" a="0" />
             <shininess value="0.8" />
         </material>
 
         <material id="m2" >
-            <emission r="0.2" g="0.2" b="0.2" a="0.2" />
-            <ambient r="0.3" g="0.3" b="0.3" a="0.3" />
-            <diffuse r="0.4" g="0.4" b="0.4" a="0.4" />
-            <specular r="0.5" g="0.5" b="0.5" a="0.5" />
-            <shininess value="0.8" />
+          <emission r="0.2" g="0.2" b="0.2" a="0.2" />
+          <ambient r="0.3" g="0.3" b="0.3" a="0.3" />
+          <diffuse r="0" g="0" b="0" a="0" />
+          <specular r="0" g="1.0" b="0" a="0" />
+          <shininess value="0.8" />
+        </material>
+
+        <material id="m3" >
+          <emission r="0.2" g="0.2" b="0.2" a="0.2" />
+          <ambient r="0.3" g="0.3" b="0.3" a="0.3" />
+          <diffuse r="0" g="0" b="0" a="0" />
+          <specular r="1.0" g="0" b="0" a="0" />
+          <shininess value="0.8" />
+        </material>
+
+        <material id="m4" >
+          <emission r="0.2" g="0.2" b="0.2" a="0.2" />
+          <ambient r="0.3" g="0.3" b="0.3" a="0.3" />
+          <diffuse r="0" g="0" b="0" a="0" />
+          <specular r="1.0" g="1.0" b="0" a="0" />
+          <shininess value="0.8" />
         </material>
 
     </materials>
@@ -153,11 +170,11 @@
         </primitive>
 
 		<primitive id="cylinder">
-            <cylinder base="0.5" top="1" height="1" slices="10" stacks="10" />
+            <cylinder base="0.5" top="1" height="1" slices="50" stacks="10" />
         </primitive>
 
 		<primitive id="sphere">
-            <sphere radius="1" slices="20" stacks="10" />
+            <sphere radius="0.5" slices="20" stacks="10" />
         </primitive>
 
 		<primitive id="torus">
@@ -184,7 +201,7 @@
                 <!-- usando zero ou mais das instrucoes seguintes, sem -->
                 <!-- limite nem ordem -->
                 <!-- ex: bloco transformation pode ficar sem conteudo -->
-                <translate x="2" y="2" z="2" />
+                <translate x="2" y="2" z="0" />
             </transformation>
 
             <!-- declaracao obrigatoria de pelo menos um material; -->
@@ -228,13 +245,13 @@
             </transformation>
 
             <materials>
-                <material id="mat" />
+                <material id="m2" />
                 <material id="inherit" />
                 <material id="default" />
             </materials>
 
 
-            <texture id="t1" />
+            <texture id="t2" />
 
 
             <children>
@@ -249,22 +266,46 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
 
-                <translate x="5" y="5" z="5" />
+                <translate x="-1" y="-1" z="0" />
             </transformation>
 
             <materials>
-                <material id="mat" />
+                <material id="inherit" />
                 <material id="inherit" />
                 <material id="default" />
             </materials>
 
 
-            <texture id="t1" />
+            <texture id="t2" />
 
 
             <children>
-
+                <componentref id="cmp4" />
                 <primitiveref id="triangle" />
+            </children>
+
+        </component>
+
+        <component id="cmp4">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+
+                <translate x="-1" y="-1" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="m4" />
+                <material id="inherit" />
+                <material id="default" />
+            </materials>
+
+
+            <texture id="t3" />
+
+
+            <children>
+                <primitiveref id="cylinder" />
             </children>
 
         </component>

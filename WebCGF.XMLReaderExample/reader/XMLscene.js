@@ -30,7 +30,8 @@ XMLscene.prototype.init = function (application) {
   // TODO esfera para ir com o caralho
   this.sphere = new Triangle(this,new Point3(0,0,0),new Point3(2,0,0),new Point3(1,2,0));
   this.appearance = new CGFappearance(this);
-  this.appearance.loadTexture("resources\\images\\world.png");
+
+
 };
 
 XMLscene.prototype.initLights = function () {
@@ -149,15 +150,24 @@ XMLscene.prototype.display = function () {
   {
     this.updateLights();
 
+
     for (var i = 0; i < this.graph.displayables.length; i++) {
       this.pushMatrix();
       this.multMatrix(this.graph.displayables[i].transformation);
-      this.graph.displayables[i].primitive.display();
+      var displayable =this.graph.displayables[i];
+
+      if(displayable.texture != "none")
+        displayable.appearance.setTexture(displayable.texture);
+
+      displayable.appearance.apply();
+      displayable.primitive.display();
+      displayable.appearance.setTexture(null);
+
       this.popMatrix();
 
     }
   };
 
-  this.appearance.apply();
-  //this.sphere.display();
+
+
 };
