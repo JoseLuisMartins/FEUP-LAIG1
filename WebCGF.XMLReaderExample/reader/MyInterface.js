@@ -39,17 +39,13 @@ MyInterface.prototype.addLight = function(type,i,name) {
 
 
 MyInterface.prototype.processKeyDown = function(event) {
-	//CGFinterface.prototype.processKeyDown.call(this,event);
+
 
 	switch (event.keyCode)
 	{
-	};
-};
-
-MyInterface.prototype.processKeyUp = function(event) {
-	//CGFinterface.prototype.processKeyUp.call(this,event);
-
-	switch (event.keyCode)
-	{
+    case (86):
+		case (118):    //V
+	    this.scene.updateView();
+			break;
 	};
 };

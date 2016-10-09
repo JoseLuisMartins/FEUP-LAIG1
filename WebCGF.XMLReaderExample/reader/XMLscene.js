@@ -2,11 +2,7 @@
 function XMLscene(myInterface) {
   CGFscene.call(this);
 
-  this.cameraId;
   this.interface=myInterface;
-  this.stopClockAnimation=true
-
-
 
 }
 
@@ -35,8 +31,9 @@ XMLscene.prototype.init = function (application) {
   this.sphere = new Triangle(this,new Point3(0,0,0),new Point3(2,0,0),new Point3(1,2,0));
   this.appearance = new CGFappearance(this);
 
+  //interface
   this.lightsStatus;
-
+  this.viewIndex=0;
 
 };
 
@@ -68,17 +65,17 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.gl.clearColor(this.graph.illumination.background.r,this.graph.illumination.background.g,this.graph.illumination.background.b,this.graph.illumination.background.a);
   this.lights[0].setVisible(true);
   this.lights[0].enable();
-  this.initGraphCameras();
+  this.updateView();
   this.initGraphLights();
   this.axis=new CGFaxis(this,this.graph.axis_length,0.1);
 };
 
 
-XMLscene.prototype.initGraphCameras = function () {
-    this.camera = new CGFcamera(this.graph.perspectives[0].angle, this.graph.perspectives[0].near, this.graph.perspectives[0].far,
-    vec3.fromValues(this.graph.perspectives[0].from.x, this.graph.perspectives[0].from.y, this.graph.perspectives[0].from.z),
-    vec3.fromValues(this.graph.perspectives[0].to.x, this.graph.perspectives[0].to.y, this.graph.perspectives[0].to.z));
-    this.interface.setActiveCamera(this.camera);
+XMLscene.prototype.updateView = function () {
+    this.camera = this.graph.perspectives[this.viewIndex];
+    this.interface.setActiveCamera(this.graph.perspectives[this.viewIndex]);
+
+    this.viewIndex = (++this.viewIndex) % this.graph.perspectives.length;
 };
 
 XMLscene.prototype.initGraphLights = function () {

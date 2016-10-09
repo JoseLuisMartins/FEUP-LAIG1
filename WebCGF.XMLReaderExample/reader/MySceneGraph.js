@@ -93,7 +93,9 @@ MySceneGraph.prototype.loadViews = function(rootElement) {
 		from = this.getPoint3Element(perspectiveElement.getElementsByTagName('from')[0]);
 		to = this.getPoint3Element(perspectiveElement.getElementsByTagName('to')[0]);
 
-		this.perspectives.push(new PerspectiveInfo(id, near, far, angle, from, to));
+		this.perspectives.push(new CGFcamera(angle, near, far,
+    																		vec3.fromValues(from.x, from.y, from.z),
+    																		vec3.fromValues(to.x, to.y, to.z)))
 	}
 }
 
