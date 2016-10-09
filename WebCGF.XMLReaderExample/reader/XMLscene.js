@@ -4,6 +4,10 @@ function XMLscene(myInterface) {
 
   this.cameraId;
   this.interface=myInterface;
+  this.stopClockAnimation=true
+
+
+
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -30,6 +34,8 @@ XMLscene.prototype.init = function (application) {
   // TODO esfera para ir com o caralho
   this.sphere = new Triangle(this,new Point3(0,0,0),new Point3(2,0,0),new Point3(1,2,0));
   this.appearance = new CGFappearance(this);
+
+  this.lightsStatus;
 
 
 };
@@ -78,6 +84,9 @@ XMLscene.prototype.initGraphCameras = function () {
 XMLscene.prototype.initGraphLights = function () {
     var index = 0;
 
+
+    this.lightsStatus= new Array( this.graph.omniLights.length + this.graph.spotLights.length);
+
     for (var i = 0; i < this.graph.omniLights.length; i++,index++) {
       var omni = this.graph.omniLights[i];
 
@@ -85,6 +94,9 @@ XMLscene.prototype.initGraphLights = function () {
       this.lights[index].setAmbient(omni.ambient.r, omni.ambient.g, omni.ambient.b, omni.ambient.a);
       this.lights[index].setDiffuse(omni.diffuse.r, omni.diffuse.g, omni.diffuse.b, omni.diffuse.a);
       this.lights[index].setSpecular(omni.specular.r, omni.specular.g, omni.specular.b, omni.specular.a);
+
+      this.lightsStatus[index] = omni.enabled;
+      this.interface.addLight("omni",index,omni.id);
 
       if (omni.enabled)
         this.lights[index].enable();
@@ -94,6 +106,8 @@ XMLscene.prototype.initGraphLights = function () {
       this.lights[index].setVisible(true);
       this.lights[index].update();
     }
+
+
 
     for (var i = 0; i < this.graph.spotLights.length; i++,index++) {
       var spot = this.graph.spotLights[i];
@@ -105,6 +119,9 @@ XMLscene.prototype.initGraphLights = function () {
       this.lights[index].setSpotExponent(spot.exponent);
       this.lights[index].setSpotDirection(spot.direction.x, spot.direction.y, spot.direction.z);
 
+      this.lightsStatus[index] = spot.enabled;
+      this.interface.addLight("spot",index,spot.id);
+
       if (spot.enabled)
         this.lights[index].enable();
       else
@@ -113,11 +130,26 @@ XMLscene.prototype.initGraphLights = function () {
       this.lights[index].setVisible(true);
       this.lights[index].update();
     }
+
+    for (var i = 0; i < this.lightsStatus.length; i++) {
+      console.log(this.lightsStatus[i]);
+    }
+
 };
 
+
 XMLscene.prototype.updateLights = function () {
+
+  for (var i = 0; i < this.lightsStatus.length; i++) {
+    if(this.lightsStatus[i])
+      this.lights[i].enable();
+    else
+      this.lights[i].disable();
+  }
+
   for (var i = 0; i < this.lights.length; i++)
     this.lights[i].update();
+
 }
 
 

@@ -59,6 +59,20 @@
             <specular r="1" g="1" b="1" a="1" />
         </omni>
 
+        <omni id="omni2" enabled="0" >
+            <location x="1" y="3" z="5" w="0.2" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+
+        <omni id="omni3" enabled="1" >
+            <location x="2" y="5" z="2" w="0.2" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+
         <spot id="spot1" enabled="0" angle="0.8" exponent="0.5">
             <!-- atencao, "target" e' diferente de "direction" -->
             <target x="3" y="3" z="0.5" />
