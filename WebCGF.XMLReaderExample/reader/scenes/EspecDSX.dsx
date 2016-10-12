@@ -155,9 +155,9 @@
         <transformation id="ola">
            <!-- instrucoes a usar sem limite nem ordem -->
            <!-- deve existir pelo menos uma transformacao -->
-           <translate x="0" y="1" z="0" />
-           <rotate axis="y" angle="20" />
-           <scale x="1" y="2" z="1" />
+          <scale x="2" y="1" z="1" />
+          <rotate axis="y" angle="1.5707" />
+
         </transformation>
 
 
@@ -215,12 +215,12 @@
                 <!-- deve conter uma referencia a uma das "transformation" -->
                 <!-- declaradas anteriormente -->
                 <!-- <transformationref id="sa" /> -->
-
+                <transformationref id="ola" />
                 <!-- ou, ALTERNATIVAMENTE, transformacoes explicitas, -->
                 <!-- usando zero ou mais das instrucoes seguintes, sem -->
                 <!-- limite nem ordem -->
                 <!-- ex: bloco transformation pode ficar sem conteudo -->
-                <translate x="2" y="2" z="0" />
+              <!--  <translate x="2" y="2" z="0" /> -->
             </transformation>
 
             <!-- declaracao obrigatoria de pelo menos um material; -->
@@ -309,7 +309,6 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-
                 <translate x="-1" y="-1" z="0" />
             </transformation>
 

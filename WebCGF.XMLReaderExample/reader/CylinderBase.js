@@ -34,7 +34,7 @@ CylinderBase.prototype.initBuffers = function() {
 	// First vertex
 	this.vertices.push(0, 0, 0);
 	this.normals.push(0, 0, 1);
-	this.texCoords(1, 0.5);
+	this.texCoords.push(1, 0.5);
 
 	for (var slice = 1; slice <= this.slices; slice++) {
 		var x = this.radius * Math.cos(slice * ang);

@@ -63,6 +63,7 @@ XMLscene.prototype.setDefaultAppearance = function () {
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function () {
   this.gl.clearColor(this.graph.illumination.background.r,this.graph.illumination.background.g,this.graph.illumination.background.b,this.graph.illumination.background.a);
+  this.setGlobalAmbientLight(this.graph.illumination.ambient.r,this.graph.illumination.ambient.g,this.graph.illumination.ambient.b,this.graph.illumination.ambient.a);
   this.lights[0].setVisible(true);
   this.lights[0].enable();
   this.updateView();
@@ -128,9 +129,7 @@ XMLscene.prototype.initGraphLights = function () {
       this.lights[index].update();
     }
 
-    for (var i = 0; i < this.lightsStatus.length; i++) {
-      console.log(this.lightsStatus[i]);
-    }
+
 
 };
 

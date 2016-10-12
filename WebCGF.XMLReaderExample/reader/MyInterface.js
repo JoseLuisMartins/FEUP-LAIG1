@@ -12,10 +12,7 @@ function MyInterface() {
 MyInterface.prototype = Object.create(CGFinterface.prototype);
 MyInterface.prototype.constructor = MyInterface;
 
-/**
- * init
- * @param {CGFapplication} application
- */
+
 MyInterface.prototype.init = function(application) {
 
 	CGFinterface.prototype.init.call(this, application);

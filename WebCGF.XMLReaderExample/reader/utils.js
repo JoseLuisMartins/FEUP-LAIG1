@@ -39,16 +39,7 @@ class ColorRGBA {
 }
 
 
-class PerspectiveInfo {
-	constructor(id, near, far, angle, from, to) {
-		this.id = id;
-		this.near = near;
-		this.far = far;
-		this.angle = angle;
-		this.from = from;
-		this.to = to;
-	}
-}
+
 
 
 class Illumination {
