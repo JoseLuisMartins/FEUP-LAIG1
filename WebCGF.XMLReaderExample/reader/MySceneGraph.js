@@ -338,7 +338,7 @@ MySceneGraph.prototype.createPrimitive = function(primitiveName, primitiveTag) {
 			var slices = this.reader.getInteger(primitiveTag, 'slices');
 			var stacks = this.reader.getInteger(primitiveTag, 'stacks');
 			//ver parametros do cilindro !!!
-			primitive = new Cylinder(this.scene, slices, stacks);
+			primitive = new Cylinder(this.scene, base, top, height, slices, stacks);
 			break;
 
 		case 'sphere':

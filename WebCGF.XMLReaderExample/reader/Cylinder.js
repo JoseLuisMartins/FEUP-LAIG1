@@ -2,11 +2,12 @@
 * Cylinder
 * @constructor
 */
-function Cylinder(scene, slices, stacks) {
+function Cylinder(scene, base, top, height, slices, stacks) {
 	CGFobject.call(this,scene);
 
-	this.surface = new CylinderSurface(scene, slices, stacks);
-	this.base = new CylinderBase(scene, slices);
+	this.surface = new CylinderSurface(scene, base, top, height, slices, stacks);
+	this.base = new CylinderBase(scene, base, slices);
+	this.top = new CylinderBase(scene, top, slices);
 };
 
 Cylinder.prototype = Object.create(CGFobject.prototype);
