@@ -25,26 +25,25 @@ CylinderBase.prototype.initBuffers = function() {
 
 	var ang = (2*Math.PI) / this.slices;
 	var start = 1;
+	var texCenter;
+	
 
 	// Circle center
 	this.vertices.push(0, 0, 0);
 	this.normals.push(0, 0, 1);
 	this.texCoords.push(0.5, 0.5);
 
-	// First vertex
-	this.vertices.push(0, 0, 0);
-	this.normals.push(0, 0, 1);
-	this.texCoords.push(1, 0.5);
 
-	for (var slice = 1; slice <= this.slices; slice++) {
-		var x = this.radius * Math.cos(slice * ang);
-		var y = this.radius * Math.sin(slice * ang);
+	for (var slice = 0; slice <= this.slices; slice++) {
+		var x = Math.cos(slice * ang);
+		var y = Math.sin(slice * ang);
 
-		this.vertices.push(x, y, 0);
+		this.vertices.push(this.radius * x, this.radius * y, 0);
 		this.normals.push(0, 0, 1);
-
 		this.texCoords.push(0.5 + 0.5 * x, 0.5 - 0.5 * y);
-		this.indices.push(start++, start, 0);
+
+		if (slice > 1)
+			this.indices.push(start++, start, 0);
 	}
 
 	this.indices.push(0, start, 1);
