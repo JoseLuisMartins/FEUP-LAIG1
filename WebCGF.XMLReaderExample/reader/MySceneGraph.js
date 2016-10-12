@@ -40,34 +40,50 @@ MySceneGraph.prototype.onXMLReady = function() {
 
     // Here should go the calls for different functions to parse the various blocks
 
-    	if(this.chekDSXOrder(rootElement))
-					return;
+    if (this.chekDSXOrder(rootElement))
+        return;
 
-    this.loadScene(rootElement);
-    this.loadViews(rootElement);
-    this.loadIllumination(rootElement);
-    this.loadLights(rootElement);
-    this.loadTextures(rootElement);
-    this.loadMaterials(rootElement);
-    this.loadTranformations(rootElement);
-    this.loadPrimitives(rootElement);
-    this.loadComponents(rootElement);
-    this.loadGraph();
+    if (this.loadScene(rootElement))
+        return;
 
+    if(this.loadViews(rootElement))
+        return;
 
+    if(this.loadIllumination(rootElement))
+        return;
+
+    if(this.loadLights(rootElement))
+        return;
+
+    if(this.loadTextures(rootElement))
+        return;
+
+    if(this.loadMaterials(rootElement))
+        return;
+
+    if(this.loadTranformations(rootElement))
+        return;
+
+    if(this.loadPrimitives(rootElement))
+        return;
+
+    if(this.loadComponents(rootElement))
+        return;
+
+    if(this.loadGraph())
+        return;
 
     // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
     this.scene.onGraphLoaded();
-
     this.loadedOk = true;
 };
 
 MySceneGraph.prototype.chekDSXOrder = function(rootElement) {
     var childs = rootElement.children;
-    if (childs.length != 9){
+    if (childs.length != 9) {
         console.error("Missing Tag");
-				return 1;
-		}
+        return 1;
+    }
 
     if (childs[0].tagName != "scene")
         console.warn("scene is not the first element on the DSX Tag");
@@ -96,14 +112,16 @@ MySceneGraph.prototype.chekDSXOrder = function(rootElement) {
     if (childs[8].tagName != "components")
         console.warn("components is not the ninth element on the DSX Tag");
 
-		return 0;
+    return 0;
 }
 
 MySceneGraph.prototype.loadScene = function(rootElement) {
     var scene = rootElement.getElementsByTagName('scene')[0];
 
-    if (scene == null)
-        onXMLError("Error loading scene.");
+    if (scene == null) {
+        this.onXMLError("Error loading scene, No Scene Tag");
+        return 1;
+    }
 
     this.rootID = this.reader.getString(scene, 'root');
     this.axis_length = this.reader.getFloat(scene, 'axis_length');
@@ -114,9 +132,10 @@ MySceneGraph.prototype.loadViews = function(rootElement) {
     var viewElement, perspectiveElements, id, near, far, angle, from, to;
 
     viewElement = rootElement.getElementsByTagName('views')[0];
-    if (viewElement == null)
-        onXMLError("Error loading view.");
-
+    if (viewElement == null){
+        this.onXMLError("Error loading view. No views Tag");
+        return 1;
+      }
 
     perspectiveElements = viewElement.getElementsByTagName('perspective');
 
@@ -141,6 +160,10 @@ MySceneGraph.prototype.loadIllumination = function(rootElement) {
 
     illuminationElement = rootElement.getElementsByTagName('illumination')[0];
 
+    if (illuminationElement == null){
+        this.onXMLError("Error loading illumination. No illumination Tag");
+        return 1;
+    }
 
     doublesided = this.reader.getBoolean(illuminationElement, 'doublesided');
     local = this.reader.getBoolean(illuminationElement, 'local');
@@ -154,8 +177,10 @@ MySceneGraph.prototype.loadIllumination = function(rootElement) {
 MySceneGraph.prototype.loadLights = function(rootElement) {
     var lightElements = rootElement.getElementsByTagName('lights')[0];
 
-    if (lightElements == null)
-        onXMLError("Error loading lights.");
+    if (lightElements == null){
+        this.onXMLError("Error loading Lights. No Lights Tag");
+        return 1;
+    }
 
     this.loadOmniLights(lightElements);
     this.loadSpotLights(lightElements);
@@ -217,8 +242,10 @@ MySceneGraph.prototype.loadTextures = function(rootElement) {
     var texturesElement, textureElements, id, texture, lengthS, lengthT;
 
     var texturesElement = rootElement.getElementsByTagName('textures')[0];
-    if (texturesElement == null)
-        onXMLError("Error loading textures.");
+    if (texturesElement == null){
+        this.onXMLError("Error loading Textures. No textures Tag");
+        return 1;
+    }
 
     textureElements = texturesElement.getElementsByTagName('texture');
 
@@ -238,8 +265,11 @@ MySceneGraph.prototype.loadMaterials = function(rootElement) {
         ambient, diffuse, specular, shininessElement, shininess;
 
     var materialsElement = rootElement.getElementsByTagName('materials')[0];
-    if (materialsElement == null)
-        onXMLError("Error loading materials.");
+
+    if (materialsElement == null){
+        this.onXMLError("Error loading Materials. No materials Tag");
+        return 1;
+    }
 
     materialElements = materialsElement.getElementsByTagName('material');
 
@@ -269,8 +299,10 @@ MySceneGraph.prototype.loadTranformations = function(rootElement) {
     var transformationsElement, transformationElements, id;
 
     transformationsElement = rootElement.getElementsByTagName('transformations')[0];
-    if (transformationsElement == null)
-        onXMLError("Error loading transformations.");
+    if (transformationsElement == null){
+        this.onXMLError("Error loading Tranformations. No transformations Tag");
+        return 1;
+    }
 
     transformationElements = transformationsElement.getElementsByTagName('transformation');
 
@@ -284,8 +316,8 @@ MySceneGraph.prototype.loadTranformations = function(rootElement) {
 MySceneGraph.prototype.getTranformationMatrix = function(transformationElement) {
     var matrix = mat4.create();
 
-		for (var i = transformationElement.children.length-1; i >= 0; i--) {
-				var transformation=transformationElement.children[i];
+    for (var i = transformationElement.children.length - 1; i >= 0; i--) {
+        var transformation = transformationElement.children[i];
         var transformationName = transformation.tagName;
 
         switch (transformationName) {
@@ -326,8 +358,10 @@ MySceneGraph.prototype.loadPrimitives = function(rootElement) {
     var primitivesElement, primitiveElements, id, primitiveTag, primitiveName;
 
     var primitivesElement = rootElement.getElementsByTagName('primitives')[0];
-    if (primitivesElement == null)
-        this.onXMLError("Error loading primitives.");
+    if (primitivesElement == null){
+        this.onXMLError("Error loading primitives. No primitives Tag");
+        return 1;
+    }
 
     primitiveElements = primitivesElement.getElementsByTagName('primitive');
 
@@ -407,8 +441,10 @@ MySceneGraph.prototype.createPrimitive = function(primitiveName, primitiveTag) {
 MySceneGraph.prototype.loadComponents = function(rootElement) {
     var components = rootElement.getElementsByTagName('components')[0];
 
-    if (components == null)
-        this.onXMLError("Error loading components.");
+    if (components == null){
+        this.onXMLError("Error loading components. No components Tag");
+        return 1;
+    }
 
 
     var componentTmp = components.getElementsByTagName('component');
@@ -468,8 +504,10 @@ MySceneGraph.prototype.loadComponents = function(rootElement) {
 }
 
 MySceneGraph.prototype.getRGBAElement = function(element) {
-    if (element == null)
-        onXMLError("Error loading 'RGBA' element .");
+    if (element == null){
+        this.onXMLError("Error loading 'RGBA' element .");
+        return 1;
+    }
 
     var res = new ColorRGBA(this.reader.getFloat(element, 'r'), this.reader.getFloat(element, 'g'),
         this.reader.getFloat(element, 'b'), this.reader.getFloat(element, 'a'));
@@ -478,8 +516,10 @@ MySceneGraph.prototype.getRGBAElement = function(element) {
 }
 
 MySceneGraph.prototype.getPoint3Element = function(element) {
-    if (element == null)
-        onXMLError("Error loading 'Point3' element .");
+    if (element == null){
+        this.onXMLError("Error loading 'Point3' element .");
+        return 1;
+      }
 
     var res = new Point3(this.reader.getFloat(element, 'x'), this.reader.getFloat(element, 'y'),
         this.reader.getFloat(element, 'z'));
@@ -500,6 +540,8 @@ MySceneGraph.prototype.onXMLError = function(message) {
 
 
 
+
+
 MySceneGraph.prototype.loadGraph = function() {
     var textureStack = new Structure.stack();
     var materialStack = new Structure.stack();
@@ -511,7 +553,7 @@ MySceneGraph.prototype.loadGraph = function() {
 
 
 MySceneGraph.prototype.visitGraph = function(root, transformationStack, materialStack, textureStack) {
-    var node, currentTransformation, curren;
+    var node, currentTransformation;
 
     node = this.nodes[root];
 
