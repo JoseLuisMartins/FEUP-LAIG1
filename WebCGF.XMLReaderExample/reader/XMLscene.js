@@ -181,26 +181,6 @@ XMLscene.prototype.display = function () {
   if (this.graph.loadedOk)
   {
     this.updateLights();
-
-
-    for (var i = 0; i < this.graph.displayables.length; i++) {
-      this.pushMatrix();
-      this.multMatrix(this.graph.displayables[i].transformation);
-      var displayable =this.graph.displayables[i];
-      var appearenceIndex=this.materialIndex % displayable.appearances.length;
-
-      if(displayable.texture != "none")
-        displayable.appearances[appearenceIndex].setTexture(displayable.texture);
-
-      displayable.appearances[appearenceIndex].apply();
-      displayable.primitive.display();
-      displayable.appearances[appearenceIndex].setTexture(null);
-
-      this.popMatrix();
-
-    }
+    this.graph.diplayGraph();
   };
-
-
-
 };

@@ -15,7 +15,9 @@ function MySceneGraph(filename, scene) {
     this.materials = {};
     this.transformations = {};
     this.nodes = {};
-    this.displayables = [];
+
+
+
 
 
     // File reading
@@ -70,8 +72,7 @@ MySceneGraph.prototype.onXMLReady = function() {
     if(this.loadComponents(rootElement))
         return;
 
-    if(this.loadGraph())
-        return;
+
 
     // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
     this.scene.onGraphLoaded();
@@ -542,7 +543,7 @@ MySceneGraph.prototype.onXMLError = function(message) {
 
 
 
-MySceneGraph.prototype.loadGraph = function() {
+MySceneGraph.prototype.diplayGraph = function() {
     var textureStack = new Structure.stack();
     var materialStack = new Structure.stack();
     var transformationStack = new Structure.stack();
@@ -565,19 +566,15 @@ MySceneGraph.prototype.visitGraph = function(root, transformationStack, material
         transformationStack.push(currentTransformation);
 
         //Materials--------------------------------
-        var materialIds = node.materialIDs;
+        var materialId = node.materialIDs[this.scene.materialIndex % node.materialIDs.length];
 
-        var finalMaterials= new Array(materialIds.length);
 
-        for (var i = 0; i < materialIds.length; i++) {
-          if(materialIds[i] == "inherit")
-              finalMaterials[i]=materialStack.top()[i % materialStack.top().length];
+          if(materialId == "inherit")
+            materialStack.push(materialStack.top());
           else
-              finalMaterials[i]=this.materials[materialIds[i]];
-        }
+            materialStack.push(this.materials[materialId]);
 
 
-          materialStack.push(finalMaterials);
 
         //Textures------------------------------
         var textureId = node.textureID;
@@ -598,10 +595,20 @@ MySceneGraph.prototype.visitGraph = function(root, transformationStack, material
         textureStack.pop();
 
     } else { //primitive
-      
-        var displayable = new Displayable(node, transformationStack.top(), materialStack.top(), textureStack.top());
 
-        this.displayables.push(displayable);
-    }
+        this.scene.pushMatrix();
+        this.scene.multMatrix(transformationStack.top());
+
+
+        if(textureStack.top() != "none")
+          materialStack.top().setTexture(textureStack.top());
+
+        materialStack.top().apply();
+        node.display();
+        materialStack.top().setTexture(null);
+
+        this.scene.popMatrix();
+      }
+
 
 }

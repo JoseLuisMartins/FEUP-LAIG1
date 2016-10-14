@@ -156,9 +156,9 @@
         <transformation id="ola">
            <!-- instrucoes a usar sem limite nem ordem -->
            <!-- deve existir pelo menos uma transformacao -->
-          <scale x="2" y="1" z="1" />
-          <rotate axis="y" angle="1.5707" />
 
+          <rotate axis="y" angle="1.5707" />
+          <scale x="2" y="1" z="1" />
         </transformation>
 
 
@@ -215,13 +215,13 @@
 
                 <!-- deve conter uma referencia a uma das "transformation" -->
                 <!-- declaradas anteriormente -->
-                <!-- <transformationref id="sa" /> -->
+                <!--  <transformationref id="ola" /> -->
 
                 <!-- ou, ALTERNATIVAMENTE, transformacoes explicitas, -->
                 <!-- usando zero ou mais das instrucoes seguintes, sem -->
                 <!-- limite nem ordem -->
                 <!-- ex: bloco transformation pode ficar sem conteudo -->
-                <translate x="2" y="2" z="0" />
+                 <translate x="2" y="2" z="0" />
             </transformation>
 
             <!-- declaracao obrigatoria de pelo menos um material; -->
@@ -231,8 +231,8 @@
             <!-- o material muda para o proximo material da lista; do -->
             <!-- ultimo material da lista volta ao primeiro -->
             <materials>
-                <material id="m3" />
                 <material id="m4" />
+                <material id="m3" />
             </materials>
 
             <!-- declaracao obrigatoria de texture -->
@@ -248,7 +248,7 @@
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
-                <componentref id="cmp2" />
+                <componentref id="cmp2" /> 
                 <componentref id="cmp3" />
                 <primitiveref id="torus" />
             </children>
@@ -266,7 +266,8 @@
             <materials>
                 <material id="inherit"  />
                 <material id="m2"/>
-
+                <material id="m1"/>
+                <material id="inherit"  />
             </materials>
 
 
@@ -291,7 +292,7 @@
             <materials>
                 <material id="inherit" />
                 <material id="inherit" />
-
+                <material id="m1" />
             </materials>
 
 
