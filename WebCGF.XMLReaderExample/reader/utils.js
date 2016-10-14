@@ -104,10 +104,10 @@ class  Component {
 
 
 class Displayable {
-	constructor(primitive, transformation, appearance,texture) {
+	constructor(primitive, transformation, appearances,texture) {
 		this.primitive = primitive;
 		this.transformation = transformation;
-		this.appearance = appearance;
+		this.appearances = appearances;
 		this.texture = texture;
 	}
 }

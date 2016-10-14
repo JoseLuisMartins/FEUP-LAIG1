@@ -565,12 +565,19 @@ MySceneGraph.prototype.visitGraph = function(root, transformationStack, material
         transformationStack.push(currentTransformation);
 
         //Materials--------------------------------
-        var materialId = node.materialIDs[0]; //para agora só esta a usar o primeiro material do componente, depois ver aquilo de mudar material
+        var materialIds = node.materialIDs;
 
-        if (materialId == "inherit")
-            materialStack.push(materialStack.top());
-        else
-            materialStack.push(this.materials[materialId]);
+        var finalMaterials= new Array(materialIds.length);
+
+        for (var i = 0; i < materialIds.length; i++) {
+          if(materialIds[i] == "inherit")
+              finalMaterials[i]=materialStack.top()[i % materialStack.top().length];
+          else
+              finalMaterials[i]=this.materials[materialIds[i]];
+        }
+
+
+          materialStack.push(finalMaterials);
 
         //Textures------------------------------
         var textureId = node.textureID;
@@ -591,7 +598,7 @@ MySceneGraph.prototype.visitGraph = function(root, transformationStack, material
         textureStack.pop();
 
     } else { //primitive
-
+      
         var displayable = new Displayable(node, transformationStack.top(), materialStack.top(), textureStack.top());
 
         this.displayables.push(displayable);

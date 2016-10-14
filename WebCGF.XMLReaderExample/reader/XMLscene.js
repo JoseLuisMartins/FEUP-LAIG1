@@ -34,7 +34,7 @@ XMLscene.prototype.init = function (application) {
   //interface
   this.lightsStatus;
   this.viewIndex=0;
-
+  this.materialIndex=0;
 };
 
 XMLscene.prototype.initLights = function () {
@@ -148,6 +148,10 @@ XMLscene.prototype.updateLights = function () {
 
 }
 
+XMLscene.prototype.updateMaterial = function () {
+    this.materialIndex++;
+}
+
 
 
 XMLscene.prototype.display = function () {
@@ -183,13 +187,14 @@ XMLscene.prototype.display = function () {
       this.pushMatrix();
       this.multMatrix(this.graph.displayables[i].transformation);
       var displayable =this.graph.displayables[i];
+      var appearenceIndex=this.materialIndex % displayable.appearances.length;
 
       if(displayable.texture != "none")
-        displayable.appearance.setTexture(displayable.texture);
+        displayable.appearances[appearenceIndex].setTexture(displayable.texture);
 
-      displayable.appearance.apply();
+      displayable.appearances[appearenceIndex].apply();
       displayable.primitive.display();
-      displayable.appearance.setTexture(null);
+      displayable.appearances[appearenceIndex].setTexture(null);
 
       this.popMatrix();
 

@@ -231,8 +231,8 @@
             <!-- o material muda para o proximo material da lista; do -->
             <!-- ultimo material da lista volta ao primeiro -->
             <materials>
-                <material id="m1" />
-                <material id="m2" />
+                <material id="m3" />
+                <material id="m4" />
             </materials>
 
             <!-- declaracao obrigatoria de texture -->
@@ -251,7 +251,6 @@
                 <componentref id="cmp2" />
                 <componentref id="cmp3" />
                 <primitiveref id="torus" />
-                <primitiveref id="sphere" />
             </children>
 
         </component>
@@ -265,9 +264,9 @@
             </transformation>
 
             <materials>
-                <material id="m2" />
-                <material id="inherit" />
-                <material id="default" />
+                <material id="inherit"  />
+                <material id="m2"/>
+
             </materials>
 
 
@@ -292,7 +291,7 @@
             <materials>
                 <material id="inherit" />
                 <material id="inherit" />
-                <material id="default" />
+
             </materials>
 
 
@@ -314,9 +313,8 @@
             </transformation>
 
             <materials>
-                <material id="m4" />
-                <material id="inherit" />
-                <material id="default" />
+                <material id="m1" />
+                <material id="m1" />
             </materials>
 
 
