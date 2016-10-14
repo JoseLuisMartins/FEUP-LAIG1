@@ -317,7 +317,7 @@ MySceneGraph.prototype.loadTranformations = function(rootElement) {
 MySceneGraph.prototype.getTranformationMatrix = function(transformationElement) {
     var matrix = mat4.create();
 
-    for (var i = transformationElement.children.length - 1; i >= 0; i--) {
+    for (var i = 0; i < transformationElement.children.length ; i++) {
         var transformation = transformationElement.children[i];
         var transformationName = transformation.tagName;
 
@@ -543,7 +543,7 @@ MySceneGraph.prototype.onXMLError = function(message) {
 
 
 
-MySceneGraph.prototype.diplayGraph = function() {
+MySceneGraph.prototype.displayGraph = function() {
     var textureStack = new Structure.stack();
     var materialStack = new Structure.stack();
     var transformationStack = new Structure.stack();

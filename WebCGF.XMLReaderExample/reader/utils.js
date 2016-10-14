@@ -101,13 +101,3 @@ class  Component {
 		this.childrenIDs = childrenIDs ;
   }
 }
-
-
-class Displayable {
-	constructor(primitive, transformation, appearances,texture) {
-		this.primitive = primitive;
-		this.transformation = transformation;
-		this.appearances = appearances;
-		this.texture = texture;
-	}
-}
