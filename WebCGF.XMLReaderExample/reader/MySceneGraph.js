@@ -149,7 +149,7 @@ MySceneGraph.prototype.loadViews = function(rootElement) {
         from = this.getPoint3Element(perspectiveElement.getElementsByTagName('from')[0]);
         to = this.getPoint3Element(perspectiveElement.getElementsByTagName('to')[0]);
 
-    
+
         this.perspectives.push(new CGFcamera(angle* this.degToRad, near, far,
             vec3.fromValues(from.x, from.y, from.z),
             vec3.fromValues(to.x, to.y, to.z)))
@@ -563,7 +563,7 @@ MySceneGraph.prototype.visitGraph = function(root, transformationStack, material
 
         //Tranformations--------------------------
         currentTransformation = mat4.create();
-        mat4.multiply(currentTransformation, transformationStack.top(), this.transformations[node.transformationID]);
+        mat4.multiply(currentTransformation, this.transformations[node.transformationID], transformationStack.top());
         transformationStack.push(currentTransformation);
 
         //Materials--------------------------------

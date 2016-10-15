@@ -38,8 +38,8 @@ CylinderSurface.prototype.initBuffers = function() {
 		for (var slice = 0; slice <= this.slices; slice++) {
 			var x = radius * Math.cos(slice * thetha);
 			var y = radius * Math.sin(slice * thetha);
-			var s = slice * thetha;
-			var t = z;
+			var s = 1 - (stack / this.stacks);
+			var t = 1 - (slice / this.slices);
 
 			this.vertices.push(x, y, z);
 			this.normals.push(x, y, 0);
