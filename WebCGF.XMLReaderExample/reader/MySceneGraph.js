@@ -16,7 +16,7 @@ function MySceneGraph(filename, scene) {
     this.transformations = {};
     this.nodes = {};
 
-
+    this.degToRad= Math.PI / 180.0;
 
 
 
@@ -149,7 +149,8 @@ MySceneGraph.prototype.loadViews = function(rootElement) {
         from = this.getPoint3Element(perspectiveElement.getElementsByTagName('from')[0]);
         to = this.getPoint3Element(perspectiveElement.getElementsByTagName('to')[0]);
 
-        this.perspectives.push(new CGFcamera(angle, near, far,
+    
+        this.perspectives.push(new CGFcamera(angle* this.degToRad, near, far,
             vec3.fromValues(from.x, from.y, from.z),
             vec3.fromValues(to.x, to.y, to.z)))
     }
@@ -221,7 +222,7 @@ MySceneGraph.prototype.loadSpotLights = function(lightElements) {
         target = this.getPoint3Element(spotElement.getElementsByTagName('target')[0]);
         location = this.getPoint3Element(spotElement.getElementsByTagName('location')[0]);
 
-        this.spotLights.push(new Spot(lightElement, angle, exponent, target, location));
+        this.spotLights.push(new Spot(lightElement, angle*this.degToRad, exponent, target, location));
     }
 }
 
@@ -339,7 +340,7 @@ MySceneGraph.prototype.getTranformationMatrix = function(transformationElement) 
                 else if (rotationAxis == 'y') rotation = [0, 1, 0];
                 else if (rotationAxis == 'z') rotation = [0, 0, 1];
 
-                mat4.rotate(matrix, matrix, angle, rotation);
+                mat4.rotate(matrix, matrix, angle*this.degToRad, rotation);
                 break;
 
             case 'scale':

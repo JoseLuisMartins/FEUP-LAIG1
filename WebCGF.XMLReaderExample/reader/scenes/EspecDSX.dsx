@@ -28,17 +28,17 @@
         <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
-        <perspective id="p1" near="0.1" far="500" angle="0.4">
-            <from x="15" y="15" z="15" />
+        <perspective id="p1" near="0.1" far="500" angle="22">
+            <from x="18" y="8" z="18" />
             <to x="0" y="0" z="0" />
         </perspective>
 
-        <perspective id="p2" near="0.1" far="500" angle="0.4">
+        <perspective id="p2" near="0.1" far="500" angle="25">
             <from x="0" y="5" z="5" />
             <to x="0" y="0" z="0" />
         </perspective>
 
-        <perspective id="p3" near="0.1" far="500" angle="0.4">
+        <perspective id="p3" near="0.1" far="500" angle="40">
             <from x="25" y="25" z="25" />
             <to x="0" y="0" z="0" />
         </perspective>
@@ -79,7 +79,7 @@
             <specular r="1" g="1" b="1" a="1" />
         </omni>
 
-        <spot id="spot1" enabled="0" angle="0.8" exponent="0.5">
+        <spot id="spot1" enabled="0" angle="40" exponent="0.5">
             <!-- atencao, "target" e' diferente de "direction" -->
             <target x="3" y="3" z="0.5" />
             <location x="4" y="2" z="2" />
@@ -157,7 +157,7 @@
            <!-- instrucoes a usar sem limite nem ordem -->
            <!-- deve existir pelo menos uma transformacao -->
 
-          <rotate axis="y" angle="1.5707" />
+          <rotate axis="y" angle="90" />
           <scale x="2" y="1" z="1" />
         </transformation>
 
@@ -181,7 +181,7 @@
             <!--     rectangle, triangle, cylinder, sphere, torus -->
             <!-- os parametros devem ser interpretados, genericamente como-->
             <!-- em OpenGL/GLUT; o cilindro deve adicionalmente ter tampas -->
-            <rectangle x1="-0.6" y1="-0.5" x2="0.5" y2="0.5" />
+            <rectangle x1="0" y1="0" x2="1" y2="1" />
         </primitive>
 
 
@@ -190,7 +190,7 @@
         </primitive>
 
 		<primitive id="cylinder">
-            <cylinder base="0.5" top="1" height="1" slices="50" stacks="10" />
+            <cylinder base="0.5" top="0.5" height="1" slices="50" stacks="10" />
         </primitive>
 
 		<primitive id="sphere">
@@ -221,7 +221,7 @@
                 <!-- usando zero ou mais das instrucoes seguintes, sem -->
                 <!-- limite nem ordem -->
                 <!-- ex: bloco transformation pode ficar sem conteudo -->
-                 <translate x="2" y="2" z="0" />
+                 <translate x="0" y="0" z="0" />
             </transformation>
 
             <!-- declaracao obrigatoria de pelo menos um material; -->
@@ -248,19 +248,20 @@
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
-                <componentref id="cmp2" /> 
-                <componentref id="cmp3" />
-                <primitiveref id="torus" />
+                <componentref id="floor" />
+                <componentref id="earth" />
+                <componentref id="person" />
             </children>
 
         </component>
 
-        <component id="cmp2">
+        <component id="floor">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-
-                <translate x="1" y="1" z="1" />
+              <scale x="7" y="1" z="7" />
+              <rotate axis="x" angle="-90" />
+              <translate x="0" y="-1" z="0" />
             </transformation>
 
             <materials>
@@ -271,22 +272,21 @@
             </materials>
 
 
-            <texture id="t2" />
+            <texture id="t1" />
 
 
             <children>
-
                 <primitiveref id="rectangle" />
             </children>
 
         </component>
 
-        <component id="cmp3">
+        <component id="earth">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-
-                <translate x="-1" y="-1" z="0" />
+                <translate x="1" y="3" z="6" />
+                <scale x="2" y="2" z="2" />
             </transformation>
 
             <materials>
@@ -300,17 +300,16 @@
 
 
             <children>
-                <componentref id="cmp4" />
-                <primitiveref id="triangle" />
+                <primitiveref id="sphere" />
             </children>
 
         </component>
 
-        <component id="cmp4">
+        <component id="person">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="-1" y="-1" z="0" />
+                <translate x="3" y="2" z="2" />
             </transformation>
 
             <materials>
@@ -318,15 +317,123 @@
                 <material id="m1" />
             </materials>
 
-
             <texture id="t3" />
 
-
             <children>
-                <primitiveref id="cylinder" />
+              <componentref id="leg1" />
+              <componentref id="leg2" />
+              <componentref id="body" />
             </children>
 
         </component>
+
+        <component id="leg1">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="0" y="-0.3" z="0" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="m1" />
+                <material id="m1" />
+            </materials>
+
+            <texture id="t3" />
+
+            <children>
+                  <componentref id="leg" />
+            </children>
+
+        </component>
+
+        <component id="leg2">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="0.7" y="-0.3" z="0" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="m1" />
+                <material id="m1" />
+            </materials>
+
+            <texture id="t3" />
+
+            <children>
+                 <componentref id="leg" />
+            </children>
+
+        </component>
+
+        <component id="leg">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <scale x="0.3" y="0.3" z="1.5" />
+            </transformation>
+
+            <materials>
+                <material id="m1" />
+                <material id="m1" />
+            </materials>
+
+            <texture id="t3" />
+
+            <children>
+                <primitiveref id="cylinder" />
+                <componentref id="foot" />
+            </children>
+
+        </component>
+
+        <component id="foot">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="0" y="0.5" z="1.0" />
+                <scale x="1" y="3" z="0.3" />
+            </transformation>
+
+            <materials>
+                <material id="m1" />
+                <material id="m1" />
+            </materials>
+
+            <texture id="t3" />
+
+            <children>
+                <primitiveref id="sphere" />
+            </children>
+
+        </component>
+
+        <component id="body">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="0.3" y="0.3" z="0" />
+                <scale x="1.5" y="2" z="0.8" />
+            </transformation>
+
+            <materials>
+                <material id="m1" />
+                <material id="m1" />
+            </materials>
+
+            <texture id="t1" />
+
+            <children>
+                <primitiveref id="sphere" />
+            </children>
+
+        </component>
+
     </components>
+
+
 
 </dsx>
