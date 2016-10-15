@@ -17,7 +17,7 @@
 
     <!-- deve definir-se um objeto para raiz do grafo , assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
-    <scene root="comp1" axis_length="7" />
+    <scene root="root" axis_length="7" />
 
 
 
@@ -193,12 +193,16 @@
             <cylinder base="0.5" top="0.5" height="1" slices="50" stacks="10" />
         </primitive>
 
+    <primitive id="cone">
+            <cylinder base="0" top="0.5" height="1" slices="50" stacks="10" />
+        </primitive>
+
 		<primitive id="sphere">
             <sphere radius="0.5" slices="20" stacks="10" />
         </primitive>
 
 		<primitive id="torus">
-            <torus inner="0.5" outer="1" slices="20" loops="5" />
+            <torus inner="0.5" outer="1" slices="20" loops="10" />
         </primitive>
 
 
@@ -208,7 +212,7 @@
 
     <components>
 
-        <component id="comp1">
+        <component id="root">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
@@ -250,6 +254,7 @@
                 <!-- componentes ou primitivas -->
                 <componentref id="floor" />
                 <componentref id="earth" />
+                <componentref id="support" />
                 <componentref id="person" />
             </children>
 
@@ -281,12 +286,92 @@
 
         </component>
 
+        <component id="support">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+
+                <translate x="2" y="1" z="5" />
+
+            </transformation>
+
+            <materials>
+                <material id="inherit"  />
+                <material id="m2"/>
+                <material id="m1"/>
+                <material id="inherit"  />
+            </materials>
+
+
+            <texture id="t1" />
+
+
+            <children>
+                <componentref id="supportBot" />
+                <componentref id="supportTop" />
+            </children>
+
+        </component>
+
+        <component id="supportBot">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+              <translate x="0" y="0.5" z="0" />
+              <scale x="1" y="1.5" z="1" />
+              <rotate axis="x" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit"  />
+                <material id="m2"/>
+                <material id="m1"/>
+                <material id="inherit"  />
+            </materials>
+
+
+            <texture id="t1" />
+
+
+            <children>
+                <primitiveref id="cone" />
+            </children>
+
+        </component>
+
+        <component id="supportTop">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+
+                <translate x="0" y="0.8" z="0" />
+                <scale x="1" y="0.5" z="1" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit"  />
+                <material id="m2"/>
+                <material id="m1"/>
+                <material id="inherit"  />
+            </materials>
+
+
+            <texture id="t3" />
+
+
+            <children>
+                <primitiveref id="torus" />
+            </children>
+
+        </component>
+
         <component id="earth">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="1" y="3" z="6" />
-                <scale x="2" y="2" z="2" />
+                <translate x="2" y="3.5" z="5" />
+                <scale x="2.5" y="2.5" z="2.5" />
             </transformation>
 
             <materials>
@@ -310,6 +395,7 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
                 <translate x="3" y="2" z="2" />
+                <rotate axis="y" angle="-20" />
             </transformation>
 
             <materials>
@@ -323,6 +409,9 @@
               <componentref id="leg1" />
               <componentref id="leg2" />
               <componentref id="body" />
+              <componentref id="head" />
+              <componentref id="arm1" />
+              <componentref id="arm2" />
             </children>
 
         </component>
@@ -415,7 +504,7 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="0.3" y="0.3" z="0" />
+                <translate x="0.35" y="0.3" z="0" />
                 <scale x="1.5" y="2" z="0.8" />
             </transformation>
 
@@ -428,6 +517,152 @@
 
             <children>
                 <primitiveref id="sphere" />
+            </children>
+
+        </component>
+
+        <component id="head">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="0.35" y="1.7" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="m1" />
+                <material id="m1" />
+            </materials>
+
+            <texture id="t3" />
+
+            <children>
+                <primitiveref id="sphere" />
+                <componentref id="eye1" />
+                <componentref id="eye2" />
+            </children>
+
+        </component>
+
+        <component id="eye1">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="-0.1" y="0" z="0.5" />
+            </transformation>
+
+            <materials>
+                <material id="m1" />
+                <material id="m1" />
+            </materials>
+
+            <texture id="t1" />
+
+            <children>
+                  <componentref id="eye" />
+            </children>
+
+        </component>
+
+        <component id="eye2">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="0.3" y="0" z="0.5" />
+            </transformation>
+
+            <materials>
+                <material id="m1" />
+                <material id="m1" />
+            </materials>
+
+            <texture id="t1" />
+
+            <children>
+                  <componentref id="eye" />
+            </children>
+
+        </component>
+
+        <component id="eye">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <scale x="0.3" y="0.3" z="0.3" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="m1" />
+                <material id="m1" />
+            </materials>
+
+            <texture id="t1" />
+
+            <children>
+                <primitiveref id="triangle" />
+            </children>
+
+        </component>
+
+        <component id="arm1">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="-0.2" y="0.3" z="0" />
+
+            </transformation>
+
+            <materials>
+                <material id="m1" />
+                <material id="m1" />
+            </materials>
+
+            <texture id="t3" />
+
+            <children>
+                <componentref id="arm" />
+            </children>
+
+        </component>
+
+        <component id="arm2">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="0.8" y="0.3" z="0" />
+
+            </transformation>
+
+            <materials>
+                <material id="m1" />
+                <material id="m1" />
+            </materials>
+
+            <texture id="t3" />
+
+            <children>
+                <componentref id="arm" />
+            </children>
+
+        </component>
+
+        <component id="arm">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <scale x="0.3" y="0.3" z="1" />
+
+            </transformation>
+
+            <materials>
+                <material id="m1" />
+                <material id="m1" />
+            </materials>
+
+            <texture id="t3" />
+
+            <children>
+                <primitiveref id="cylinder" />
             </children>
 
         </component>
