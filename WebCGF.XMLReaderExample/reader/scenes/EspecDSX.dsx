@@ -272,9 +272,8 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-              <translate x="-25" y="0" z="25" />
-              <rotate axis="x" angle="-90" />
-              <scale x="50" y="50" z="50" />
+
+              <scale x="2" y="2" z="2" />
             </transformation>
 
             <materials>
@@ -303,7 +302,9 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-              <translate x="0" y="-20" z="0" />
+              <translate x="-25" y="-25" z="25" />
+              <rotate axis="x" angle="-90" />
+              <scale x="50" y="50" z="50" />
             </transformation>
 
             <materials>
@@ -327,8 +328,9 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-              <translate x="0" y="20" z="0" />
-              <rotate axis="x" angle="180" />
+              <translate x="25" y="25" z="25" />
+              <rotate axis="x" angle="-90" />
+              <scale x="-50" y="50" z="50" />
             </transformation>
 
             <materials>
@@ -352,8 +354,9 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-              <translate x="-25" y="0" z="0" />
+              <translate x="-25" y="25" z="-25" />
               <rotate axis="z" angle="-90" />
+              <scale x="50" y="50" z="50" />
             </transformation>
 
             <materials>
@@ -377,8 +380,9 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-              <translate x="25" y="0" z="0" />
-              <rotate axis="z" angle="90" />
+              <translate x="-25" y="-25" z="25s" />
+              <rotate axis="y" angle="90" />
+              <scale x="50" y="50" z="50" />
             </transformation>
 
             <materials>
@@ -402,9 +406,9 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-              <translate x="0" y="0" z="-25" />
-              <rotate axis="y" angle="90" />
-              <rotate axis="z" angle="90" />
+              <translate x="25" y="-25" z="-25" />
+              <rotate axis="y" angle="-90" />
+              <scale x="50" y="50" z="50" />
             </transformation>
 
             <materials>
@@ -428,9 +432,9 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-              <translate x="0" y="0" z="25" />
-              <rotate axis="y" angle="-90" />
-              <rotate axis="z" angle="90" />
+              <translate x="-25" y="25" z="25" />
+              <rotate axis="x" angle="-180" />
+              <scale x="50" y="50" z="50" />
             </transformation>
 
             <materials>

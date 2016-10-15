@@ -563,7 +563,7 @@ MySceneGraph.prototype.visitGraph = function(root, transformationStack, material
 
         //Tranformations--------------------------
         currentTransformation = mat4.create();
-        mat4.multiply(currentTransformation, this.transformations[node.transformationID], transformationStack.top());
+        mat4.multiply(currentTransformation, transformationStack.top(),this.transformations[node.transformationID]);
         transformationStack.push(currentTransformation);
 
         //Materials--------------------------------
