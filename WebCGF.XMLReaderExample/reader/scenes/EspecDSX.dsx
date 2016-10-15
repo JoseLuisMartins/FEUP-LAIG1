@@ -29,8 +29,8 @@
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="p1" near="0.1" far="500" angle="22">
-            <from x="18" y="8" z="18" />
-            <to x="0" y="0" z="0" />
+            <from x="15" y="20" z="35" />
+            <to x="5" y="5" z="5" />
         </perspective>
 
         <perspective id="p2" near="0.1" far="500" angle="25">
@@ -104,13 +104,14 @@
         <!-- objetos respetivos podem a violar esta regra.         -->
         <!-- Nao necessario aplicar fatores de escala em  -->
         <!-- quadricas (esfera, ciclindro...) -->
-        <texture id="t1" file="resources\\images\\trash.jpg" length_s="0.5" length_t="1.3" />
-        <texture id="t2" file="resources\\images\\world.png" length_s="0.4" length_t="1.2" />
-        <texture id="t3" file="resources\\images\\clock.png" length_s="0.4" length_t="1.2" />
+        <texture id="earthTex" file="resources\\images\\world.png" length_s="1.0" length_t="1.0" />
+        <texture id="jupiterTex" file="resources\\images\\jupiter.jpg" length_s="1.0" length_t="1.0" />
+        <texture id="neptuneTex" file="resources\\images\\neptune.jpg" length_s="1.0" length_t="1.0" />
+        <texture id="saturnTex" file="resources\\images\\saturn.png" length_s="1.0" length_t="1.0" />
+        <texture id="marsTex" file="resources\\images\\mars.jpg" length_s="1.0" length_t="1.0" />
         <texture id="eye" file="resources\\images\\eye.png" length_s="1.0" length_t="1.0" />
-        <texture id="robot_head" file="resources\\images\\robothead.png" length_s="1.0" length_t="1.0" />
-        <texture id="robot_torso" file="resources\\images\\robottorso.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="sliced_metal" file="resources\\images\\slicedmetal.jpg" length_s="1.0" length_t="1.0" />
+        <texture id="robot_skin" file="resources\\images\\robotSkin.jpg" length_s="1.0" length_t="1.0" />
+        <texture id="robot_torso" file="resources\\images\\robotTorso.jpg" length_s="1.0" length_t="1.0" />
         <texture id="fofis" file="resources\\images\\fofis.png" length_s="1.0" length_t="1.0" />
         <texture id="vortex" file="resources\\images\\vortex.jpg" length_s="1.0" length_t="1.0" />
         <texture id="abstract_orange" file="resources\\images\\abstractorange.jpg" length_s="1.0" length_t="1.0" />
@@ -233,7 +234,8 @@
                 <!-- usando zero ou mais das instrucoes seguintes, sem -->
                 <!-- limite nem ordem -->
                 <!-- ex: bloco transformation pode ficar sem conteudo -->
-                 <translate x="0" y="0" z="0" />
+
+                <scale x="1" y="1" z="1" />
             </transformation>
 
             <!-- declaracao obrigatoria de pelo menos um material; -->
@@ -252,7 +254,7 @@
             <!-- id="none" remove a textura recebida do pai -->
             <!-- a textura declarada sobrepoe a textura recebida do -->
             <!-- objecto "pai" -->
-            <texture id="t2" />
+            <texture id="none" />
 
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
@@ -262,7 +264,10 @@
                 <!-- componentes ou primitivas -->
                 <componentref id="universe" />
                 <componentref id="earth" />
-                <componentref id="support" />
+                <componentref id="neptune" />
+                <componentref id="saturn" />
+                <componentref id="jupiter" />
+                <componentref id="mars" />
                 <componentref id="person" />
             </children>
 
@@ -455,14 +460,164 @@
         </component>
 
 
-
-        <component id="support">
+        <component id="earth">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
+                <translate x="2" y="1" z="7" />
+                <rotate axis="z" angle="90" />
+                <scale x="2.5" y="2.5" z="2.5" />
+            </transformation>
 
-                <translate x="2" y="1" z="5" />
+            <materials>
+                <material id="inherit" />
+                <material id="inherit" />
+                <material id="m1" />
+            </materials>
 
+
+            <texture id="earthTex" />
+
+
+            <children>
+                <primitiveref id="sphere" />
+            </children>
+
+        </component>
+
+        <component id="neptune">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="-1" y="1" z="3" />
+                <rotate axis="z" angle="90" />
+                <scale x="2.5" y="2.5" z="2.5" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+                <material id="inherit" />
+                <material id="m1" />
+            </materials>
+
+
+            <texture id="neptuneTex" />
+
+
+            <children>
+                <primitiveref id="sphere" />
+            </children>
+
+        </component>
+
+        <component id="saturn">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="3" y="1" z="-1" />
+                <rotate axis="z" angle="90" />
+                <scale x="2.5" y="2.5" z="2.5" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+                <material id="inherit" />
+                <material id="m1" />
+            </materials>
+
+
+            <texture id="saturnTex" />
+
+
+            <children>
+                <primitiveref id="sphere" />
+            </children>
+
+        </component>
+
+        <component id="jupiter">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="6.5" y="1" z="6" />
+                <rotate axis="z" angle="90" />
+                <scale x="2.5" y="2.5" z="2.5" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+                <material id="inherit" />
+                <material id="m1" />
+            </materials>
+
+
+            <texture id="jupiterTex" />
+
+
+            <children>
+                <primitiveref id="sphere" />
+            </children>
+
+        </component>
+
+        <component id="mars">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="8" y="1" z="1" />
+                <rotate axis="z" angle="90" />
+                <scale x="2.5" y="2.5" z="2.5" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+                <material id="inherit" />
+                <material id="m1" />
+            </materials>
+
+
+            <texture id="marsTex" />
+
+
+            <children>
+                <primitiveref id="sphere" />
+            </children>
+
+        </component>
+
+        <component id="person">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <scale x="2" y="2" z="2" />
+                <translate x="1" y="2" z="1" />
+                <rotate axis="y" angle="-20" />
+            </transformation>
+
+            <materials>
+                <material id="m1" />
+                <material id="m1" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+              <componentref id="hat" />
+              <componentref id="leg1" />
+              <componentref id="leg2" />
+              <componentref id="torso" />
+              <componentref id="head" />
+              <componentref id="arm1" />
+              <componentref id="arm2" />
+            </children>
+
+        </component>
+
+        <component id="hat">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="0.5" y="1.5" z="0"/>
             </transformation>
 
             <materials>
@@ -477,19 +632,19 @@
 
 
             <children>
-                <componentref id="supportBot" />
-                <componentref id="supportTop" />
+                <componentref id="hatTop" />
+                <componentref id="hatBot" />
             </children>
 
         </component>
 
-        <component id="supportBot">
+        <component id="hatTop">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-              <translate x="0" y="0.5" z="0" />
+              <translate x="0" y="1" z="0" />
               <scale x="1" y="1.5" z="1" />
-              <rotate axis="x" angle="90" />
+              <rotate axis="x" angle="-90" />
             </transformation>
 
             <materials>
@@ -509,7 +664,7 @@
 
         </component>
 
-        <component id="supportTop">
+        <component id="hatBot">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
@@ -532,57 +687,6 @@
 
             <children>
                 <primitiveref id="torus" />
-            </children>
-
-        </component>
-
-        <component id="earth">
-
-            <!-- bloco "transformation" obrigatorio -->
-            <transformation>
-                <translate x="2" y="3.5" z="5" />
-                <rotate axis="z" angle="90" />
-                <scale x="2.5" y="2.5" z="2.5" />
-            </transformation>
-
-            <materials>
-                <material id="inherit" />
-                <material id="inherit" />
-                <material id="m1" />
-            </materials>
-
-
-            <texture id="t2" />
-
-
-            <children>
-                <primitiveref id="sphere" />
-            </children>
-
-        </component>
-
-        <component id="person">
-
-            <!-- bloco "transformation" obrigatorio -->
-            <transformation>
-                <translate x="3" y="2" z="2" />
-                <rotate axis="y" angle="-20" />
-            </transformation>
-
-            <materials>
-                <material id="m1" />
-                <material id="m1" />
-            </materials>
-
-            <texture id="t3" />
-
-            <children>
-              <componentref id="leg1" />
-              <componentref id="leg2" />
-              <componentref id="torso" />
-              <componentref id="head" />
-              <componentref id="arm1" />
-              <componentref id="arm2" />
             </children>
 
         </component>
@@ -641,7 +745,7 @@
                 <material id="m1" />
             </materials>
 
-            <texture id="sliced_metal" />
+            <texture id="robot_skin" />
 
             <children>
                 <primitiveref id="cylinder" />
@@ -704,7 +808,7 @@
                 <material id="m1" />
             </materials>
 
-            <texture id="robot_head" />
+            <texture id="robot_skin" />
 
             <children>
                 <primitiveref id="sphere" />
@@ -718,7 +822,7 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="-0.1" y="0" z="0.5" />
+                <translate x="-0.3" y="0" z="0.5" />
             </transformation>
 
             <materials>
@@ -738,7 +842,7 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="0.3" y="0" z="0.5" />
+                <translate x="0.1" y="0" z="0.5" />
             </transformation>
 
             <materials>
@@ -779,8 +883,9 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="-0.2" y="0.3" z="0" />
-
+                <translate x="-0.2" y="0.5" z="0" />
+                <rotate axis="x" angle="-80" />
+                <rotate axis="y" angle="-60" />
             </transformation>
 
             <materials>
@@ -800,8 +905,9 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="0.8" y="0.3" z="0" />
-
+                <translate x="0.8" y="0.5" z="0" />
+                <rotate axis="x" angle="-80" />
+                <rotate axis="y" angle="60" />
             </transformation>
 
             <materials>
@@ -830,7 +936,7 @@
                 <material id="m1" />
             </materials>
 
-            <texture id="sliced_metal" />
+            <texture id="robot_skin" />
 
             <children>
                 <primitiveref id="cylinder" />
