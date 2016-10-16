@@ -116,9 +116,11 @@
         <texture id="eye" file="resources\\images\\eye.png" length_s="1.0" length_t="1.0" />
         <texture id="robot_skin" file="resources\\images\\robotSkin.jpg" length_s="1.0" length_t="1.0" />
         <texture id="robot_torso" file="resources\\images\\robotTorso.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="fofis" file="resources\\images\\fofis.png" length_s="1.0" length_t="1.0" />
+        <texture id="black" file="resources\\images\\black.jpg" length_s="1.0" length_t="1.0" />
         <texture id="abstract_orange" file="resources\\images\\abstractorange.jpg" length_s="1.0" length_t="1.0" />
         <texture id="space" file="resources\\images\\space.jpg" length_s="1.0" length_t="1.0" />
+        <texture id="saturnRingTex" file="resources\\images\\SaturnRing.png" length_s="1.0" length_t="1.0" />
+        <texture id="flameTex" file="resources\\images\\flame.jpg" length_s="1.0" length_t="1.0" />
     </textures>
 
 
@@ -216,6 +218,10 @@
 		<primitive id="torus">
             <torus inner="0.5" outer="1" slices="40" loops="40" />
         </primitive>
+
+      <primitive id="torusSaturn">
+              <torus inner="0.5" outer="2" slices="40" loops="40" />
+          </primitive>
 
 
 
@@ -518,6 +524,53 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
                 <translate x="3" y="1" z="-1" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+                <material id="inherit" />
+                <material id="m1" />
+            </materials>
+
+
+            <texture id="saturnTex" />
+
+
+            <children>
+                <componentref id="saturnSphere" />
+                <componentref id="saturnRing" />
+            </children>
+
+        </component>
+
+        <component id="saturnRing">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <scale x="1" y="0.1" z="1" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+                <material id="inherit" />
+                <material id="m1" />
+            </materials>
+
+
+            <texture id="saturnRingTex" />
+
+
+            <children>
+                <primitiveref id="torusSaturn" />
+            </children>
+
+        </component>
+
+        <component id="saturnSphere">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
                 <rotate axis="z" angle="90" />
                 <scale x="2.5" y="2.5" z="2.5" />
             </transformation>
@@ -761,6 +814,28 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
+                <translate x="0" y="0" z="0" />
+
+            </transformation>
+
+            <materials>
+                <material id="m1" />
+                <material id="m1" />
+            </materials>
+
+            <texture id="none" />
+
+            <children>
+                <componentref id="footBoot" />
+                <componentref id="footFlame" />
+            </children>
+
+        </component>
+
+        <component id="footBoot">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
                 <translate x="0" y="0.5" z="1.0" />
                 <scale x="1" y="3" z="0.3" />
             </transformation>
@@ -770,10 +845,31 @@
                 <material id="m1" />
             </materials>
 
-            <texture id="fofis" />
+            <texture id="black" />
 
             <children>
                 <primitiveref id="sphere" />
+            </children>
+
+        </component>
+
+        <component id="footFlame">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <scale x="0.8" y="0.8" z="0.8" />
+                <translate x="0" y="0" z="1.4" />
+            </transformation>
+
+            <materials>
+                <material id="m1" />
+                <material id="m1" />
+            </materials>
+
+            <texture id="flameTex" />
+
+            <children>
+                <primitiveref id="cone" />
             </children>
 
         </component>
@@ -885,9 +981,9 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="-0.2" y="0.5" z="0" />
-                <rotate axis="x" angle="-80" />
-                <rotate axis="y" angle="-60" />
+                <translate x="-0.2" y="0.3" z="0" />
+                <rotate axis="x" angle="90" />
+                <rotate axis="y" angle="-30" />
             </transformation>
 
             <materials>
@@ -907,9 +1003,10 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="0.8" y="0.5" z="0" />
-                <rotate axis="x" angle="-80" />
-                <rotate axis="y" angle="60" />
+                <translate x="0.9" y="0.3" z="0" />
+                <rotate axis="x" angle="-90" />
+                <rotate axis="y" angle="30" />
+
             </transformation>
 
             <materials>
@@ -952,7 +1049,7 @@
 
         <!-- bloco "transformation" obrigatorio -->
         <transformation>
-            <scale x="0.3" y="0.3" z="1" />
+            <scale x="0.3" y="0.3" z="1.3" />
 
         </transformation>
 
@@ -975,7 +1072,7 @@
         <!-- bloco "transformation" obrigatorio -->
         <transformation>
             <scale x="0.5" y="0.5" z="0.5" />
-            <translate x="0" y="0" z="2.0" />
+            <translate x="0" y="0" z="2.5" />
         </transformation>
 
         <materials>
@@ -983,7 +1080,7 @@
             <material id="m1" />
         </materials>
 
-        <texture id="fofis" />
+        <texture id="black" />
 
         <children>
             <primitiveref id="sphere" />

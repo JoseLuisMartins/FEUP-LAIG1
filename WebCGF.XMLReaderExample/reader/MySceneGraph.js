@@ -547,14 +547,12 @@ MySceneGraph.prototype.onXMLError = function(message) {
 MySceneGraph.prototype.displayGraph = function() {
     var textureStack = new Structure.stack();
     var materialStack = new Structure.stack();
-    var transformationStack = new Structure.stack();
 
-    transformationStack.push(mat4.create());
-    this.visitGraph(this.rootID, transformationStack, materialStack, textureStack);
+    this.visitGraph(this.rootID, materialStack, textureStack);
 }
 
 
-MySceneGraph.prototype.visitGraph = function(root, transformationStack, materialStack, textureStack) {
+MySceneGraph.prototype.visitGraph = function(root, materialStack, textureStack) {
     var node, currentTransformation;
 
     node = this.nodes[root];
@@ -562,9 +560,9 @@ MySceneGraph.prototype.visitGraph = function(root, transformationStack, material
     if (node instanceof Component) { //component
 
         //Tranformations--------------------------
-        currentTransformation = mat4.create();
-        mat4.multiply(currentTransformation, transformationStack.top(),this.transformations[node.transformationID]);
-        transformationStack.push(currentTransformation);
+        this.scene.pushMatrix();
+        this.scene.multMatrix(this.transformations[node.transformationID]);
+
 
         //Materials--------------------------------
         var materialId = node.materialIDs[this.scene.materialIndex % node.materialIDs.length];
@@ -586,17 +584,16 @@ MySceneGraph.prototype.visitGraph = function(root, transformationStack, material
 
 
         for (var i = 0; i < node.childrenIDs.length; i++) {
-            this.visitGraph(node.childrenIDs[i], transformationStack, materialStack, textureStack);
+            this.visitGraph(node.childrenIDs[i], materialStack, textureStack);
         }
 
-        transformationStack.pop();
+        this.scene.popMatrix();
         materialStack.pop();
         textureStack.pop();
 
     } else { //primitive
 
-        this.scene.pushMatrix();
-        this.scene.multMatrix(transformationStack.top());
+
         var material = this.materials[materialStack.top()];
 
         if(textureStack.top() != "none")
@@ -606,7 +603,7 @@ MySceneGraph.prototype.visitGraph = function(root, transformationStack, material
         node.display();
         material.setTexture(null);
 
-        this.scene.popMatrix();
+
       }
 
 
