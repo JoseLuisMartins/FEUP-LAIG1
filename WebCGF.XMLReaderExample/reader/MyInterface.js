@@ -18,9 +18,11 @@ MyInterface.prototype.init = function(application) {
     CGFinterface.prototype.init.call(this, application);
 
     this.gui = new dat.GUI();
-    this.omni = this.gui.addFolder("Omni Lights");
+
+    this.omni = this.gui.addFolder("Omnilights");
     this.omni.open();
-    this.spot = this.gui.addFolder("Spot Lights");
+
+    this.spot = this.gui.addFolder("Spotlights");
     this.spot.open();
 
     return true;
