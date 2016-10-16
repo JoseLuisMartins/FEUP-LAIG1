@@ -82,7 +82,7 @@ MySceneGraph.prototype.onXMLReady = function() {
 MySceneGraph.prototype.chekDSXOrder = function(rootElement) {
     var childs = rootElement.children;
     if (childs.length != 9) {
-        console.error("Missing Tag");
+        console.error("Number of tags in dsx different than 9" );
         return 1;
     }
 
@@ -573,7 +573,7 @@ MySceneGraph.prototype.visitGraph = function(root, transformationStack, material
           if(materialId == "inherit")
             materialStack.push(materialStack.top());
           else
-            materialStack.push(this.materials[materialId]);
+            materialStack.push(materialId);
 
 
 
@@ -581,10 +581,8 @@ MySceneGraph.prototype.visitGraph = function(root, transformationStack, material
         var textureId = node.textureID;
         if (textureId == "inherit")
             textureStack.push(textureStack.top());
-        else if (textureId == "none")
-            textureStack.push("none");
         else
-            textureStack.push(this.textures[textureId].texture);
+            textureStack.push(textureId);
 
 
         for (var i = 0; i < node.childrenIDs.length; i++) {
@@ -599,14 +597,14 @@ MySceneGraph.prototype.visitGraph = function(root, transformationStack, material
 
         this.scene.pushMatrix();
         this.scene.multMatrix(transformationStack.top());
-
+        var material = this.materials[materialStack.top()];
 
         if(textureStack.top() != "none")
-          materialStack.top().setTexture(textureStack.top());
+          material.setTexture(this.textures[textureStack.top()].texture);
 
-        materialStack.top().apply();
+        material.apply();
         node.display();
-        materialStack.top().setTexture(null);
+        material.setTexture(null);
 
         this.scene.popMatrix();
       }

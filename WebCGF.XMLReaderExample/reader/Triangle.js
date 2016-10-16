@@ -36,14 +36,14 @@ Triangle.prototype.initBuffers = function() {
     ];
 
 
-    var properties = this.getVectorsProperties(this.makeVector(this.point2, this.point1),
-        this.makeVector(this.point2, this.point3));
+    var properties = this.getVectorsProperties(this.makeVector(this.point3, this.point2),
+        this.makeVector(this.point3, this.point1));
 
 
     this.texCoords = [
+      properties[0] - properties[1] * Math.cos(properties[2]), 1 - properties[1] * Math.sin(properties[2]),
       0, 1,
       properties[0], 1,
-      properties[0] - properties[1] * Math.cos(properties[2]), 1 - (properties[1] * Math.sin(properties[2]))
     ]
 
     this.initGLBuffers();

@@ -17,7 +17,7 @@
 
     <!-- deve definir-se um objeto para raiz do grafo , assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
-    <scene root="root" axis_length="7" />
+    <scene root="root" axis_length="3" />
 
 
 
@@ -113,7 +113,6 @@
         <texture id="robot_skin" file="resources\\images\\robotSkin.jpg" length_s="1.0" length_t="1.0" />
         <texture id="robot_torso" file="resources\\images\\robotTorso.jpg" length_s="1.0" length_t="1.0" />
         <texture id="fofis" file="resources\\images\\fofis.png" length_s="1.0" length_t="1.0" />
-        <texture id="vortex" file="resources\\images\\vortex.jpg" length_s="1.0" length_t="1.0" />
         <texture id="abstract_orange" file="resources\\images\\abstractorange.jpg" length_s="1.0" length_t="1.0" />
         <texture id="space" file="resources\\images\\space.jpg" length_s="1.0" length_t="1.0" />
     </textures>
@@ -195,7 +194,7 @@
 
 
 		<primitive id="triangle">
-            <triangle x1="0" y1="0" z1="0" x2="1" y2="0" z2="0" x3="0.5" y3="1" z3="0" />
+            <triangle x1="0.5" y1="1" z1="0" x2="0" y2="0" z2="0" x3="1" y3="0" z3="0" />
         </primitive>
 
 		<primitive id="cylinder">
@@ -268,7 +267,7 @@
                 <componentref id="saturn" />
                 <componentref id="jupiter" />
                 <componentref id="mars" />
-                <componentref id="person" />
+                <componentref id="robot" />
             </children>
 
         </component>
@@ -585,7 +584,7 @@
 
         </component>
 
-        <component id="person">
+        <component id="robot">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
@@ -599,7 +598,7 @@
                 <material id="m1" />
             </materials>
 
-            <texture id="none" />
+            <texture id="robot_skin" />
 
             <children>
               <componentref id="hat" />
@@ -682,7 +681,7 @@
             </materials>
 
 
-            <texture id="vortex" />
+            <texture id="robot_torso" />
 
 
             <children>
@@ -704,7 +703,7 @@
                 <material id="m1" />
             </materials>
 
-            <texture id="none" />
+            <texture id="inherit" />
 
             <children>
                   <componentref id="leg" />
@@ -725,7 +724,7 @@
                 <material id="m1" />
             </materials>
 
-            <texture id="none" />
+            <texture id="inherit" />
 
             <children>
                  <componentref id="leg" />
@@ -745,7 +744,7 @@
                 <material id="m1" />
             </materials>
 
-            <texture id="robot_skin" />
+            <texture id="inherit" />
 
             <children>
                 <primitiveref id="cylinder" />
@@ -808,7 +807,7 @@
                 <material id="m1" />
             </materials>
 
-            <texture id="robot_skin" />
+            <texture id="inherit" />
 
             <children>
                 <primitiveref id="sphere" />
@@ -863,7 +862,6 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
                 <scale x="0.3" y="0.3" z="0.3" />
-            <!--    <rotate axis="x" angle="-90" /> -->
             </transformation>
 
             <materials>
@@ -927,7 +925,7 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <scale x="0.3" y="0.3" z="1" />
+                <scale x="1" y="1" z="1" />
 
             </transformation>
 
@@ -939,12 +937,57 @@
             <texture id="robot_skin" />
 
             <children>
-                <primitiveref id="cylinder" />
+                <componentref id="armCylinder" />
+                <componentref id="hand" />
             </children>
 
         </component>
 
-    </components>
+
+    <component id="armCylinder">
+
+        <!-- bloco "transformation" obrigatorio -->
+        <transformation>
+            <scale x="0.3" y="0.3" z="1" />
+
+        </transformation>
+
+        <materials>
+            <material id="m1" />
+            <material id="m1" />
+        </materials>
+
+        <texture id="robot_skin" />
+
+        <children>
+            <primitiveref id="cylinder" />
+        </children>
+
+    </component>
+
+
+    <component id="hand">
+
+        <!-- bloco "transformation" obrigatorio -->
+        <transformation>
+            <scale x="0.5" y="0.5" z="0.5" />
+            <translate x="0" y="0" z="2.0" />
+        </transformation>
+
+        <materials>
+            <material id="m1" />
+            <material id="m1" />
+        </materials>
+
+        <texture id="fofis" />
+
+        <children>
+            <primitiveref id="sphere" />
+        </children>
+
+    </component>
+
+</components>
 
 
 
