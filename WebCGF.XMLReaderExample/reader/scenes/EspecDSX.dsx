@@ -43,7 +43,7 @@
             <to x="0" y="0" z="0" />
         </perspective>
 
-        <perspective id="p4" near="0.1" far="500" angle="40">
+        <perspective id="p4" near="0.1" far="1000" angle="40">
             <from x="100" y="25" z="200" />
             <to x="0" y="0" z="0" />
         </perspective>
@@ -62,35 +62,57 @@
 
         <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <omni id="omni1" enabled="1" >
-            <location x="0" y="10" z="0" w="0.2" />
-            <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="1" g="1" b="1" a="1" />
-            <specular r="1" g="1" b="1" a="1" />
+        <omni id="Sun Orange" enabled="1" >
+            <location x="-70" y="1" z="0" w="1" />
+            <ambient r="1" g="0.5" b="0" a="1" />
+            <diffuse r="1" g="0.5" b="0" a="1" />
+            <specular r="1" g="0.5" b="0" a="1" />
         </omni>
 
-        <omni id="omni2" enabled="0" >
-            <location x="10" y="10" z="0" w="0.2" />
-            <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="1" g="1" b="1" a="1" />
-            <specular r="1" g="1" b="1" a="1" />
+        <omni id="Sun Yellow" enabled="1" >
+            <location x="-70" y="1" z="0" w="1" />
+            <ambient r="1" g="1" b="0.2" a="1" />
+            <diffuse r="1" g="1" b="0.2" a="1" />
+            <specular r="1" g="1" b="0.2" a="1" />
         </omni>
 
-        <omni id="omni3" enabled="1" >
-            <location x="0" y="10" z="10" w="0.2" />
-            <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="1" g="1" b="1" a="1" />
-            <specular r="1" g="1" b="1" a="1" />
-        </omni>
-
-        <spot id="spot1" enabled="0" angle="40" exponent="0.5">
+        <spot id="Sun Ray 1" enabled="0" angle="0" exponent="1">
             <!-- atencao, "target" e' diferente de "direction" -->
-            <target x="3" y="3" z="0.5" />
-            <location x="10" y="10" z="10" />
-            <ambient r="0.5" g="0.5" b="0.5" a="0.5" />
-            <diffuse r="0.5" g="0.5" b="0.5" a="0.5" />
+            <target x="0" y="1" z="0" />
+            <location x="-70" y="1" z="0" w="1" />
+            <ambient r="1" g="1" b="0.2" a="1" />
+            <diffuse r="1" g="0.5" b="0" a="0.5" />
             <specular r="0.5" g="0.5" b="0.5" a="0.5" />
         </spot>
+
+        <spot id="Sun Ray 2" enabled="0" angle="0" exponent="1">
+            <!-- atencao, "target" e' diferente de "direction" -->
+            <target x="-70" y="-5" z="0" />
+            <location x="-70" y="1" z="0" w="1" />
+            <ambient r="1" g="1" b="0.2" a="1" />
+            <diffuse r="1" g="0.5" b="0" a="0.5" />
+            <specular r="0.5" g="0.5" b="0.5" a="0.5" />
+        </spot>
+
+        <spot id="Sun Ray 3" enabled="0" angle="0" exponent="1">
+            <!-- atencao, "target" e' diferente de "direction" -->
+            <target x="-120" y="1" z="0" />
+            <location x="-70" y="1" z="0" w="1" />
+            <ambient r="1" g="1" b="0.2" a="1" />
+            <diffuse r="1" g="0.5" b="0" a="0.5" />
+            <specular r="0.5" g="0.5" b="0.5" a="0.5" />
+        </spot>
+
+        <spot id="Sun Ray 4" enabled="0" angle="0" exponent="1">
+            <!-- atencao, "target" e' diferente de "direction" -->
+            <target x="-70" y="5" z="0" />
+            <location x="-70" y="1" z="0" w="1" />
+            <ambient r="1" g="1" b="0.2" a="1" />
+            <diffuse r="1" g="0.5" b="0" a="0.5" />
+            <specular r="0.5" g="0.5" b="0.5" a="0.5" />
+        </spot>
+
+
     </lights>
 
 
@@ -108,7 +130,7 @@
         <!-- objetos respetivos podem a violar esta regra.         -->
         <!-- Nao necessario aplicar fatores de escala em  -->
         <!-- quadricas (esfera, ciclindro...) -->
-        <texture id="earthTex" file="resources\\images\\world.png" length_s="1.0" length_t="1.0" />
+        <texture id="earthTex" file="resources\\images\\earth.png" length_s="1.0" length_t="1.0" />
         <texture id="jupiterTex" file="resources\\images\\jupiter.jpg" length_s="1.0" length_t="1.0" />
         <texture id="neptuneTex" file="resources\\images\\neptune.jpg" length_s="1.0" length_t="1.0" />
         <texture id="saturnTex" file="resources\\images\\saturn.png" length_s="1.0" length_t="1.0" />
@@ -121,6 +143,10 @@
         <texture id="space" file="resources\\images\\space.jpg" length_s="1.0" length_t="1.0" />
         <texture id="saturnRingTex" file="resources\\images\\SaturnRing.png" length_s="1.0" length_t="1.0" />
         <texture id="flameTex" file="resources\\images\\flame.jpg" length_s="1.0" length_t="1.0" />
+        <texture id="sunTex" file="resources\\images\\sun.jpg" length_s="1.0" length_t="1.0" />
+        <texture id="venusTex" file="resources\\images\\venus.jpg" length_s="1.0" length_t="1.0" />
+        <texture id="mercuryTex" file="resources\\images\\mercury.jpg" length_s="1.0" length_t="1.0" />
+        <texture id="uranusTex" file="resources\\images\\uranus.png" length_s="1.0" length_t="1.0" />
     </textures>
 
 
@@ -219,8 +245,8 @@
             <torus inner="0.5" outer="1" slices="40" loops="40" />
         </primitive>
 
-      <primitive id="torusSaturn">
-              <torus inner="0.5" outer="2" slices="40" loops="40" />
+      <primitive id="ring">
+              <torus inner="1.2" outer="7" slices="40" loops="40" />
           </primitive>
 
 
@@ -272,11 +298,15 @@
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
                 <componentref id="universe" />
+                <componentref id="sun" />
+                <componentref id="mercury" />
+                <componentref id="venus" />
                 <componentref id="earth" />
-                <componentref id="neptune" />
-                <componentref id="saturn" />
-                <componentref id="jupiter" />
                 <componentref id="mars" />
+                <componentref id="jupiter" />
+                <componentref id="saturn" />
+                <componentref id="uranus" />
+                <componentref id="neptune" />
                 <componentref id="robot" />
             </children>
 
@@ -287,7 +317,7 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
 
-              <scale x="2" y="2" z="2" />
+              <scale x="7" y="7" z="7" />
             </transformation>
 
             <materials>
@@ -469,13 +499,94 @@
         </component>
 
 
+        <component id="sun">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="-70" y="1" z="0" />
+                <rotate axis="z" angle="90" />
+                <scale x="50" y="50" z="50" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+                <material id="inherit" />
+                <material id="m1" />
+            </materials>
+
+
+            <texture id="sunTex" />
+
+
+            <children>
+                <primitiveref id="sphere" />
+            </children>
+
+        </component>
+
+
+
+        <component id="mercury">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="-20" y="1" z="0" />
+                <rotate axis="z" angle="90" />
+                <scale x="1.77" y="1.77" z="1.77" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+                <material id="inherit" />
+                <material id="m1" />
+            </materials>
+
+
+            <texture id="mercuryTex" />
+
+
+            <children>
+                <primitiveref id="sphere" />
+            </children>
+
+        </component>
+
+
+        <component id="venus">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="-10" y="1" z="0" />
+                <rotate axis="z" angle="90" />
+                <scale x="2.77" y="2.77" z="2.77" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+                <material id="inherit" />
+                <material id="m1" />
+            </materials>
+
+
+            <texture id="venusTex" />
+
+
+            <children>
+                <primitiveref id="sphere" />
+            </children>
+
+        </component>
+
+
+
+
         <component id="earth">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="2" y="1" z="7" />
+                <translate x="0" y="1" z="0" />
                 <rotate axis="z" angle="90" />
-                <scale x="2.5" y="2.5" z="2.5" />
+                <scale x="3" y="3" z="3" />
             </transformation>
 
             <materials>
@@ -494,13 +605,15 @@
 
         </component>
 
-        <component id="neptune">
+
+
+        <component id="mars">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="-1" y="1" z="3" />
+                <translate x="5" y="1" z="0" />
                 <rotate axis="z" angle="90" />
-                <scale x="2.5" y="2.5" z="2.5" />
+                <scale x="1.51" y="1.51" z="1.51" />
             </transformation>
 
             <materials>
@@ -510,7 +623,7 @@
             </materials>
 
 
-            <texture id="neptuneTex" />
+            <texture id="marsTex" />
 
 
             <children>
@@ -519,11 +632,40 @@
 
         </component>
 
+
+
+        <component id="jupiter">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="15" y="1" z="0" />
+                <rotate axis="z" angle="90" />
+                <scale x="11.21" y="11.21" z="11.21" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+                <material id="inherit" />
+                <material id="m1" />
+            </materials>
+
+
+            <texture id="jupiterTex" />
+
+
+            <children>
+                <primitiveref id="sphere" />
+            </children>
+
+        </component>
+
+
+
         <component id="saturn">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="3" y="1" z="-1" />
+                <translate x="35" y="1" z="0" />
             </transformation>
 
             <materials>
@@ -543,12 +685,13 @@
 
         </component>
 
+
         <component id="saturnRing">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <scale x="1" y="0.1" z="1" />
                 <rotate axis="x" angle="90" />
+                <scale x="1" y="1" z="0.2" />
             </transformation>
 
             <materials>
@@ -562,17 +705,18 @@
 
 
             <children>
-                <primitiveref id="torusSaturn" />
+                <primitiveref id="ring" />
             </children>
 
         </component>
+
 
         <component id="saturnSphere">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
                 <rotate axis="z" angle="90" />
-                <scale x="2.5" y="2.5" z="2.5" />
+                <scale x="9.45" y="9.45" z="9.45" />
             </transformation>
 
             <materials>
@@ -591,13 +735,14 @@
 
         </component>
 
-        <component id="jupiter">
+
+        <component id="uranus">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="6.5" y="1" z="6" />
+                <translate x="50" y="1" z="0" />
                 <rotate axis="z" angle="90" />
-                <scale x="2.5" y="2.5" z="2.5" />
+                <scale x="4.01" y="4.01" z="4.01" />
             </transformation>
 
             <materials>
@@ -607,7 +752,7 @@
             </materials>
 
 
-            <texture id="jupiterTex" />
+            <texture id="uranusTex" />
 
 
             <children>
@@ -616,13 +761,15 @@
 
         </component>
 
-        <component id="mars">
+
+
+        <component id="neptune">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="8" y="1" z="1" />
+                <translate x="60" y="1" z="0" />
                 <rotate axis="z" angle="90" />
-                <scale x="2.5" y="2.5" z="2.5" />
+                <scale x="3.88" y="3.88" z="3.88" />
             </transformation>
 
             <materials>
@@ -632,7 +779,7 @@
             </materials>
 
 
-            <texture id="marsTex" />
+            <texture id="neptuneTex" />
 
 
             <children>
@@ -640,6 +787,8 @@
             </children>
 
         </component>
+
+
 
         <component id="robot">
 
