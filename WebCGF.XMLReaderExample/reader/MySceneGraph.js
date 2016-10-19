@@ -601,7 +601,7 @@ MySceneGraph.prototype.visitGraph = function(root, materialStack, textureStack) 
         if(textureStack.top() != "none") {
           if (node instanceof Triangle){
             node.setTextureCoords(textureElement.lengthS, textureElement.lengthT);
-            console.log(textureElement);
+            //console.log(textureElement);
           }
           material.setTexture(textureElement.texture);
         }
@@ -612,6 +612,4 @@ MySceneGraph.prototype.visitGraph = function(root, materialStack, textureStack) 
 
 
       }
-
-
-}
+  }
