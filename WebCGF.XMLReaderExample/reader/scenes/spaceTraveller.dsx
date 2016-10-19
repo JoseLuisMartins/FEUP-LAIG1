@@ -17,7 +17,7 @@
 
     <!-- deve definir-se um objeto para raiz do grafo , assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
-    <scene root="root" axis_length="3" />
+    <scene root="root" axis_length="0" />
 
 
 
@@ -135,7 +135,7 @@
         <texture id="neptuneTex" file="resources\\images\\neptune.jpg" length_s="1.0" length_t="1.0" />
         <texture id="saturnTex" file="resources\\images\\saturn.png" length_s="1.0" length_t="1.0" />
         <texture id="marsTex" file="resources\\images\\mars.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="eye" file="resources\\images\\eye.png" length_s="1.0" length_t="1.0" />
+        <texture id="eye" file="resources\\images\\eye.png" length_s="0.4" length_t="1.0" />
         <texture id="robot_skin" file="resources\\images\\robotSkin.jpg" length_s="1.0" length_t="1.0" />
         <texture id="robot_torso" file="resources\\images\\robotTorso.jpg" length_s="1.0" length_t="1.0" />
         <texture id="black" file="resources\\images\\black.jpg" length_s="1.0" length_t="1.0" />
@@ -234,7 +234,7 @@
         </primitive>
 
     <primitive id="cone">
-            <cylinder base="0" top="0.5" height="1" slices="50" stacks="20" />
+            <cylinder base="0.5" top="0" height="1" slices="50" stacks="20" />
         </primitive>
 
 		<primitive id="sphere">
@@ -246,7 +246,7 @@
         </primitive>
 
       <primitive id="ring">
-              <torus inner="1.2" outer="7" slices="40" loops="40" />
+              <torus inner="5.33" outer="7.87" slices="40" loops="40" />
           </primitive>
 
 
@@ -289,7 +289,7 @@
             <!-- id="none" remove a textura recebida do pai -->
             <!-- a textura declarada sobrepoe a textura recebida do -->
             <!-- objecto "pai" -->
-            <texture id="none" />
+            <texture id="eye" />
 
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
@@ -297,6 +297,7 @@
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
+                <!--
                 <componentref id="universe" />
                 <componentref id="sun" />
                 <componentref id="mercury" />
@@ -308,6 +309,8 @@
                 <componentref id="uranus" />
                 <componentref id="neptune" />
                 <componentref id="robot" />
+              -->
+                <primitiveref id="triangle" />
             </children>
 
         </component>
@@ -848,7 +851,7 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-              <translate x="0" y="1" z="0" />
+              <translate x="-0.1" y="0.85" z="0.1" />
               <scale x="1" y="1.5" z="1" />
               <rotate axis="x" angle="-90" />
             </transformation>
@@ -875,7 +878,7 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
 
-                <translate x="0" y="0.8" z="0" />
+                <translate x="-0.1" y="0.8" z="0.1" />
                 <scale x="1" y="0.5" z="1" />
                 <rotate axis="x" angle="90" />
             </transformation>

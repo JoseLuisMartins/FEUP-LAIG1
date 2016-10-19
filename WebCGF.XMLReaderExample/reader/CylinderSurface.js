@@ -33,7 +33,7 @@ CylinderSurface.prototype.initBuffers = function() {
 
 	for (var stack = 0; stack <= this.stacks; stack++) {
 		var z = stack * zRatio;
-		var radius = this.top - stack * radiusRatio;
+		var radius = this.base + stack * radiusRatio;
 
 		for (var slice = 0; slice <= this.slices; slice++) {
 			var x = radius * Math.cos(slice * thetha);

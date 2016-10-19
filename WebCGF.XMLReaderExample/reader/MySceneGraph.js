@@ -291,6 +291,7 @@ MySceneGraph.prototype.loadMaterials = function(rootElement) {
         appearance.setDiffuse(diffuse.r, diffuse.g, diffuse.b, diffuse.a);
         appearance.setSpecular(specular.r, specular.g, specular.b, specular.a);
         appearance.setShininess(shininess);
+        appearance.setTextureWrap('REPEAT', 'REPEAT');
 
         this.materials[id] = appearance;
     }
@@ -595,9 +596,15 @@ MySceneGraph.prototype.visitGraph = function(root, materialStack, textureStack) 
 
 
         var material = this.materials[materialStack.top()];
+        var textureElement = this.textures[textureStack.top()];
 
-        if(textureStack.top() != "none")
-          material.setTexture(this.textures[textureStack.top()].texture);
+        if(textureStack.top() != "none") {
+          if (node instanceof Triangle){
+            node.setTextureCoords(textureElement.lengthS, textureElement.lengthT);
+            console.log(textureElement);
+          }
+          material.setTexture(textureElement.texture);
+        }
 
         material.apply();
         node.display();

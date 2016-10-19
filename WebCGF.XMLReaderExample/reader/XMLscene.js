@@ -68,7 +68,7 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.lights[0].enable();
   this.updateView();
   this.initGraphLights();
-  this.axis=new CGFaxis(this,this.graph.axis_length,0.1);
+  this.axis=new CGFaxis(this,this.graph.axis_length, 0.1);
 };
 
 

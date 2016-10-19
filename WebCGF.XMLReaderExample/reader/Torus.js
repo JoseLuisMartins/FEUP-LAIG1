@@ -5,8 +5,10 @@
 function Torus(scene, inner, outer, slices, loops) {
     CGFobject.call(this, scene);
 
-    this.r = inner;
-    this.R = outer;
+    var torusRadius = (outer - inner) / 2;
+
+    this.r = torusRadius;
+    this.R = inner + torusRadius;
     this.slices = slices;
     this.stacks = loops;
 

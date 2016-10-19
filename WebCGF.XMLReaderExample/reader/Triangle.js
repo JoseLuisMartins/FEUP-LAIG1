@@ -40,11 +40,17 @@ Triangle.prototype.initBuffers = function() {
         this.makeVector(this.point3, this.point1));
 
 
+    this.baseTexCoords = [
+      properties[0] - properties[1] * Math.cos(properties[2]), 1 - properties[1] * Math.sin(properties[2]),
+      0, 1,
+      properties[0], 1,
+    ];
+
     this.texCoords = [
       properties[0] - properties[1] * Math.cos(properties[2]), 1 - properties[1] * Math.sin(properties[2]),
       0, 1,
       properties[0], 1,
-    ]
+    ];
 
     this.initGLBuffers();
 };
@@ -69,4 +75,15 @@ Triangle.prototype.getVectorsProperties = function(vec1, vec2) {
     var angle = Math.acos(dot / (length1 * length2));
 
     return [length1, length2, angle];
+}
+
+
+Triangle.prototype.setTextureCoords = function(length_s, length_t) {
+  this.texCoords = [
+    this.baseTexCoords[0] / length_s, this.baseTexCoords[1] / length_t,
+    this.baseTexCoords[2] / length_s, this.baseTexCoords[3] / length_t,
+    this.baseTexCoords[4] / length_s, this.baseTexCoords[5] / length_t
+  ];
+
+  this.updateTexCoordsGLBuffers();
 }
