@@ -130,7 +130,7 @@
         <!-- objetos respetivos podem a violar esta regra.         -->
         <!-- Nao necessario aplicar fatores de escala em  -->
         <!-- quadricas (esfera, ciclindro...) -->
-        <texture id="earthTex" file="resources\\images\\earth.png" length_s="1.0" length_t="1.0" />
+        <texture id="earthTex" file="resources\\images\\earth.jpg" length_s="1.0" length_t="1.0" />
         <texture id="jupiterTex" file="resources\\images\\jupiter.jpg" length_s="1.0" length_t="1.0" />
         <texture id="neptuneTex" file="resources\\images\\neptune.jpg" length_s="1.0" length_t="1.0" />
         <texture id="saturnTex" file="resources\\images\\saturn.png" length_s="1.0" length_t="1.0" />
@@ -139,7 +139,7 @@
         <texture id="robot_skin" file="resources\\images\\robotSkin.jpg" length_s="1.0" length_t="1.0" />
         <texture id="black" file="resources\\images\\black.jpg" length_s="1.0" length_t="1.0" />
         <texture id="abstract_orange" file="resources\\images\\abstractorange.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="space" file="resources\\images\\space.png" length_s="1.0" length_t="1.0" />
+        <texture id="space" file="resources\\images\\space.jpg" length_s="1.0" length_t="1.0" />
         <texture id="saturnRingTex" file="resources\\images\\SaturnRing.png" length_s="1.0" length_t="1.0" />
         <texture id="flameTex" file="resources\\images\\flame.jpg" length_s="1.0" length_t="1.0" />
         <texture id="sunTex" file="resources\\images\\sun.jpg" length_s="1.0" length_t="1.0" />
@@ -296,7 +296,7 @@
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
-                <!--
+                
                 <componentref id="universe" />
                 <componentref id="sun" />
                 <componentref id="mercury" />
@@ -308,7 +308,7 @@
                 <componentref id="uranus" />
                 <componentref id="neptune" />
                 <componentref id="robot" />
-              -->
+              
               <primitiveref id="triangle" />
             </children>
 
