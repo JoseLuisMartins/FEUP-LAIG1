@@ -4,7 +4,7 @@
 */
 function Cylinder(scene, base, top, height, slices, stacks) {
 	CGFobject.call(this,scene);
-
+	this.heigth=height;
 	this.surface = new CylinderSurface(scene, base, top, height, slices, stacks);
 	this.base = new CylinderBase(scene, base, slices);
 	this.top = new CylinderBase(scene, top, slices);
@@ -24,7 +24,7 @@ Cylinder.prototype.display = function() {
 	this.scene.popMatrix();
 
 	this.scene.pushMatrix();
-		this.scene.translate(0, 0, 1);
+		this.scene.translate(0, 0, this.heigth);
 		this.top.display();
 	this.scene.popMatrix();
 }

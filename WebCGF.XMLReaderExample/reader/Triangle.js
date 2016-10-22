@@ -82,7 +82,7 @@ Triangle.prototype.setTextureCoords = function(length_s, length_t) {
   this.texCoords = [
     this.baseTexCoords[0] / length_s, 1-(this.baseTexCoords[1] / length_t),
     0, 1,
-    this.baseTexCoords[4] / length_s, 1
+    this.baseTexCoords[4] / length_s, 1 
   ];
 
   this.updateTexCoordsGLBuffers();
