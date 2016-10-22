@@ -599,10 +599,10 @@ MySceneGraph.prototype.visitGraph = function(root, materialStack, textureStack) 
         var textureElement = this.textures[textureStack.top()];
 
         if(textureStack.top() != "none") {
-          if (node instanceof Triangle){
+          if (node instanceof Triangle || node instanceof Rectangle ){
             node.setTextureCoords(textureElement.lengthS, textureElement.lengthT);
-            //console.log(textureElement);
           }
+
           material.setTexture(textureElement.texture);
         }
 

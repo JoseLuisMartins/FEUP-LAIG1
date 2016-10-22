@@ -29,8 +29,8 @@
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="p1" near="0.1" far="1500" angle="22">
-            <from x="15" y="20" z="210" />
-            <to x="5" y="5" z="5" />
+            <from x="0" y="20" z="15" />
+            <to x="0" y="0" z="0" />
         </perspective>
 
         <perspective id="p2" near="0.1" far="1500" angle="40">
@@ -135,7 +135,7 @@
         <texture id="neptuneTex" file="resources\\images\\neptune.jpg" length_s="1.0" length_t="1.0" />
         <texture id="saturnTex" file="resources\\images\\saturn.png" length_s="1.0" length_t="1.0" />
         <texture id="marsTex" file="resources\\images\\mars.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="eye" file="resources\\images\\eye.png" length_s="0.4" length_t="0.4" />
+        <texture id="eye" file="resources\\images\\eye.png" length_s="1" length_t="0.5" />
         <texture id="robot_skin" file="resources\\images\\robotSkin.jpg" length_s="1.0" length_t="1.0" />
         <texture id="black" file="resources\\images\\black.jpg" length_s="1.0" length_t="1.0" />
         <texture id="abstract_orange" file="resources\\images\\abstractorange.jpg" length_s="1.0" length_t="1.0" />
@@ -220,7 +220,7 @@
             <!--     rectangle, triangle, cylinder, sphere, torus -->
             <!-- os parametros devem ser interpretados, genericamente como-->
             <!-- em OpenGL/GLUT; o cilindro deve adicionalmente ter tampas -->
-            <rectangle x1="0" y1="0" x2="1" y2="1" />
+            <rectangle x1="0" y1="0" x2="3" y2="3" />
         </primitive>
 
 
@@ -296,8 +296,8 @@
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
-                
-                <componentref id="universe" />
+
+              <!--  <componentref id="universe" />
                 <componentref id="sun" />
                 <componentref id="mercury" />
                 <componentref id="venus" />
@@ -307,8 +307,8 @@
                 <componentref id="saturn" />
                 <componentref id="uranus" />
                 <componentref id="neptune" />
-                <componentref id="robot" />
-              
+                <componentref id="robot" /> -->
+
               <primitiveref id="triangle" />
             </children>
 
