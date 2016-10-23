@@ -14,7 +14,12 @@ function MySceneGraph(filename, scene) {
     this.textures = {};
     this.materials = {};
     this.transformations = {};
-    this.nodes = {};
+    this.primitives = {};
+    this.components = {};
+
+    this.textureStack = new Structure.stack();
+    this.materialStack = new Structure.stack();
+
 
     this.degToRad= Math.PI / 180.0;
 
@@ -381,7 +386,7 @@ MySceneGraph.prototype.loadPrimitives = function(rootElement) {
         var primitive = this.createPrimitive(primitiveName, primitiveTag);
         if (primitive == null);
 
-        this.nodes[id] = primitive;
+        this.primitives[id] = primitive;
     }
 }
 
@@ -490,17 +495,18 @@ MySceneGraph.prototype.loadComponents = function(rootElement) {
         var childrenTmp = componentTmp[i].getElementsByTagName('children')[0];
         var componentTag = childrenTmp.getElementsByTagName('componentref');
         var primitiveTag = childrenTmp.getElementsByTagName('primitiveref');
-        childrenIDs = new Array(componentTag.length + primitiveTag.length);
+        componentIDs = new Array(componentTag.length);
+        primitiveIDs = new Array( primitiveTag.length);
+
         for (var j = 0; j < componentTag.length; j++) {
-            childrenIDs[j] = this.reader.getString(componentTag[j], 'id');
-
+            componentIDs[j] = this.reader.getString(componentTag[j], 'id');
         }
 
-        for (var j = componentTag.length; j < primitiveTag.length + componentTag.length; j++) {
-            childrenIDs[j] = this.reader.getString(primitiveTag[j - componentTag.length], 'id');
+        for (var j = 0; j < primitiveTag.length ; j++) {
+            primitiveIDs[j] = this.reader.getString(primitiveTag[j], 'id');
         }
 
-        this.nodes[id] = new Component(id, tranformation, materials, texture, childrenIDs);
+        this.components[id] = new Component(id, tranformation, materials, texture, componentIDs,primitiveIDs);
 
     }
 
@@ -546,70 +552,66 @@ MySceneGraph.prototype.onXMLError = function(message) {
 
 
 MySceneGraph.prototype.displayGraph = function() {
-    var textureStack = new Structure.stack();
-    var materialStack = new Structure.stack();
-
-    this.visitGraph(this.rootID, materialStack, textureStack);
+    this.visitGraph(this.rootID);
 }
 
 
-MySceneGraph.prototype.visitGraph = function(root, materialStack, textureStack) {
-    var node, currentTransformation;
+MySceneGraph.prototype.visitGraph = function(root) {
 
-    node = this.nodes[root];
 
-    if (node instanceof Component) { //component
+    var component = this.components[root];
+
 
         //Tranformations--------------------------
         this.scene.pushMatrix();
-        this.scene.multMatrix(this.transformations[node.transformationID]);
+        this.scene.multMatrix(this.transformations[component.transformationID]);
 
 
         //Materials--------------------------------
-        var materialId = node.materialIDs[this.scene.materialIndex % node.materialIDs.length];
+        var materialId = component.materialIDs[this.scene.materialIndex % component.materialIDs.length];
 
 
           if(materialId == "inherit")
-            materialStack.push(materialStack.top());
+            this.materialStack.push(this.materialStack.top());
           else
-            materialStack.push(materialId);
+            this.materialStack.push(materialId);
 
 
 
         //Textures------------------------------
-        var textureId = node.textureID;
+        var textureId = component.textureID;
         if (textureId == "inherit")
-            textureStack.push(textureStack.top());
+            this.textureStack.push(this.textureStack.top());
         else
-            textureStack.push(textureId);
+            this.textureStack.push(textureId);
 
 
-        for (var i = 0; i < node.childrenIDs.length; i++) {
-            this.visitGraph(node.childrenIDs[i], materialStack, textureStack);
+        for (var i = 0; i < component.componentIds.length; i++) {
+            this.visitGraph(component.componentIds[i]);
         }
 
-        this.scene.popMatrix();
-        materialStack.pop();
-        textureStack.pop();
+        for (var i = 0; i < component.primitiveIds.length; i++) {
+          var material = this.materials[this.materialStack.top()];
+          var textureElement = this.textures[this.textureStack.top()];
+          var primitive = this.primitives[component.primitiveIds[i]];
 
-    } else { //primitive
+          if(this.textureStack.top() != "none") {
+            if (primitive instanceof Triangle || primitive instanceof Rectangle ){
+              primitive.setTextureCoords(textureElement.lengthS, textureElement.lengthT);
+            }
 
-
-        var material = this.materials[materialStack.top()];
-        var textureElement = this.textures[textureStack.top()];
-
-        if(textureStack.top() != "none") {
-          if (node instanceof Triangle || node instanceof Rectangle ){
-            node.setTextureCoords(textureElement.lengthS, textureElement.lengthT);
+            material.setTexture(textureElement.texture);
           }
 
-          material.setTexture(textureElement.texture);
+          material.apply();
+          primitive.display();
+          material.setTexture(null);
         }
 
-        material.apply();
-        node.display();
-        material.setTexture(null);
+
+        this.scene.popMatrix();
+        this.materialStack.pop();
+        this.textureStack.pop();
 
 
-      }
   }

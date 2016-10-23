@@ -93,11 +93,12 @@ class Texture {
 
 
 class  Component {
-  constructor(id, transformationID, materialIDs, textureID, childrenIDs) {
+  constructor(id, transformationID, materialIDs, textureID, componentIds,primitiveIds) {
 		this.id = id;
 		this.transformationID = transformationID;
 		this.materialIDs = materialIDs;
 		this.textureID = textureID;
-		this.childrenIDs = childrenIDs ;
+		this.componentIds = componentIds ;
+		this.primitiveIds = primitiveIds ;
   }
 }
