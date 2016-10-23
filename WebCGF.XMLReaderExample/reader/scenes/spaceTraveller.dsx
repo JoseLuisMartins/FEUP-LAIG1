@@ -139,7 +139,7 @@
         <texture id="robot_skin" file="resources\\images\\robotSkin.jpg" length_s="1.0" length_t="1.0" />
         <texture id="black" file="resources\\images\\black.jpg" length_s="1.0" length_t="1.0" />
         <texture id="abstract_orange" file="resources\\images\\abstractorange.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="space" file="resources\\images\\space.jpg" length_s="1.0" length_t="1.0" />
+        <texture id="space" file="resources\\images\\space.png" length_s="1" length_t="1" />
         <texture id="saturnRingTex" file="resources\\images\\SaturnRing.png" length_s="1.0" length_t="1.0" />
         <texture id="flameTex" file="resources\\images\\flame.jpg" length_s="1.0" length_t="1.0" />
         <texture id="sunTex" file="resources\\images\\sun.jpg" length_s="1.0" length_t="1.0" />
@@ -220,7 +220,7 @@
             <!--     rectangle, triangle, cylinder, sphere, torus -->
             <!-- os parametros devem ser interpretados, genericamente como-->
             <!-- em OpenGL/GLUT; o cilindro deve adicionalmente ter tampas -->
-            <rectangle x1="0" y1="0" x2="3" y2="3" />
+            <rectangle x1="0" y1="0" x2="1" y2="1" />
         </primitive>
 
 
@@ -296,7 +296,7 @@
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
-                
+
                 <componentref id="universe" />
                 <componentref id="sun" />
                 <componentref id="mercury" />
@@ -338,7 +338,7 @@
                 <componentref id="side1" />
                 <componentref id="side2" />
                 <componentref id="side3" />
-                <componentref id="side4" />
+                <componentref id="side4" /> -->
             </children>
 
         </component>
@@ -347,7 +347,7 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-              <translate x="-25" y="-25" z="25" />
+              <translate x="-25" y="-25" z="25" /> -->
               <rotate axis="x" angle="-90" />
               <scale x="50" y="50" z="50" />
             </transformation>
@@ -425,7 +425,7 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-              <translate x="-25" y="-25" z="25s" />
+              <translate x="-25" y="-25" z="25" />
               <rotate axis="y" angle="90" />
               <scale x="50" y="50" z="50" />
             </transformation>
@@ -586,7 +586,7 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
                 <translate x="0" y="1" z="0" />
-                <rotate axis="z" angle="90" />
+                <rotate axis="z" angle="180" />
                 <scale x="3" y="3" z="3" />
             </transformation>
 
