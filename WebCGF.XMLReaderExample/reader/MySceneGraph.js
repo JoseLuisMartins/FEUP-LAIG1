@@ -17,8 +17,8 @@ function MySceneGraph(filename, scene) {
     this.primitives = {};
     this.components = {};
 
-    this.textureStack = new Structure.stack();
-    this.materialStack = new Structure.stack();
+    this.textureStack;
+    this.materialStack;
 
 
     this.degToRad = Math.PI / 180.0;
@@ -651,7 +651,10 @@ MySceneGraph.prototype.onXMLError = function(message) {
 
 
 MySceneGraph.prototype.displayGraph = function() {
-    return this.visitGraph(this.rootID);
+  this.textureStack = new Structure.stack();
+  this.materialStack = new Structure.stack();
+
+  return this.visitGraph(this.rootID);
 }
 
 
@@ -715,5 +718,5 @@ MySceneGraph.prototype.visitGraph = function(root) {
     this.materialStack.pop();
     this.textureStack.pop();
 
-
+    return 0;
 }
