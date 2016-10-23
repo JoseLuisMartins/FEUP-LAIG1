@@ -181,6 +181,7 @@ XMLscene.prototype.display = function () {
   if (this.graph.loadedOk)
   {
     this.updateLights();
-    this.graph.displayGraph();
+    if(this.graph.displayGraph())
+      return;
   };
 };
