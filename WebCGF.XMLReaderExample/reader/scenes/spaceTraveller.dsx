@@ -208,6 +208,7 @@
            <translate x="5" y="0" z="0" />
 
         </transformation>
+
     </transformations>
 
 
@@ -262,7 +263,7 @@
 
                 <!-- deve conter uma referencia a uma das "transformation" -->
                 <!-- declaradas anteriormente -->
-                <!--  <transformationref id="ola" /> -->
+
 
                 <!-- ou, ALTERNATIVAMENTE, transformacoes explicitas, -->
                 <!-- usando zero ou mais das instrucoes seguintes, sem -->

@@ -87,7 +87,7 @@ MySceneGraph.prototype.onXMLReady = function() {
 MySceneGraph.prototype.chekDSXOrder = function(rootElement) {
     var childs = rootElement.children;
     if (childs.length != 9) {
-        console.error("Number of tags in dsx different than 9" );
+        console.error("Number of tagson dsx incorrect" );
         return 1;
     }
 
@@ -143,8 +143,14 @@ MySceneGraph.prototype.loadViews = function(rootElement) {
         return 1;
       }
 
+
+
     perspectiveElements = viewElement.getElementsByTagName('perspective');
 
+    if(perspectiveElements.length == 0){
+      this.onXMLError("at least one perspective should be declared");
+      return 1;
+    }
 
     for (var perspectiveElement of perspectiveElements) {
         id = this.reader.getString(perspectiveElement, 'id');
@@ -192,9 +198,10 @@ MySceneGraph.prototype.loadLights = function(rootElement) {
     this.loadOmniLights(lightElements);
     this.loadSpotLights(lightElements);
 
-    if (this.omniLights.length == 0 && this.spotLights.length == 0)
+    if (this.omniLights.length == 0 && this.spotLights.length == 0){
         onXMLError("Error No lights defined.");
-
+        return 1;
+    }
 }
 
 
@@ -256,13 +263,20 @@ MySceneGraph.prototype.loadTextures = function(rootElement) {
 
     textureElements = texturesElement.getElementsByTagName('texture');
 
+    if(textureElements.length == 0 ){
+      this.onXMLError("There should be at least one texture");
+      return 1;
+    }
+
     for (var textureElement of textureElements) {
         id = this.reader.getString(textureElement, 'id');
         texture = new CGFtexture(this.scene, this.reader.getString(textureElement, 'file'));
         lengthS = this.reader.getFloat(textureElement, 'length_s');
         lengthT = this.reader.getFloat(textureElement, 'length_t');
-
-        this.textures[id] = new Texture(id, texture, lengthS, lengthT);
+        if(this.textures[id] != null)
+          console.error("Already exists a Texture with id " + id);
+        else
+          this.textures[id] = new Texture(id, texture, lengthS, lengthT);
     }
 }
 
@@ -280,6 +294,11 @@ MySceneGraph.prototype.loadMaterials = function(rootElement) {
 
     materialElements = materialsElement.getElementsByTagName('material');
 
+    if (materialElements.length == 0){
+        this.onXMLError("There should be at least on material");
+        return 1;
+    }
+
     for (var materialElement of materialElements) {
         id = this.reader.getString(materialElement, 'id');
         emission = this.getRGBAElement(materialElement.getElementsByTagName('emission')[0]);
@@ -289,7 +308,9 @@ MySceneGraph.prototype.loadMaterials = function(rootElement) {
 
         shininessElement = materialElement.getElementsByTagName('shininess')[0];
         shininess = this.reader.getFloat(shininessElement, 'value');
-
+        if(this.materials[id] != null){
+            console.error("Already exists a material with id " + id);
+        }else{
         var appearance = new CGFappearance(this.scene);
         appearance.setEmission(emission.r, emission.g, emission.b, emission.a);
         appearance.setAmbient(ambient.r, ambient.g, ambient.b, ambient.a);
@@ -299,6 +320,7 @@ MySceneGraph.prototype.loadMaterials = function(rootElement) {
         appearance.setTextureWrap('REPEAT', 'REPEAT');
 
         this.materials[id] = appearance;
+      }
     }
 }
 
@@ -314,15 +336,28 @@ MySceneGraph.prototype.loadTranformations = function(rootElement) {
 
     transformationElements = transformationsElement.getElementsByTagName('transformation');
 
+    if (transformationElements.length == 0){
+        this.onXMLError("There should be at least on tranformation");
+        return 1;
+    }
+
     for (transformationElement of transformationElements) {
         id = this.reader.getString(transformationElement, 'id');
-        this.transformations[id] = this.getTranformationMatrix(transformationElement);
+        if(this.transformations[id] != null){
+            console.error("Already exists a tranformation with id " + id);
+        }else{
+          this.transformations[id] = this.getTranformationMatrix(transformationElement);
+        }
     }
 }
 
 
 MySceneGraph.prototype.getTranformationMatrix = function(transformationElement) {
     var matrix = mat4.create();
+
+    if(transformationElement.children.length == 0){
+        console.error("There sould be at least one transformation in the tranformation tag" );
+    }
 
     for (var i = 0; i < transformationElement.children.length ; i++) {
         var transformation = transformationElement.children[i];
@@ -373,9 +408,13 @@ MySceneGraph.prototype.loadPrimitives = function(rootElement) {
 
     primitiveElements = primitivesElement.getElementsByTagName('primitive');
 
+    if(primitiveElements.length == 0){
+      console.error("there should be at least on primitive tag on the primitives tag");
+    }
+
     for (var primitiveElement of primitiveElements) {
         if (primitiveElement.children.length != 1) {
-            this.onXMLError("Error loading primitives (more than one tag).");
+            this.onXMLError("Error loading primitives (more than one tag inside primitive tag).");
             continue;
         }
 
@@ -383,10 +422,14 @@ MySceneGraph.prototype.loadPrimitives = function(rootElement) {
         primitiveTag = primitiveElement.children[0];
         primitiveName = primitiveTag.tagName;
 
-        var primitive = this.createPrimitive(primitiveName, primitiveTag);
-        if (primitive == null);
+        if(this.primitives[id]  != null){
+          console.error("Already exists a primitive with id " + id);
+        }else{
+          var primitive = this.createPrimitive(primitiveName, primitiveTag);
+          if (primitive == null);
 
-        this.primitives[id] = primitive;
+          this.primitives[id] = primitive;
+        }
     }
 }
 
@@ -457,44 +500,100 @@ MySceneGraph.prototype.loadComponents = function(rootElement) {
 
     var componentTmp = components.getElementsByTagName('component');
 
+    if(componentTmp.length == 0){
+      console.error("There should be at least on component");
+      return 1;
+    }
+
+
     var id, tranformation, materials, texture, componentIDs, primitiveIDs;
 
     for (var i = 0; i < componentTmp.length; i++) {
         //load  component id
         id = this.reader.getString(componentTmp[i], 'id');
 
+        if(this.components[id] != null){
+          console.error("Already exists a component with id " + id);
+          return 1;
+        }else{
         //load  tranformation id for the component
-        var transformationTmp = componentTmp[i].getElementsByTagName('transformation')[0];
-        var transformationTag = transformationTmp.getElementsByTagName('transformationref');
+        var transformationTmp = componentTmp[i].getElementsByTagName('transformation');
+
+        if(transformationTmp.length == 0){
+          console.error("Missing tranformation tag on component " + id);
+          return 1;
+        }
+
+        if(transformationTmp[0].children.length == 0){
+          console.error("Tranformation tag on component " + id + " must contain a tranformationRef tag or transformations declared");
+          return 1;
+        }
+
+        var transformationTag = transformationTmp[0].getElementsByTagName('transformationref');
+
+
         if (transformationTag.length != 0) {
             tranformation = this.reader.getString(transformationTag[0], 'id');
-
+            if(this.transformations[tranformation] == null){
+              console.error("Tranformationref " + tranformation +  " on component " + id + " is not declared");
+              return 1;
+            }
         } else { //a transformação tem que ser criada
             //guarda o id da transformação
             tranformation = id + "texture";
             //guarda tranformação no array de tranformações
-            this.transformations[tranformation] = this.getTranformationMatrix(transformationTmp);
+            this.transformations[tranformation] = this.getTranformationMatrix(transformationTmp[0]);
         }
 
 
         //load  material id's for the component
-        var materialsTmp = componentTmp[i].getElementsByTagName('materials')[0];
-        var materialTag = materialsTmp.getElementsByTagName('material');
+        var materialsTmp = componentTmp[i].getElementsByTagName('materials');
+
+        if(materialsTmp.length == 0){
+          console.error("Missing materials tag on component " + id);
+          return 1;
+        }
+
+        var materialTag = materialsTmp[0].getElementsByTagName('material');
+        if(materialTag.length == 0){
+          console.error("Materials tag on component " + id + " must contain at least on material");
+          return 1;
+        }
         materials = new Array(materialTag.length);
         for (var j = 0; j < materialTag.length; j++) {
-            materials[j] = this.reader.getString(materialTag[j], 'id');
+          var materialId = this.reader.getString(materialTag[j], 'id');
+          if(this.materials[materialId] == null && materialId != "inherit"){
+            console.error("The material  " + materialId +  " on component " + id + " is not declared");
+            return 1;
+          }
+
+          materials[j] = materialId;
+
         }
 
 
         //load  texture id for the component
-        var textureTmp = componentTmp[i].getElementsByTagName('texture')[0];
-        texture = this.reader.getString(textureTmp, 'id');
+        var textureTmp = componentTmp[i].getElementsByTagName('texture');
+        if(textureTmp.length == 0){
+          console.error("Missing texture tag on component " + id);
+          return 1;
+        }
+        texture = this.reader.getString(textureTmp[0], 'id');
 
+        if(this.textures[texture] == null && texture != "inherit" && texture != "none"){
+          console.error("The texture  " + texture +  " on component " + id + " is not declared");
+          return 1;
+        }
 
         //load  children id's for the component
-        var childrenTmp = componentTmp[i].getElementsByTagName('children')[0];
-        var componentTag = childrenTmp.getElementsByTagName('componentref');
-        var primitiveTag = childrenTmp.getElementsByTagName('primitiveref');
+        var childrenTmp = componentTmp[i].getElementsByTagName('children');
+        if(childrenTmp.length == 0){
+          console.error("Missing children tag on component " + id);
+          return 1;
+        }
+
+        var componentTag = childrenTmp[0].getElementsByTagName('componentref');
+        var primitiveTag = childrenTmp[0].getElementsByTagName('primitiveref');
         componentIDs = new Array(componentTag.length);
         primitiveIDs = new Array( primitiveTag.length);
 
@@ -507,7 +606,7 @@ MySceneGraph.prototype.loadComponents = function(rootElement) {
         }
 
         this.components[id] = new Component(id, tranformation, materials, texture, componentIDs,primitiveIDs);
-
+      }
     }
 
 }
