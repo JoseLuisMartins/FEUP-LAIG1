@@ -30,11 +30,14 @@ XMLscene.prototype.init = function (application) {
   // TODO esfera para ir com o caralho
   this.sphere = new Triangle(this,new Point3(0,0,0),new Point3(2,0,0),new Point3(1,2,0));
   this.appearance = new CGFappearance(this);
+  this.anim = new LinearAnimation(this, "1", [new Point3(0, 0, 0), new Point3(1, 1, 1), new Point3(0, 1, 0)], 5);
 
   //interface
   this.lightsStatus;
   this.viewIndex=0;
   this.materialIndex=0;
+
+  this.setUpdatePeriod(30);
 };
 
 XMLscene.prototype.initLights = function () {
@@ -178,10 +181,20 @@ XMLscene.prototype.display = function () {
   // it is important that things depending on the proper loading of the graph
   // only get executed after the graph has loaded correctly.
   // This is one possible way to do it
+  /*
   if (this.graph.loadedOk)
   {
     this.updateLights();
     if(this.graph.displayGraph())
       return;
   };
+  */
+
+  this.sphere.display();
 };
+
+
+
+XMLscene.prototype.update = function(currTime) {
+  this.anim.animate(currTime);
+}
