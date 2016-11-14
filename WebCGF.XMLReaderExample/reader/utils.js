@@ -16,6 +16,12 @@ class Point3 {
 	toArray() {
 		return [this.x, this.y, this.z];
 	}
+
+	set(x, y, z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
 }
 
 

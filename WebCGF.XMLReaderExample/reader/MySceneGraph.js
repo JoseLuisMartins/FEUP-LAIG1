@@ -714,9 +714,9 @@ MySceneGraph.prototype.visitGraph = function(root) {
     }
 
 
-    this.scene.popMatrix();
     this.materialStack.pop();
     this.textureStack.pop();
+    this.scene.popMatrix();
 
     return 0;
 }

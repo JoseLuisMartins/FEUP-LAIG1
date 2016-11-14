@@ -1,28 +1,24 @@
-function LinearAnimation(scene, id, controlPoints, span) {
-  Animation.call(this, scene, id);
+function LinearAnimation(id, controlPoints, span) {
+  Animation.call(this, id);
 
   this.controlPoints = controlPoints;
-  this.span = span;
-
   this.distances = [];
-  this.vectors = [];
 
-  var distance = 0;
-  for (var i = 0; i < controlPoints.length - 1; i++) {
-    var vec = this.makeVector(controlPoints[i], controlPoints[i+1]);
-    distance += this.calculateLength(vec);
-    this.vectors.push(vec);
+  var totalDistance = 0;
+  for (var i = 0; i < controlPoints.length-1; i++) {
+    var distance = this.distanceBetweenPoints(controlPoints[i], controlPoints[i+1]);
+    totalDistance += distance;
     this.distances.push(distance);
   }
 
+  this.velocity = totalDistance / span;
+  this.distanceAcc = 0;
 
-  this.velocity = distance / span;
   this.currentControl = 0;
-  this.theta = Math.atan(this.vectors[0].x / this.vectors[0].z);
+  this.currentPosition = new Point3(controlPoints[0].x, controlPoints[0].y, controlPoints[0].z);
+  this.currentAngle = Math.atan2( (controlPoints[1].x - controlPoints[0].x), (controlPoints[1].z - controlPoints[0].z) );
 
   this.lastCurrTime = -1;
-  this.distance = 0;
-  this.timeElapsed = 0;
 }
 
 
@@ -30,52 +26,62 @@ LinearAnimation.prototype = Object.create(Animation.prototype);
 LinearAnimation.prototype.constructor = LinearAnimation;
 
 
-LinearAnimation.prototype.animate = function(currTime) {
-  var delta;
+LinearAnimation.prototype.update = function(currTime) {
+  var delta, x, y, z;
+
+  if (!this.render)
+    return;
 
   if (this.lastCurrTime == -1) {
-      delta = 0;
+    delta = 0;
   }
   else {
-      delta = (currTime - this.lastCurrTime) / 1000;
+    delta = (currTime - this.lastCurrTime) / 1000;
   }
-
   this.lastCurrTime = currTime;
-  this.timeElapsed += delta;
 
 
-  this.distance += this.velocity * delta;
-  if (this.distance > this.distances[this.currentControl]) {
-    if (this.currentControl != this.vectors.length - 1) {
-      this.currentControl++;
-      this.theta = Math.atan(this.vectors[this.currentControl].x / this.vectors[this.currentControl].z);
-    }
-    else {
+  this.distanceAcc += this.velocity * delta;
+  if (this.distanceAcc > this.distances[this.currentControl]) {
+    if (this.currentControl == this.controlPoints.length - 2) {
+      this.finished = true;
       return;
     }
+    else {
+      this.distanceAcc = 0;
+      this.currentControl++;
+      this.currentAngle = Math.atan2( (this.controlPoints[this.currentControl + 1].x - this.controlPoints[this.currentControl].x),
+                                      (this.controlPoints[this.currentControl + 1].z - this.controlPoints[this.currentControl].z) );
+    }
   }
 
 
-  var t = (this.timeElapsed * this.velocity) / this.calculateLength(this.vectors[this.currentControl]);
-  var x = (this.controlPoints[this.currentControl + 1].x * t) + ((1 - t) * this.controlPoints[this.currentControl].x);
-  var y = (this.controlPoints[this.currentControl + 1].y * t) + ((1 - t) * this.controlPoints[this.currentControl].y);
-  var z = (this.controlPoints[this.currentControl + 1].z * t) + ((1 - t) * this.controlPoints[this.currentControl].z);
+  t = this.distanceAcc / this.distances[this.currentControl];
+  x = (this.controlPoints[this.currentControl + 1].x * t) + ((1 - t) * this.controlPoints[this.currentControl].x);
+  y = (this.controlPoints[this.currentControl + 1].y * t) + ((1 - t) * this.controlPoints[this.currentControl].y);
+  z = (this.controlPoints[this.currentControl + 1].z * t) + ((1 - t) * this.controlPoints[this.currentControl].z);
 
-  console.log(this.timeElapsed, x + this.controlPoints[this.currentControl].x, y + this.controlPoints[this.currentControl].y, z + this.controlPoints[this.currentControl].z);
-
-  this.scene.translate(x + this.controlPoints[this.currentControl].x,
-                       y + this.controlPoints[this.currentControl].y,
-                       z + this.controlPoints[this.currentControl].z);
-
-  this.scene.rotate(this.theta, 0, 1, 0);
+  this.currentPosition.set(x, y, z);
 }
 
 
-LinearAnimation.prototype.makeVector = function(point1, point2) {
-    return new Point3(point2.x - point1.x, point2.y - point1.y, point2.z - point1.z)
+
+LinearAnimation.prototype.getCurrentPosition = function() {
+
+  return this.currentPosition;
 }
 
 
-LinearAnimation.prototype.calculateLength = function(vec) {
-    return Math.sqrt((vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z));
+LinearAnimation.prototype.getCurrentAngle = function() {
+
+  return this.currentAngle;
+};
+
+
+LinearAnimation.prototype.distanceBetweenPoints = function(point1, point2) {
+  var dx = point2.x - point1.x;
+  var dy = point2.y - point1.y;
+  var dz = point2.z - point1.z;
+
+  return Math.sqrt(dx*dx + dy*dy + dz*dz);
 }

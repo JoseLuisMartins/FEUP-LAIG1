@@ -1,7 +1,10 @@
-function Animation(scene, id) {
+function Animation(id) {
   this.id = id;
-  this.scene = scene;
+  this.finished = false;
+  this.render = false;
 }
 
 
-Animation.prototype.animate = function(currTime) { };
+Animation.prototype.update = function(currTime) { };
+Animation.prototype.getCurrentPosition = function() { };
+Animation.prototype.getCurrentAngle = function() { };
