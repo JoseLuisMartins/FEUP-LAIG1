@@ -1,3 +1,3 @@
 # LAIG1
 
-First Project of the Laig class at FEUP
+Second Project of the LAIG class at FEUP
