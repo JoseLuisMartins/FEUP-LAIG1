@@ -68,7 +68,10 @@ MySceneGraph.prototype.onXMLReady = function() {
     if (this.loadMaterials(rootElement))
         return;
 
-    if (this.loadTranformations(rootElement))
+    if (this.loadTransformations(rootElement))
+        return;
+
+    if (this.loadAnimations(rootElement))
         return;
 
     if (this.loadPrimitives(rootElement))
@@ -86,7 +89,7 @@ MySceneGraph.prototype.onXMLReady = function() {
 
 MySceneGraph.prototype.chekDSXOrder = function(rootElement) {
     var childs = rootElement.children;
-    if (childs.length != 9) {
+    if (childs.length != 10) {
         console.error("Number of tagson dsx incorrect");
         return 1;
     }
@@ -112,11 +115,14 @@ MySceneGraph.prototype.chekDSXOrder = function(rootElement) {
     if (childs[6].tagName != "transformations")
         console.warn("transformations is not the seventh element on the DSX Tag");
 
-    if (childs[7].tagName != "primitives")
-        console.warn("primitives is not the oith element on the DSX Tag");
+    if (childs[7].tagName != "animations")
+        console.warn("animations is not the eigth element on the DSX Tag");
 
-    if (childs[8].tagName != "components")
-        console.warn("components is not the ninth element on the DSX Tag");
+    if (childs[8].tagName != "primitives")
+        console.warn("primitives is not the ninth element on the DSX Tag");
+
+    if (childs[9].tagName != "components")
+        console.warn("components is not the tenth element on the DSX Tag");
 
     return 0;
 }
@@ -325,7 +331,7 @@ MySceneGraph.prototype.loadMaterials = function(rootElement) {
 }
 
 
-MySceneGraph.prototype.loadTranformations = function(rootElement) {
+MySceneGraph.prototype.loadTransformations = function(rootElement) {
     var transformationsElement, transformationElements, id;
 
     transformationsElement = rootElement.getElementsByTagName('transformations')[0];
@@ -395,6 +401,63 @@ MySceneGraph.prototype.getTranformationMatrix = function(transformationElement) 
 
     return matrix;
 }
+
+
+
+
+MySceneGraph.prototype.loadAnimations = function(rootElement) {
+  var animationsElement, animationElements;
+
+  var animationsElement = rootElement.getElementsByTagName('animations')[0];
+  if (animationsElement == null) {
+    this.onXMLError("Error loading animations. No animations Tag");
+    return 1;
+  }
+
+
+  animationElements = animationsElement.getElementsByTagName('animation');
+  for (var animationElement of animationElements) {
+    var id, span, type;
+
+    id = this.reader.getString(animationElement, 'id');
+    span = this.reader.getFloat(animationElement, 'span');
+    type = this.reader.getString(animationElement, 'type');
+
+    if (type == "linear") {
+      var controlPointsElements = animationElement.getElementsByTagName('controlpoint');
+      var controlPoints = [];
+
+      for (var controlPointElement of controlPointsElements) {
+        var x, y, z;
+
+        x = this.reader.getFloat(controlPointElement, 'xx');
+        y = this.reader.getFloat(controlPointElement, 'yy');
+        z = this.reader.getFloat(controlPointElement, 'zz');
+
+        controlPoints.push(new Point3(x, y, z));
+      }
+
+      console.log(new LinearAnimation(id, controlPoints, span));
+    }
+    else if (type == "circular") {
+      var cx, cy, cz, radius, startang, rotang;
+
+      cx = this.reader.getFloat(animationElement, 'centerx');
+      cy = this.reader.getFloat(animationElement, 'centery');
+      cz = this.reader.getFloat(animationElement, 'centerz');
+      radius = this.reader.getFloat(animationElement, 'radius');
+      startang = this.reader.getFloat(animationElement, 'startang');
+      rotang = this.reader.getFloat(animationElement, 'rotang');
+
+      console.log(new CircularAnimation(id, new Point3(cx, cy, cz), radius, startang, rotang, span));
+    }
+    else {
+      this.onXMLError("Error loading animations. Animation type must be either 'linear' or 'circular'");
+      return 1;
+    }
+  }
+}
+
 
 
 MySceneGraph.prototype.loadPrimitives = function(rootElement) {

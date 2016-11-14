@@ -5,7 +5,7 @@ function CircularAnimation(id, center, radius, phiDeg, thetaDeg, span) {
 
   this.center = center;
   this.radius = radius;
-  this.phi = phiDeg * (Math.PI / 180.0);
+  this.phi = phiDeg * (Math.PI / 180.0) + Math.PI/2;
   this.theta = thetaDeg * (Math.PI / 180.0);
 
   this.W = this.theta / span;
