@@ -2,7 +2,7 @@
  * Plane
  * @constructor
  */
-function Plane(scene,dimX,dimY,partsX,partsY) {
+function Plane(scene, dimX, dimY, partsX, partsY) {
   var knots1 = this.getKnotsVector(1); // to be built inside webCGF in later versions ()
   var knots2 = this.getKnotsVector(1); // to be built inside webCGF in later versions
 

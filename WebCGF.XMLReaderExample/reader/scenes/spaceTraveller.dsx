@@ -29,8 +29,8 @@
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="p1" near="0.1" far="1500" angle="22">
-            <from x="15" y="15" z="15" />
-            <to x="5" y="5" z="5" />
+            <from x="0" y="0" z="15" />
+            <to x="0" y="0" z="0" />
         </perspective>
 
         <perspective id="p2" near="0.1" far="1500" angle="40">

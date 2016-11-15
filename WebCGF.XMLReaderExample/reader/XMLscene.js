@@ -32,6 +32,24 @@ XMLscene.prototype.init = function (application) {
   this.materialIndex=0;
 
   this.setUpdatePeriod(30);
+
+
+
+  // *********************************************
+  this.appearance = new CGFappearance(this);
+	this.appearance.setAmbient(0.3, 0.3, 0.3, 1);
+	this.appearance.setDiffuse(0.7, 0.7, 0.7, 1);
+	this.appearance.setSpecular(0.0, 0.0, 0.0, 1);
+	this.appearance.setShininess(120);
+	this.texture = new CGFtexture(this, "resources\\images\\earth.jpg");
+	this.appearance.setTexture(this.texture);
+	this.appearance.setTextureWrap ('REPEAT', 'REPEAT');
+
+  this.shader = new CGFshader(this.gl, "shaders\\texture1.vert", "shaders\\texture1.frag");
+  this.square = new Plane(this, 5, 5, 10, 10);
+
+  this.texture2 = new CGFtexture(this, "resources\\images\\flame.jpg");
+  // *********************************************
 };
 
 XMLscene.prototype.initLights = function () {
@@ -176,6 +194,7 @@ XMLscene.prototype.display = function () {
   // only get executed after the graph has loaded correctly.
   // This is one possible way to do it
 
+  /*
   if (this.graph.loadedOk)
   {
     this.updateLights();
@@ -183,7 +202,14 @@ XMLscene.prototype.display = function () {
     if(this.graph.displayGraph())
       return;
   };
+  */
 
+  this.appearance.apply();
+  this.texture2.bind(1);
+
+  this.setActiveShader(this.shader);
+  this.square.display();
+  this.setActiveShader(this.defaultShader);
 
 };
 
