@@ -27,17 +27,6 @@ XMLscene.prototype.init = function (application) {
 
   this.axis=new CGFaxis(this);
 
-  // TODO esfera para ir com o caralho
-  this.sphere = new Triangle(this,new Point3(0,0,0),new Point3(2,0,0),new Point3(1,2,0));
-  this.sphere1 = new Triangle(this,new Point3(1,2,0),new Point3(2,0,0),new Point3(0,0,0));
-  //this.sphere = new Sphere(this, 1, 10, 10);
-  this.appearance = new CGFappearance(this);
-  this.anim1 = new CircularAnimation("1", new Point3(0, 0, 0), 5, 90, 360, 5);
-  this.anim2 = new LinearAnimation("1", [new Point3(0, 0, 0), new Point3(0,1 , 0), new Point3(1, 1, 1),new Point3(1, 0, 1),new Point3(0, 0, 0)], 25);
-  this.anims = [this.anim2, this.anim1];
-  this.animated = new Animated(this.anims);
-
-  //interface
   this.lightsStatus;
   this.viewIndex=0;
   this.materialIndex=0;
@@ -190,21 +179,12 @@ XMLscene.prototype.display = function () {
   if (this.graph.loadedOk)
   {
     this.updateLights();
+
     if(this.graph.displayGraph())
       return;
   };
 
-/*
-  this.pushMatrix();
 
-  var position = this.animated.getAnimationPosition();
-  var angle = this.animated.getAnimationAngle();
-  this.translate(position.x, position.y, position.z);
-  this.rotate(angle, 0, 1, 0);
-  this.sphere.display();
-  this.sphere1.display();
-
-  this.popMatrix();*/
 };
 
 

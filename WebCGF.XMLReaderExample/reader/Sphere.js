@@ -31,8 +31,8 @@ Sphere.prototype.initBuffers = function() {
             var x = this.radius * cosPhi * sinTheta;
             var y = this.radius * cosTheta;
             var z = this.radius * sinPhi * sinTheta;
-            var s = 1 - (stack / this.stacks);
-            var t = 1 - (slice / this.slices);
+            var t = 1 - (stack / this.stacks);
+            var s = 1 - (slice / this.slices);
 
             this.vertices.push(x, y, z);
             this.normals.push(x, y, z);

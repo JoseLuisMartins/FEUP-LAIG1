@@ -42,7 +42,7 @@ function MySceneGraph(filename, scene) {
  * Callback to be executed after successful reading
  */
 MySceneGraph.prototype.onXMLReady = function() {
-    console.log("XML Loading finished.");
+
     var rootElement = this.reader.xmlDoc.documentElement;
 
     // Here should go the calls for different functions to parse the various blocks
@@ -83,6 +83,7 @@ MySceneGraph.prototype.onXMLReady = function() {
 
 
     // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
+    console.log("XML Loading finished.");
     this.scene.onGraphLoaded();
     this.loadedOk = true;
 };
@@ -90,7 +91,7 @@ MySceneGraph.prototype.onXMLReady = function() {
 MySceneGraph.prototype.chekDSXOrder = function(rootElement) {
     var childs = rootElement.children;
     if (childs.length != 10) {
-        console.error("Number of tagson dsx incorrect");
+        console.error("Number of tags on dsx incorrect");
         return 1;
     }
 
@@ -543,6 +544,37 @@ MySceneGraph.prototype.createPrimitive = function(primitiveName, primitiveTag) {
 
             primitive = new Torus(this.scene, inner, outer, slices, loops);
             break;
+        case 'plane':
+              var dimX = this.reader.getFloat(primitiveTag, 'dimX');
+              var dimY = this.reader.getFloat(primitiveTag, 'dimY');
+              var partsX = this.reader.getInteger(primitiveTag, 'partsX');
+              var partsY = this.reader.getInteger(primitiveTag, 'partsY');
+
+              primitive = new Plane(this.scene, dimX, dimY, partsX, partsY);
+        break;
+        case 'patch':
+              var orderU = this.reader.getFloat(primitiveTag, 'orderU');
+              var orderV = this.reader.getFloat(primitiveTag, 'orderV');
+              var partsU = this.reader.getInteger(primitiveTag, 'partsU');
+              var partsV = this.reader.getInteger(primitiveTag, 'partsV');
+
+              if(((orderU+1)*(orderV+1)) != primitiveTag.children.length){
+                this.onXMLError("Wrong number of control points.");
+                return null;
+              }else{
+                var controlPoints = [];
+                for (var i = 0; i < primitiveTag.children.length; i++) {
+                    controlPoints.push(this.getPoint3Element(primitiveTag.children[i]));
+                }
+
+                primitive = new Patch(this.scene, orderU, orderV, partsU, partsV,controlPoints);
+              }
+        break;
+        case 'vehicle':
+              primitive=new vehicle(this.scene);
+        break;
+        case 'chessboard':
+        break;
 
         default:
             this.onXMLError("Error loading primitives (invalid primitive tag).");
@@ -575,7 +607,7 @@ MySceneGraph.prototype.loadComponents = function(rootElement) {
     for (var i = 0; i < componentTmp.length; i++) {
         //load  component id
         id = this.reader.getString(componentTmp[i], 'id');
-        console.log("giro:"  + id );
+
         if (this.components[id] != null) {
             console.error("Already exists a component with id " + id);
             return 1;
@@ -628,7 +660,7 @@ MySceneGraph.prototype.loadComponents = function(rootElement) {
 
                     }
                     animated = new Animated(animations);
-                    console.log( animated);
+
                 }
             }
 
