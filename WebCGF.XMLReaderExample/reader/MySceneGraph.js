@@ -16,7 +16,7 @@ function MySceneGraph(filename, scene) {
     this.transformations = {};
     this.primitives = {};
     this.components = {};
-
+    this.animations = {};
     this.textureStack;
     this.materialStack;
 
@@ -436,8 +436,8 @@ MySceneGraph.prototype.loadAnimations = function(rootElement) {
 
         controlPoints.push(new Point3(x, y, z));
       }
-
-      console.log(new LinearAnimation(id, controlPoints, span));
+      this.animations[id]=new LinearAnimation(id, controlPoints, span)
+      console.log(this.animations[id]);
     }
     else if (type == "circular") {
       var cx, cy, cz, radius, startang, rotang;
@@ -449,7 +449,8 @@ MySceneGraph.prototype.loadAnimations = function(rootElement) {
       startang = this.reader.getFloat(animationElement, 'startang');
       rotang = this.reader.getFloat(animationElement, 'rotang');
 
-      console.log(new CircularAnimation(id, new Point3(cx, cy, cz), radius, startang, rotang, span));
+      this.animations[id]=new CircularAnimation(id, new Point3(cx, cy, cz), radius, startang, rotang, span);
+      console.log(this.animations[id]);
     }
     else {
       this.onXMLError("Error loading animations. Animation type must be either 'linear' or 'circular'");
@@ -569,12 +570,12 @@ MySceneGraph.prototype.loadComponents = function(rootElement) {
     }
 
 
-    var id, tranformation, materials, texture, componentIDs, primitiveIDs;
+    var id, tranformation,animated, materials, texture, componentIDs, primitiveIDs;
 
     for (var i = 0; i < componentTmp.length; i++) {
         //load  component id
         id = this.reader.getString(componentTmp[i], 'id');
-
+        console.log("giro:"  + id );
         if (this.components[id] != null) {
             console.error("Already exists a component with id " + id);
             return 1;
@@ -603,11 +604,33 @@ MySceneGraph.prototype.loadComponents = function(rootElement) {
                 }
             } else { //a transformação tem que ser criada
                 //guarda o id da transformação
-                tranformation = id + "texture";
+                tranformation = id + "transformation";
                 //guarda tranformação no array de tranformações
                 this.transformations[tranformation] = this.getTranformationMatrix(transformationTmp[0]);
             }
 
+            //load animations
+            var animationTmp = componentTmp[i].getElementsByTagName('animation');
+
+            if (animationTmp.length == 0) {
+                animated = null;
+            }else{
+
+                var animationrefs = animationTmp[0].getElementsByTagName('animationref');
+
+                if(animationrefs.length == 0){
+                    animated = null;
+                }else{
+                    var animations = new Array(animationrefs.length);
+                    for (var j = 0; j < animationrefs.length; j++) {
+                        var animationId = this.reader.getString(animationrefs[j], 'id');
+                        animations[j]=this.animations[animationId];
+
+                    }
+                    animated = new Animated(animations);
+                    console.log( animated);
+                }
+            }
 
             //load  material id's for the component
             var materialsTmp = componentTmp[i].getElementsByTagName('materials');
@@ -668,7 +691,8 @@ MySceneGraph.prototype.loadComponents = function(rootElement) {
                 primitiveIDs[j] = this.reader.getString(primitiveTag[j], 'id');
             }
 
-            this.components[id] = new Component(id, tranformation, materials, texture, componentIDs, primitiveIDs);
+            this.components[id] = new Component(id, tranformation, materials, texture, componentIDs, primitiveIDs, animated);
+
         }
     }
 
@@ -732,7 +756,14 @@ MySceneGraph.prototype.visitGraph = function(root) {
 
     //Tranformations--------------------------
     this.scene.pushMatrix();
+
+
+    if(component.animated != null)
+      this.scene.multMatrix(component.animated.getAnimationMatrix());
+
+
     this.scene.multMatrix(this.transformations[component.transformationID]);
+
 
 
     //Materials--------------------------------

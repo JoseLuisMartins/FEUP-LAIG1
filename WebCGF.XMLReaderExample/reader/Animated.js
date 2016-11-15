@@ -2,8 +2,7 @@
 * Animated
 * @constructor
 */
-function Animated(primitive, animations) {
-  this.primitive = primitive;
+function Animated(animations) {
   this.animations = animations;
 
   this.animationIndex = 0;
@@ -24,4 +23,14 @@ Animated.prototype.getAnimationPosition = function() {
 
 Animated.prototype.getAnimationAngle = function() {
 	return this.animations[this.animationIndex].getCurrentAngle();
+}
+
+Animated.prototype.getAnimationMatrix = function() {
+
+  var matrix = mat4.create();
+
+  mat4.translate(matrix, matrix, this.getAnimationPosition().toArray());
+  mat4.rotate(matrix, matrix,this.getAnimationAngle(), [0,1,0]);
+
+  return matrix;
 }

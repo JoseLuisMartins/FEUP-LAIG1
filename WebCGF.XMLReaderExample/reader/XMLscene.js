@@ -29,12 +29,13 @@ XMLscene.prototype.init = function (application) {
 
   // TODO esfera para ir com o caralho
   this.sphere = new Triangle(this,new Point3(0,0,0),new Point3(2,0,0),new Point3(1,2,0));
+  this.sphere1 = new Triangle(this,new Point3(1,2,0),new Point3(2,0,0),new Point3(0,0,0));
   //this.sphere = new Sphere(this, 1, 10, 10);
   this.appearance = new CGFappearance(this);
-  this.anim1 = new CircularAnimation("1", new Point3(0, 0, 0), 2.5, 0, 360, 5);
-  this.anim2 = new LinearAnimation("1", [new Point3(0, 0, 0), new Point3(0, 1, 0), new Point3(1, 0, 0)], 5);
-  this.anims = [this.anim1, this.anim2];
-  this.animated = new Animated(this.sphere, this.anims);
+  this.anim1 = new CircularAnimation("1", new Point3(0, 0, 0), 5, 90, 360, 5);
+  this.anim2 = new LinearAnimation("1", [new Point3(0, 0, 0), new Point3(0,1 , 0), new Point3(1, 1, 1),new Point3(1, 0, 1),new Point3(0, 0, 0)], 25);
+  this.anims = [this.anim2, this.anim1];
+  this.animated = new Animated(this.anims);
 
   //interface
   this.lightsStatus;
@@ -185,15 +186,15 @@ XMLscene.prototype.display = function () {
   // it is important that things depending on the proper loading of the graph
   // only get executed after the graph has loaded correctly.
   // This is one possible way to do it
-  /*
+
   if (this.graph.loadedOk)
   {
     this.updateLights();
     if(this.graph.displayGraph())
       return;
   };
-  */
 
+/*
   this.pushMatrix();
 
   var position = this.animated.getAnimationPosition();
@@ -201,14 +202,20 @@ XMLscene.prototype.display = function () {
   this.translate(position.x, position.y, position.z);
   this.rotate(angle, 0, 1, 0);
   this.sphere.display();
+  this.sphere1.display();
 
-  this.popMatrix();
+  this.popMatrix();*/
 };
 
 
 
 XMLscene.prototype.update = function(currTime) {
-  for (var anim of this.anims) {
-    anim.update(currTime);
+  if (this.graph.loadedOk){
+    for(var id in this.graph.animations)
+    this.graph.animations[id].update(currTime);
   }
+    /*for (var anim in this.graph.animations) {
+        anim.update(currTime);
+    }*/
+
 }

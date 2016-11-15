@@ -17,7 +17,7 @@
 
     <!-- deve definir-se um objeto para raiz do grafo , assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
-    <scene root="root" axis_length="0.4" />
+    <scene root="root" axis_length="0.3" />
 
 
 
@@ -29,7 +29,7 @@
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="p1" near="0.1" far="1500" angle="22">
-            <from x="15" y="20" z="210" />
+            <from x="15" y="15" z="300" />
             <to x="5" y="5" z="5" />
         </perspective>
 
@@ -225,8 +225,8 @@
         </animation>
 
       <animation id="2" span="10" type="circular"
-          centerx="0" centery="0" centerz="0"
-          radius="2" startang="0" rotang="90" />
+          centerx="-70" centery="0" centerz="0"
+          radius="70" startang="0" rotang="360" />
 
     </animations>
 
@@ -525,15 +525,18 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
                 <translate x="-70" y="1" z="0" />
-                <rotate axis="z" angle="90" />
                 <scale x="50" y="50" z="50" />
             </transformation>
+
+            <!-- bloco opcional -->
+
 
             <materials>
                 <material id="inherit" />
                 <material id="inherit" />
                 <material id="m1" />
             </materials>
+
 
 
             <texture id="sunTex" />
@@ -606,9 +609,12 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
                 <translate x="0" y="1" z="0" />
-                <rotate axis="z" angle="180" />
                 <scale x="3" y="3" z="3" />
             </transformation>
+
+            <animation>
+                <animationref id="2" />
+            </animation>
 
             <materials>
                 <material id="inherit" />
@@ -636,6 +642,8 @@
                 <rotate axis="z" angle="90" />
                 <scale x="1.51" y="1.51" z="1.51" />
             </transformation>
+
+
 
             <materials>
                 <material id="inherit" />

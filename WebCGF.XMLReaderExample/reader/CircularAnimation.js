@@ -33,10 +33,10 @@ CircularAnimation.prototype.update = function(currTime) {
     return;
 
   if (this.timeElapsed >= this.span) {
-    this.finished = true;
     x = this.center.x + this.radius * Math.sin(this.theta + this.phi);
     y = this.center.y;
     z = this.center.z + this.radius * Math.cos(this.theta + this.phi);
+    this.finished = true;
     return;
   }
 
