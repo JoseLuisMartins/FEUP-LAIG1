@@ -29,7 +29,7 @@
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="p1" near="0.1" far="1500" angle="22">
-            <from x="0" y="0" z="300" />
+            <from x="15" y="15" z="15" />
             <to x="0" y="0" z="0" />
         </perspective>
 
@@ -228,6 +228,17 @@
           <controlpoint xx="20" yy="-10" zz="170" />
         </animation>
 
+        <animation id="robot1" span="20" type="linear">
+            <controlpoint xx="20" yy="-10" zz="170" />
+            <controlpoint xx="20" yy="-8" zz="170" />
+            <controlpoint xx="20" yy="-10" zz="170" />
+            <controlpoint xx="20" yy="-8" zz="170" />
+            <controlpoint xx="20" yy="-10" zz="170" />
+            <controlpoint xx="20" yy="-8" zz="170" />
+            <controlpoint xx="20" yy="-10" zz="170" />
+            <controlpoint xx="20" yy="-8" zz="170" />
+          </animation>
+
       <animation id="mercury" span="120" type="circular"
           centerx="-70" centery="0" centerz="0"
           radius="50" startang="0" rotang="360" />
@@ -380,7 +391,7 @@
             <!-- id="none" remove a textura recebida do pai -->
             <!-- a textura declarada sobrepoe a textura recebida do -->
             <!-- objecto "pai" -->
-            <texture id="eye" />
+            <texture id="earthTex" />
 
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
@@ -389,8 +400,8 @@
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
 
-                <primitiveref id = "chessboard" />
-               <componentref id="universe" />
+                <primitiveref id = "vehicle" />
+                <!-- <componentref id="universe" />
                 <componentref id="sun" />
                 <componentref id="mercury" />
                 <componentref id="venus" />
@@ -400,7 +411,7 @@
                 <componentref id="saturn" />
                 <componentref id="uranus" />
                 <componentref id="neptune" />
-                <componentref id="robot" />
+                <componentref id="robot" /> -->
 
             </children>
 
@@ -926,6 +937,9 @@
 
             <animation>
                 <animationref id="robot" />
+                <animationref id="robot1" />
+                <animationref id="robot1" />
+                <animationref id="robot1" />
             </animation>
 
             <materials>
