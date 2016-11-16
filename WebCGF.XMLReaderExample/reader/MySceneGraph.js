@@ -571,7 +571,7 @@ MySceneGraph.prototype.createPrimitive = function(primitiveName, primitiveTag) {
               }
         break;
         case 'vehicle':
-              primitive=new vehicle(this.scene);
+              primitive=new Vehicle(this.scene);
         break;
         case 'chessboard':
               var du = this.reader.getFloat(primitiveTag, 'du');
@@ -676,6 +676,7 @@ MySceneGraph.prototype.loadComponents = function(rootElement) {
                         animations[j]=this.animations[animationId];
 
                     }
+                    console.log(animations);
                     animated = new Animated(animations);
 
                 }

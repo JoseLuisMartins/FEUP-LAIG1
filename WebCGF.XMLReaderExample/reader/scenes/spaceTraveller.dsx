@@ -29,7 +29,7 @@
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="p1" near="0.1" far="1500" angle="22">
-            <from x="0" y="0" z="15" />
+            <from x="0" y="0" z="300" />
             <to x="0" y="0" z="0" />
         </perspective>
 
@@ -219,18 +219,55 @@
     <!-- demorar. Nesta versão do formato DSX, type pode ter -->
     <!-- o valor "linear" ou "circular"; na animacao circular -->
     <!-- os angulos sao expressos em graus  -->
-      <animation id="1" span="5" type="linear">
-          <controlpoint xx="0" yy="1" zz="0" />
-          <controlpoint xx="0" yy="1" zz="1" />
+      <animation id="robot" span="10" type="linear">
           <controlpoint xx="0" yy="0" zz="0" />
+          <controlpoint xx="15" yy="2" zz="60" />
+          <controlpoint xx="0" yy="0" zz="80" />
+          <controlpoint xx="0" yy="0" zz="150" />
+          <controlpoint xx="20" yy="0" zz="150" />
+          <controlpoint xx="20" yy="-10" zz="170" />
         </animation>
 
-      <animation id="2" span="10" type="circular"
+      <animation id="mercury" span="120" type="circular"
+          centerx="-70" centery="0" centerz="0"
+          radius="50" startang="0" rotang="360" />
+
+      <animation id="earth" span="120" type="circular"
           centerx="-70" centery="0" centerz="0"
           radius="70" startang="0" rotang="360" />
 
-    </animations>
 
+      <animation id="venus" span="200" type="circular"
+          centerx="-70" centery="0" centerz="0"
+          radius="60" startang="0" rotang="360" />
+
+
+      <animation id="mars" span="150" type="circular"
+          centerx="-70" centery="0" centerz="0"
+          radius="75" startang="0" rotang="360" />
+
+
+      <animation id="jupiter" span="300" type="circular"
+          centerx="-70" centery="0" centerz="0"
+          radius="85" startang="0" rotang="360" />
+
+
+      <animation id="saturn" span="190" type="circular"
+          centerx="-70" centery="0" centerz="0"
+          radius="105" startang="0" rotang="360" />
+
+
+      <animation id="uranus" span="100" type="circular"
+          centerx="-70" centery="0" centerz="0"
+          radius="120" startang="0" rotang="360" />
+
+
+
+      <animation id="neptune" span="140" type="circular"
+          centerx="-70" centery="0" centerz="0"
+          radius="130" startang="0" rotang="360" />
+
+    </animations>
 
     <primitives>
 
@@ -300,6 +337,11 @@
       </primitive>
 
 
+      <primitive id="vehicle">
+        <vehicle />
+      </primitive>
+
+
     </primitives>
 
 
@@ -348,7 +390,7 @@
                 <!-- componentes ou primitivas -->
 
                 <primitiveref id = "chessboard" />
-            <!--    <componentref id="universe" />
+               <componentref id="universe" />
                 <componentref id="sun" />
                 <componentref id="mercury" />
                 <componentref id="venus" />
@@ -358,7 +400,7 @@
                 <componentref id="saturn" />
                 <componentref id="uranus" />
                 <componentref id="neptune" />
-                <componentref id="robot" /> -->
+                <componentref id="robot" />
 
             </children>
 
@@ -585,9 +627,7 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="-20" y="1" z="0" />
-                <rotate axis="z" angle="90" />
-                <scale x="1.77" y="1.77" z="1.77" />
+              <scale x="1.77" y="1.77" z="1.77" />
             </transformation>
 
             <materials>
@@ -596,6 +636,9 @@
                 <material id="m1" />
             </materials>
 
+            <animation>
+                <animationref id="mercury" />
+            </animation>
 
             <texture id="mercuryTex" />
 
@@ -611,7 +654,7 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="-10" y="1" z="0" />
+
                 <rotate axis="z" angle="90" />
                 <scale x="2.77" y="2.77" z="2.77" />
             </transformation>
@@ -622,6 +665,9 @@
                 <material id="m1" />
             </materials>
 
+            <animation>
+                <animationref id="venus" />
+            </animation>
 
             <texture id="venusTex" />
 
@@ -644,7 +690,7 @@
             </transformation>
 
             <animation>
-                <animationref id="2" />
+                <animationref id="earth" />
             </animation>
 
             <materials>
@@ -669,11 +715,14 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="5" y="1" z="0" />
+
                 <rotate axis="z" angle="90" />
                 <scale x="1.51" y="1.51" z="1.51" />
             </transformation>
 
+            <animation>
+                <animationref id="mars" />
+            </animation>
 
 
             <materials>
@@ -698,10 +747,14 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="15" y="1" z="0" />
+
                 <rotate axis="z" angle="90" />
                 <scale x="11.21" y="11.21" z="11.21" />
             </transformation>
+
+            <animation>
+                <animationref id="jupiter" />
+            </animation>
 
             <materials>
                 <material id="inherit" />
@@ -725,9 +778,13 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="35" y="1" z="0" />
+
                 <rotate axis="z" angle="50" />
             </transformation>
+
+            <animation>
+                <animationref id="saturn" />
+            </animation>
 
             <materials>
                 <material id="inherit" />
@@ -801,10 +858,14 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="50" y="1" z="0" />
+
                 <rotate axis="z" angle="90" />
                 <scale x="4.01" y="4.01" z="4.01" />
             </transformation>
+
+            <animation>
+                <animationref id="uranus" />
+            </animation>
 
             <materials>
                 <material id="inherit" />
@@ -828,10 +889,14 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="60" y="1" z="0" />
+
                 <rotate axis="z" angle="90" />
                 <scale x="3.88" y="3.88" z="3.88" />
             </transformation>
+
+            <animation>
+                <animationref id="neptune" />
+            </animation>
 
             <materials>
                 <material id="inherit" />
@@ -856,9 +921,12 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
                 <scale x="2" y="2" z="2" />
-                <translate x="15" y="2" z="60" />
                 <rotate axis="y" angle="-20" />
             </transformation>
+
+            <animation>
+                <animationref id="robot" />
+            </animation>
 
             <materials>
                 <material id="m1" />
