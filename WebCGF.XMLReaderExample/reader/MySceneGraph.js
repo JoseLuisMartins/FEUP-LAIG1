@@ -808,8 +808,8 @@ MySceneGraph.prototype.visitGraph = function(root) {
     this.scene.pushMatrix();
 
 
-    if(component.animated != null)
-      this.scene.multMatrix(component.animated.getAnimationMatrix());
+    if (component.animated != null)
+        this.scene.multMatrix(component.animated.getAnimationMatrix());
 
 
     this.scene.multMatrix(this.transformations[component.transformationID]);

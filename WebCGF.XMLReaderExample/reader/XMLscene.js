@@ -198,8 +198,4 @@ XMLscene.prototype.update = function(currTime) {
     for(var id in this.graph.animations)
     this.graph.animations[id].update(currTime);
   }
-    /*for (var anim in this.graph.animations) {
-        anim.update(currTime);
-    }*/
-
 }

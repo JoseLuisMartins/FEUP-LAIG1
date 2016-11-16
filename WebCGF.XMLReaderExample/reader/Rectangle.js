@@ -44,9 +44,9 @@ Rectangle.prototype.initBuffers = function() {
 
     this.texCoords = [
         0, 1,
-        this.point2.x - this.point1.x, 1,
-        this.point2.x - this.point1.x,  1 - (this.point2.y - this.point1.y),
-        0,  1 - (this.point2.y - this.point1.y)
+        1, 1,
+        1, 0,
+        0, 0
     ]
 
     this.baseTexCoords = [
