@@ -14,9 +14,11 @@ uniform float divV;
 uniform float sU;
 uniform float sV;
 
+
+
 vec4 colorSeclect(vec2 tex, vec4 color1, vec4 color2)
 {
-				if(((tex.x > (sU/10.0)) && (tex.x < (sU+1.0)/10.0)) && ((tex.y > (sV/10.0)) && (tex.y < (sV+1.0)/10.0)) ){
+				if(((tex.x > (sU/divU)) && (tex.x < (sU+1.0)/divU)) && ((tex.y > (sV/divV)) && (tex.y < (sV+1.0)/divV)) ){
 							return colorMark;
 				}else{
 

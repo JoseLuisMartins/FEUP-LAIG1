@@ -8,17 +8,21 @@ function Chessboard(scene,du,dv,textureref,su,sv,c1,c2,cs) {
     this.scene=scene;
 
     this.shader = new CGFshader(scene.gl, "shaders\\texture1.vert", "shaders\\texture1.frag");
-    this.plane = new Plane(this.scene, 1, 1, du*10, dv*10);
+    this.plane = new Plane(this.scene, 1, 1, 100, 100);
 
-    console.log("Tecture " + textureref);
-    this.texture = this.scene.graph.textures[textureref];
+
+    this.texture = this.scene.graph.textures[textureref].texture;
+
+
+    sv=dv-(sv+1);
 
     this.shader.setUniformsValues({uSampler : 0,
                                   color1 : [c1.r, c1.g, c1.b, c1.a],
                                   color2 : [c2.r, c2.g, c2.b, c2.a],
                                   colorMark : [cs.r, cs.g, cs.b, cs.a],
                                   divU:parseInt(du)*1.0,divV:parseInt(dv)*1.0,
-                                  sU:parseInt(su)*1.0,sV:parseInt(sv)*1.0});
+                                  sU:parseInt(su)*1.0,sV:parseInt(sv)*1.0
+                                  });
 
 };
 
