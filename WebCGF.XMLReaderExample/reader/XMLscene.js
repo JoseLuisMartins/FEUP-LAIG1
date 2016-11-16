@@ -46,9 +46,18 @@ XMLscene.prototype.init = function (application) {
 	this.appearance.setTextureWrap ('REPEAT', 'REPEAT');
 
   this.shader = new CGFshader(this.gl, "shaders\\texture1.vert", "shaders\\texture1.frag");
-  this.square = new Plane(this, 5, 5, 10, 10);
+  this.square = new Plane(this, 5, 5, 100, 100);
 
-  this.texture2 = new CGFtexture(this, "resources\\images\\flame.jpg");
+  this.texture2 = new CGFtexture(this, "resources\\images\\boardTex.png");
+
+  this.shader.setUniformsValues({uSampler : 0});
+  this.shader.setUniformsValues({color1 : [0.0, 0.4, 0.2, 1.0],color2 : [0.7, 0.6, 0.0, 1.0],
+                                colorMark : [1.0, 0.0, 1.0, 1.0],divU:parseInt(10)*1.0,
+                                divU:parseInt(10)*1.0,divV:parseInt(10)*1.0,
+                                sU:parseInt(5)*1.0,sV:parseInt(5)*1.0});
+
+
+
   // *********************************************
 };
 
@@ -205,7 +214,7 @@ XMLscene.prototype.display = function () {
   */
 
   this.appearance.apply();
-  this.texture2.bind(1);
+  this.texture2.bind(0);
 
   this.setActiveShader(this.shader);
   this.square.display();

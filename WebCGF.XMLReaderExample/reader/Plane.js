@@ -8,14 +8,14 @@ function Plane(scene, dimX, dimY, partsX, partsY) {
 
   var controlPoints=[	// U = 0
           						[ // V = 0..1;
-          							 [-dimX/2, -dimY/2, 0.0, 1 ],
-          							 [-dimX/2,  dimY/2, 0.0, 1 ]
+          							 [-dimX/2, dimY/2, 0.0, 1 ],
+          							 [dimX/2,  dimY/2, 0.0, 1 ]
 
           						],
           						// U = 1
           						[ // V = 0..1
-                        [dimX/2, -dimY/2, 0.0, 1 ],
-                        [dimX/2,  dimY/2, 0.0, 1 ]
+                        [-dimX/2, -dimY/2, 0.0, 1 ],
+                        [dimX/2, -dimY/2, 0.0, 1 ]
           						]
           					];
 
