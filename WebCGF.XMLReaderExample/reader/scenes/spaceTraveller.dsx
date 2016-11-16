@@ -130,6 +130,7 @@
         <!-- objetos respetivos podem a violar esta regra.         -->
         <!-- Nao necessario aplicar fatores de escala em  -->
         <!-- quadricas (esfera, ciclindro...) -->
+        <texture id="boardTex" file="resources\\images\\boardTex.png" length_s="1.0" length_t="1.0" />
         <texture id="earthTex" file="resources\\images\\earth.jpg" length_s="1.0" length_t="1.0" />
         <texture id="jupiterTex" file="resources\\images\\jupiter.jpg" length_s="1.0" length_t="1.0" />
         <texture id="neptuneTex" file="resources\\images\\neptune.jpg" length_s="1.0" length_t="1.0" />
@@ -290,7 +291,13 @@
           </patch>
       </primitive>
 
-
+      <primitive id="chessboard">
+        <chessboard du="10" dv="10" textureref="boardTex" su="5" sv="5">
+                   <c1 r="0.0" g="0.4" b="0.2" a="1.0" />
+                   <c2 r="0.7" g="0.6" b="0.0" a="1.0" />
+                   <cs r="1.0" g="0.0" b="1.0" a="1.0" />
+        </chessboard>
+      </primitive>
       <primitive id="patch1">
            <patch orderU="2" orderV="117" partsU="20" partsV="20" >
              <controlpoint x="-0" y="-3.88253" z="-0.660288"/>
@@ -688,7 +695,7 @@
             <!-- id="none" remove a textura recebida do pai -->
             <!-- a textura declarada sobrepoe a textura recebida do -->
             <!-- objecto "pai" -->
-            <texture id="earthTex" />
+            <texture id="boardTex" />
 
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
@@ -697,7 +704,7 @@
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
 
-                <primitiveref id = "patch1" />
+                <primitiveref id = "chessboard" />
             <!--    <componentref id="universe" />
                 <componentref id="sun" />
                 <componentref id="mercury" />

@@ -203,7 +203,7 @@ XMLscene.prototype.display = function () {
   // only get executed after the graph has loaded correctly.
   // This is one possible way to do it
 
-  /*
+
   if (this.graph.loadedOk)
   {
     this.updateLights();
@@ -211,14 +211,14 @@ XMLscene.prototype.display = function () {
     if(this.graph.displayGraph())
       return;
   };
-  */
 
+/*
   this.appearance.apply();
   this.texture2.bind(0);
 
   this.setActiveShader(this.shader);
   this.square.display();
-  this.setActiveShader(this.defaultShader);
+  this.setActiveShader(this.defaultShader);/**/
 
 };
 

@@ -574,6 +574,23 @@ MySceneGraph.prototype.createPrimitive = function(primitiveName, primitiveTag) {
               primitive=new vehicle(this.scene);
         break;
         case 'chessboard':
+              var du = this.reader.getFloat(primitiveTag, 'du');
+              var dv = this.reader.getFloat(primitiveTag, 'dv');
+              var textureref = this.reader.getString(primitiveTag, 'textureref');
+              var su = this.reader.getFloat(primitiveTag, 'su');
+              var sv = this.reader.getFloat(primitiveTag, 'sv');
+
+              if(primitiveTag.children.length != 3){
+                this.onXMLError("Wrong number of colors.");
+                return null;
+              }
+
+              var c1 = this.getRGBAElement(primitiveTag.children[0]);
+              var c2 = this.getRGBAElement(primitiveTag.children[1]);
+              var cs = this.getRGBAElement(primitiveTag.children[2]);
+
+              primitive = new Chessboard(this.scene,du,dv,textureref,su,sv,c1,c2,cs);
+
         break;
 
         default:
