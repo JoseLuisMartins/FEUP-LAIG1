@@ -15,6 +15,11 @@ function CircularAnimation(id, center, radius, phiDeg, thetaDeg, span) {
 
   this.currentAngle = this.phi;
 
+  if(this.theta < 0)
+    this.rot = -Math.PI/2;
+    else
+    this.rot = Math.PI/2;
+
   this.span = span;
   this.timeElapsed = 0;
   this.lastCurrTime = -1;
@@ -50,6 +55,9 @@ CircularAnimation.prototype.update = function(currTime) {
   x = this.center.x + this.radius * Math.sin(this.currentAngle);
   y = this.center.y;
   z = this.center.z + this.radius * Math.cos(this.currentAngle);
+
+  this.currentAngle += this.rot;
+
 
   this.currentPosition.set(x, y, z);
 }

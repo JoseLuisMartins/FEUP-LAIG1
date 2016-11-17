@@ -246,14 +246,14 @@
           centerx = "-70" centery="8" centerz="0"
           radius = "82" startang="0" rotang="270" />
 
-      <animation id="robot_linear1" span="10" type="linear">
+      <animation id="robot_linear1" span="9.5" type="linear">
           <controlpoint xx="-70" yy="8" zz="82" />
           <controlpoint xx="-70" yy="8" zz="55" />
         </animation>
 
-      <animation id="robot_linear2" span="50" type="linear">
+      <animation id="robot_linear2" span="10" type="linear">
           <controlpoint xx="-70" yy="8" zz="55" />
-          <controlpoint xx="-700" yy="5" zz="550" />
+          <controlpoint xx="-350" yy="5" zz="350" />
         </animation>
 
       <animation id="mercury" span="120" type="circular"
@@ -307,17 +307,9 @@
 
       <animation id="rocket_linear2" span="2" type="linear">
             <controlpoint xx="-10" yy="8" zz="18.86" />
-            <controlpoint xx="-70" yy="8" zz="55" />
+            <controlpoint xx="-60" yy="8" zz="55" />
         </animation>
 
-
-      <animation id="rocket_aux1" span="10" type="circular"
-          centerx = "0" centery="0" centerz="0"
-          radius = "0" startang="180" rotang="0" />
-
-      <animation id="rocket_aux2" span="10" type="circular"
-          centerx = "0" centery="0" centerz="0"
-          radius = "0" startang="-90" rotang="0" />
 
     </animations>
 
@@ -463,7 +455,7 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
 
-              <scale x="7" y="7" z="7" />
+              <scale x="10" y="10" z="10" />
             </transformation>
 
             <materials>
@@ -973,7 +965,6 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
                 <scale x="2" y="2" z="2" />
-                <rotate axis="y" angle="90" />
                 <rotate axis="x" angle="80" />
             </transformation>
 
@@ -1428,7 +1419,7 @@
 
         <!-- bloco "transformation" obrigatorio -->
         <transformation>
-            <rotate axis="y" angle="0" />
+            <scale x="3" y="3" z="3" />
         </transformation>
 
 
@@ -1451,42 +1442,12 @@
 
 
         <children>
-            <componentref id="rocket_aux" />
-        </children>
-
-    </component>
-
-
-    <component id="rocket_aux">
-
-        <!-- bloco "transformation" obrigatorio -->
-        <transformation>
-            <rotate axis="y" angle="0" />
-        </transformation>
-
-
-        <materials>
-            <material id="inherit"  />
-            <material id="m2"/>
-            <material id="m1"/>
-            <material id="inherit"  />
-        </materials>
-
-
-        <animation>
-            <animationref id="rocket_aux1" />
-            <animationref id="rocket_aux2" />
-        </animation>
-
-
-        <texture id="inherit" />
-
-
-        <children>
             <primitiveref id="vehicle" />
         </children>
 
     </component>
+
+
 
 </components>
 

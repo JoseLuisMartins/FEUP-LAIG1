@@ -75,6 +75,7 @@ Vehicle.prototype.display = function() {
   /****************************/
   this.bodyAppearance.apply();
 
+
   this.scene.pushMatrix();
     this.body.display();
   this.scene.popMatrix();
