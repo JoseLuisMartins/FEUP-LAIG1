@@ -219,6 +219,8 @@
     <!-- demorar. Nesta versão do formato DSX, type pode ter -->
     <!-- o valor "linear" ou "circular"; na animacao circular -->
     <!-- os angulos sao expressos em graus  -->
+
+      <!--
       <animation id="robot" span="10" type="linear">
           <controlpoint xx="0" yy="0" zz="0" />
           <controlpoint xx="15" yy="2" zz="60" />
@@ -238,6 +240,21 @@
             <controlpoint xx="20" yy="-10" zz="170" />
             <controlpoint xx="20" yy="-8" zz="170" />
           </animation>
+      -->
+
+      <animation id="robot_circ" span="10" type="circular"
+          centerx = "-70" centery="8" centerz="0"
+          radius = "82" startang="0" rotang="270" />
+
+      <animation id="robot_linear1" span="10" type="linear">
+          <controlpoint xx="-70" yy="8" zz="82" />
+          <controlpoint xx="-70" yy="8" zz="55" />
+        </animation>
+
+      <animation id="robot_linear2" span="50" type="linear">
+          <controlpoint xx="-70" yy="8" zz="55" />
+          <controlpoint xx="-700" yy="5" zz="550" />
+        </animation>
 
       <animation id="mercury" span="120" type="circular"
           centerx="-70" centery="0" centerz="0"
@@ -277,6 +294,30 @@
       <animation id="neptune" span="120" type="circular"
           centerx="-70" centery="0" centerz="0"
           radius="130" startang="0" rotang="360" />
+
+
+      <animation id="rocket_circ" span="10" type="circular"
+          centerx = "-70" centery="30" centerz="0"
+          radius = "82" startang="0" rotang="-360" />
+
+      <animation id="rocket_linear1" span="8" type="linear">
+            <controlpoint xx="12" yy="30" zz="0" />
+            <controlpoint xx="-10" yy="8" zz="18.86" />
+        </animation>
+
+      <animation id="rocket_linear2" span="2" type="linear">
+            <controlpoint xx="-10" yy="8" zz="18.86" />
+            <controlpoint xx="-70" yy="8" zz="55" />
+        </animation>
+
+
+      <animation id="rocket_aux1" span="10" type="circular"
+          centerx = "0" centery="0" centerz="0"
+          radius = "0" startang="180" rotang="0" />
+
+      <animation id="rocket_aux2" span="10" type="circular"
+          centerx = "0" centery="0" centerz="0"
+          radius = "0" startang="-90" rotang="0" />
 
     </animations>
 
@@ -400,8 +441,7 @@
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
 
-                <primitiveref id = "vehicle" />
-                <!--<componentref id="universe" />
+                <componentref id="universe" />
                 <componentref id="sun" />
                 <componentref id="mercury" />
                 <componentref id="venus" />
@@ -411,7 +451,8 @@
                 <componentref id="saturn" />
                 <componentref id="uranus" />
                 <componentref id="neptune" />
-                <componentref id="robot" />-->
+                <componentref id="robot" />
+                <componentref id="rocket" />
 
             </children>
 
@@ -442,7 +483,7 @@
                 <componentref id="side1" />
                 <componentref id="side2" />
                 <componentref id="side3" />
-                <componentref id="side4" /> -->
+                <componentref id="side4" />
             </children>
 
         </component>
@@ -932,14 +973,14 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
                 <scale x="2" y="2" z="2" />
-                <rotate axis="y" angle="-20" />
+                <rotate axis="y" angle="90" />
+                <rotate axis="x" angle="80" />
             </transformation>
 
             <animation>
-                <animationref id="robot" />
-                <animationref id="robot1" />
-                <animationref id="robot1" />
-                <animationref id="robot1" />
+                <animationref id="robot_circ" />
+                <animationref id="robot_linear1" />
+                <animationref id="robot_linear2" />
             </animation>
 
             <materials>
@@ -1376,6 +1417,73 @@
 
         <children>
             <primitiveref id="sphere" />
+        </children>
+
+    </component>
+
+
+
+
+    <component id="rocket">
+
+        <!-- bloco "transformation" obrigatorio -->
+        <transformation>
+            <rotate axis="y" angle="0" />
+        </transformation>
+
+
+        <materials>
+            <material id="inherit"  />
+            <material id="m2"/>
+            <material id="m1"/>
+            <material id="inherit"  />
+        </materials>
+
+
+        <animation>
+            <animationref id="rocket_circ" />
+            <animationref id="rocket_linear1" />
+            <animationref id="rocket_linear2" />
+        </animation>
+
+
+        <texture id="inherit" />
+
+
+        <children>
+            <componentref id="rocket_aux" />
+        </children>
+
+    </component>
+
+
+    <component id="rocket_aux">
+
+        <!-- bloco "transformation" obrigatorio -->
+        <transformation>
+            <rotate axis="y" angle="0" />
+        </transformation>
+
+
+        <materials>
+            <material id="inherit"  />
+            <material id="m2"/>
+            <material id="m1"/>
+            <material id="inherit"  />
+        </materials>
+
+
+        <animation>
+            <animationref id="rocket_aux1" />
+            <animationref id="rocket_aux2" />
+        </animation>
+
+
+        <texture id="inherit" />
+
+
+        <children>
+            <primitiveref id="vehicle" />
         </children>
 
     </component>
