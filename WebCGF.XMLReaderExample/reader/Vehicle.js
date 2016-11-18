@@ -5,7 +5,7 @@
 function Vehicle(scene) {
     CGFobject.call(this, scene);
 
-    /*
+    /*Random Fish
     var controlPoints = [];
     var ang = Math.PI/16;
     for (var i = 0; i*ang <= 2*Math.PI; i++) {
@@ -65,12 +65,26 @@ function Vehicle(scene) {
     this.windowImageAppearance.loadTexture("resources\\images\\prof_aas.jpg");
 
     this.tube = new Cylinder(scene, 0.5, 0.5, 0, 20, 20);
+
+    this.propellant = new Propellant(this.scene);
+
 };
 
 Vehicle.prototype = Object.create(CGFobject.prototype);
 Vehicle.prototype.constructor = Vehicle;
 
+Vehicle.prototype.update = function(currrTime) {
+  this.propellant.update();
+}
+
 Vehicle.prototype.display = function() {
+  /****************************/
+
+  this.scene.pushMatrix();
+  this.scene.scale(0.8,0.8,0.8);
+  this.scene.translate(0,0.4,-2);
+  this.propellant.display();
+  this.scene.popMatrix();
 
   /****************************/
   this.bodyAppearance.apply();

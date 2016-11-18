@@ -433,6 +433,8 @@
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
 
+                <primitiveref id ="vehicle"/>
+<!--
                 <componentref id="universe" />
                 <componentref id="sun" />
                 <componentref id="mercury" />
@@ -445,7 +447,7 @@
                 <componentref id="neptune" />
                 <componentref id="robot" />
                 <componentref id="rocket" />
-
+ -->
             </children>
 
         </component>

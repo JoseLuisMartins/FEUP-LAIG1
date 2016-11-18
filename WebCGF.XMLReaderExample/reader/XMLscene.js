@@ -197,5 +197,9 @@ XMLscene.prototype.update = function(currTime) {
   if (this.graph.loadedOk){
     for(var id in this.graph.animations)
     this.graph.animations[id].update(currTime);
+
+    for(var id in this.graph.primitives)
+      if(this.graph.primitives[id] instanceof Vehicle)
+        this.graph.primitives[id].update(currTime);
   }
 }
