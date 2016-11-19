@@ -56,7 +56,8 @@ function Propellant(scene) {
 
   this.texture = new CGFtexture(this.scene, "resources\\images\\flame.jpg");
 
-
+  this.values = [0.0,0.15,0.30,0.54,0.70,0.90,1.10,1.35,1.10,0.90,0.70,0.54,0.30,0.15,0.0];
+  this.index = 0;
 };
 
 Propellant.prototype = Object.create(CGFobject.prototype);
@@ -76,6 +77,9 @@ Propellant.prototype.display = function() {
 };
 
 Propellant.prototype.update = function(currrTime) {
-  this.shader.setUniformsValues({t : currrTime});
 
+  this.shader.setUniformsValues({t : this.values[this.index%this.values.length]});
+  this.index++;
+  if(this.index >= this.values.length)
+    this.index = 0;
 }

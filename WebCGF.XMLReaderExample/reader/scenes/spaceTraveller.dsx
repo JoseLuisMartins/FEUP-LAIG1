@@ -29,7 +29,7 @@
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="p1" near="0.1" far="1500" angle="22">
-            <from x="15" y="15" z="15" />
+            <from x="15" y="15" z="500" />
             <to x="0" y="0" z="0" />
         </perspective>
 
@@ -214,39 +214,13 @@
 
 
     <animations>
-    <!-- podem existir zero ou mais nós "animation" -->
-    <!-- span é o tempo, em segundos, que a animação deve -->
-    <!-- demorar. Nesta versão do formato DSX, type pode ter -->
-    <!-- o valor "linear" ou "circular"; na animacao circular -->
-    <!-- os angulos sao expressos em graus  -->
 
-      <!--
-      <animation id="robot" span="10" type="linear">
-          <controlpoint xx="0" yy="0" zz="0" />
-          <controlpoint xx="15" yy="2" zz="60" />
-          <controlpoint xx="0" yy="0" zz="80" />
-          <controlpoint xx="0" yy="0" zz="150" />
-          <controlpoint xx="20" yy="0" zz="150" />
-          <controlpoint xx="20" yy="-10" zz="170" />
-        </animation>
-
-        <animation id="robot1" span="20" type="linear">
-            <controlpoint xx="20" yy="-10" zz="170" />
-            <controlpoint xx="20" yy="-8" zz="170" />
-            <controlpoint xx="20" yy="-10" zz="170" />
-            <controlpoint xx="20" yy="-8" zz="170" />
-            <controlpoint xx="20" yy="-10" zz="170" />
-            <controlpoint xx="20" yy="-8" zz="170" />
-            <controlpoint xx="20" yy="-10" zz="170" />
-            <controlpoint xx="20" yy="-8" zz="170" />
-          </animation>
-      -->
 
       <animation id="robot_circ" span="10" type="circular"
           centerx = "-70" centery="8" centerz="0"
           radius = "82" startang="0" rotang="270" />
 
-      <animation id="robot_linear1" span="9.5" type="linear">
+      <animation id="robot_linear1" span="11.5" type="linear">
           <controlpoint xx="-70" yy="8" zz="82" />
           <controlpoint xx="-70" yy="8" zz="55" />
         </animation>
@@ -296,6 +270,11 @@
           radius="130" startang="0" rotang="360" />
 
 
+      <animation id="rocket_launch" span="2" type="linear">
+        <controlpoint xx="0" yy="0" zz="0" />
+        <controlpoint xx="0" yy="30" zz="0" />
+    </animation>
+
       <animation id="rocket_circ" span="10" type="circular"
           centerx = "-70" centery="30" centerz="0"
           radius = "82" startang="0" rotang="-360" />
@@ -309,6 +288,9 @@
             <controlpoint xx="-10" yy="8" zz="18.86" />
             <controlpoint xx="-60" yy="8" zz="55" />
         </animation>
+
+
+
 
 
     </animations>
@@ -433,8 +415,8 @@
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
 
-                <primitiveref id ="vehicle"/>
-<!--
+
+
                 <componentref id="universe" />
                 <componentref id="sun" />
                 <componentref id="mercury" />
@@ -447,7 +429,7 @@
                 <componentref id="neptune" />
                 <componentref id="robot" />
                 <componentref id="rocket" />
- -->
+
             </children>
 
         </component>
@@ -1434,6 +1416,7 @@
 
 
         <animation>
+            <animationref id="rocket_launch" />
             <animationref id="rocket_circ" />
             <animationref id="rocket_linear1" />
             <animationref id="rocket_linear2" />
