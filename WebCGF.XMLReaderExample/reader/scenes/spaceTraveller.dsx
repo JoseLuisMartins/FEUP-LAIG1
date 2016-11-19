@@ -39,8 +39,8 @@
         </perspective>
 
         <perspective id="p3" near="0.1" far="1500" angle="40">
-            <from x="100" y="25" z="200" />
-            <to x="0" y="0" z="0" />
+            <from x="-500" y="0" z="3" />
+            <to x="-500" y="0" z="0" />
         </perspective>
 
         <perspective id="p4" near="0.1" far="1500" angle="25">
@@ -230,11 +230,11 @@
           <controlpoint xx="-350" yy="5" zz="350" />
         </animation>
 
-      <animation id="mercury" span="120" type="circular"
+      <animation id="mercury" span="60" type="circular"
           centerx="-70" centery="0" centerz="0"
           radius="50" startang="0" rotang="360" />
 
-      <animation id="earth" span="120" type="circular"
+      <animation id="earth" span="100" type="circular"
           centerx="-70" centery="0" centerz="0"
           radius="70" startang="0" rotang="360" />
 
@@ -244,22 +244,22 @@
           radius="60" startang="0" rotang="360" />
 
 
-      <animation id="mars" span="120" type="circular"
+      <animation id="mars" span="35" type="circular"
           centerx="-70" centery="0" centerz="0"
           radius="75" startang="0" rotang="360" />
 
 
-      <animation id="jupiter" span="120" type="circular"
+      <animation id="jupiter" span="70" type="circular"
           centerx="-70" centery="0" centerz="0"
           radius="85" startang="0" rotang="360" />
 
 
-      <animation id="saturn" span="120" type="circular"
+      <animation id="saturn" span="150" type="circular"
           centerx="-70" centery="0" centerz="0"
           radius="105" startang="0" rotang="360" />
 
 
-      <animation id="uranus" span="120" type="circular"
+      <animation id="uranus" span="92" type="circular"
           centerx="-70" centery="0" centerz="0"
           radius="120" startang="0" rotang="360" />
 
@@ -334,7 +334,7 @@
 
 
       <primitive id="plane">
-         <plane dimX="10" dimY="10" partsX="20" partsY="20"/>
+         <plane dimX="5" dimY="5" partsX="20" partsY="20"/>
       </primitive>
 
       <primitive id="patch">
@@ -355,8 +355,8 @@
       </primitive>
 
       <primitive id="chessboard">
-        <chessboard du="10" dv="25" textureref="boardTex" su="2" sv="5">
-                   <c1 r="0.0" g="0.4" b="0.2" a="1.0" />
+        <chessboard du="10" dv="10" textureref="boardTex" su="1" sv="1">
+                   <c1 r="0" g="0.4" b="0.2" a="1.0" />
                    <c2 r="0.7" g="0.6" b="0.0" a="1.0" />
                    <cs r="1.0" g="0.0" b="1.0" a="1.0" />
         </chessboard>
@@ -415,8 +415,9 @@
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
 
-
-
+                <componentref id="plane" />
+                <componentref id="patch" />
+                <componentref id="chessboard" />
                 <componentref id="universe" />
                 <componentref id="sun" />
                 <componentref id="mercury" />
@@ -430,6 +431,67 @@
                 <componentref id="robot" />
                 <componentref id="rocket" />
 
+            </children>
+
+        </component>
+
+
+        <component id="plane">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+              <translate x="-510" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="inherit"  />
+            </materials>
+
+
+            <texture id="marsTex" />
+
+            <children>
+                <primitiveref id="plane" />
+            </children>
+
+        </component>
+
+        <component id="chessboard">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+              <translate x="-500" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="inherit"  />
+            </materials>
+
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="chessboard" />
+            </children>
+
+        </component>
+
+        <component id="patch">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+              <translate x="-505" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="inherit"  />
+            </materials>
+
+
+            <texture id="boardTex" />
+
+            <children>
+                <primitiveref id="patch" />
             </children>
 
         </component>

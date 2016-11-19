@@ -425,6 +425,11 @@ MySceneGraph.prototype.loadAnimations = function(rootElement) {
     span = this.reader.getFloat(animationElement, 'span');
     type = this.reader.getString(animationElement, 'type');
 
+    if (this.animationsInfo[id] != null) {
+        console.error("Already exists a animation with id:" + id);
+        return 1;
+    }
+
     if (type == "linear") {
       var controlPointsElements = animationElement.getElementsByTagName('controlpoint');
       var controlPoints = [];
@@ -683,6 +688,7 @@ MySceneGraph.prototype.loadComponents = function(rootElement) {
                             currAnim = new  LinearAnimation(animInf.id, animInf.controlPoints, animInf.span);
 
                         this.animations[animationId + id] =currAnim;
+
                         animations[j]=currAnim;
 
                     }
