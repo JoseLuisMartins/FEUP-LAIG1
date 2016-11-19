@@ -17,6 +17,7 @@ function MySceneGraph(filename, scene) {
     this.primitives = {};
     this.components = {};
     this.animations = {};
+    this.animationsInfo = {}; // necessário devido de modo a permitir criar animações diferentes com as mesmas carateristicas para permitir que duas componentes possam fazer a mesma animação ao simultaneamente mas começada em tempos diferentes
     this.textureStack;
     this.materialStack;
 
@@ -437,8 +438,8 @@ MySceneGraph.prototype.loadAnimations = function(rootElement) {
 
         controlPoints.push(new Point3(x, y, z));
       }
-      this.animations[id]=new LinearAnimation(id, controlPoints, span)
-      console.log(this.animations[id]);
+      this.animationsInfo[id]=new LinearAnimationInfo(id, controlPoints, span)
+
     }
     else if (type == "circular") {
       var cx, cy, cz, radius, startang, rotang;
@@ -450,8 +451,8 @@ MySceneGraph.prototype.loadAnimations = function(rootElement) {
       startang = this.reader.getFloat(animationElement, 'startang');
       rotang = this.reader.getFloat(animationElement, 'rotang');
 
-      this.animations[id]=new CircularAnimation(id, new Point3(cx, cy, cz), radius, startang, rotang, span);
-      console.log(this.animations[id]);
+      this.animationsInfo[id]=new CircularAnimationInfo(id, new Point3(cx, cy, cz), radius, startang, rotang, span);
+
     }
     else {
       this.onXMLError("Error loading animations. Animation type must be either 'linear' or 'circular'");
@@ -673,10 +674,19 @@ MySceneGraph.prototype.loadComponents = function(rootElement) {
                     var animations = new Array(animationrefs.length);
                     for (var j = 0; j < animationrefs.length; j++) {
                         var animationId = this.reader.getString(animationrefs[j], 'id');
-                        animations[j]=this.animations[animationId];
+                        var animInf =this.animationsInfo[animationId];
+                        var currAnim;
+
+                        if(animInf instanceof CircularAnimationInfo)
+                            currAnim = new  CircularAnimation(animInf.id, animInf.center, animInf.radius, animInf.phiDeg, animInf.thetaDeg, animInf.span);
+                        else
+                            currAnim = new  LinearAnimation(animInf.id, animInf.controlPoints, animInf.span);
+
+                        this.animations[animationId + id] =currAnim;
+                        animations[j]=currAnim;
 
                     }
-                    console.log(animations);
+
                     animated = new Animated(animations);
 
                 }

@@ -109,3 +109,23 @@ class  Component {
 		this.animated = animated;
   }
 }
+
+
+class  CircularAnimationInfo {
+  constructor(id, center, radius, phiDeg, thetaDeg, span) {
+		this.id = id;
+		this.center=center;
+		this.radius=radius;
+		this.phiDeg=phiDeg;
+		this.thetaDeg=thetaDeg;
+		this.span=span;
+  }
+}
+
+class  LinearAnimationInfo {
+  constructor(id, controlPoints, span) {
+		this.id = id;
+		this.controlPoints= controlPoints;
+		this.span=span;
+  }
+}
