@@ -34,7 +34,7 @@
         </perspective>
 
         <perspective id="p2" near="0.1" far="1500" angle="40">
-            <from x="25" y="25" z="25" />
+            <from x="80" y="25" z="75" />
             <to x="0" y="0" z="0" />
         </perspective>
 
@@ -44,7 +44,7 @@
         </perspective>
 
         <perspective id="p4" near="0.1" far="1500" angle="25">
-            <from x="300" y="0" z="800" />
+            <from x="300" y="0" z="1000" />
             <to x="3" y="0" z="0" />
         </perspective>
     </views>
@@ -277,7 +277,7 @@
 
       <animation id="rocket_circ" span="10" type="circular"
           centerx = "-70" centery="30" centerz="0"
-          radius = "82" startang="0" rotang="-360" />
+          radius = "74" startang="0" rotang="-360" />
 
       <animation id="rocket_linear1" span="4" type="linear">
             <controlpoint xx="12" yy="30" zz="0" />
@@ -289,7 +289,14 @@
             <controlpoint xx="-60" yy="8" zz="55" />
         </animation>
 
+        <animation id="rocket_circ2" span="2" type="circular"
+            centerx = "-60" centery="8" centerz="55"
+            radius = "0" startang="200" rotang="90" />
 
+        <animation id="rocket_linear3" span="2" type="linear">
+              <controlpoint xx="-60" yy="8" zz="55" />
+              <controlpoint xx="40" yy="8" zz="55" />
+          </animation>
 
 
 
@@ -1482,6 +1489,8 @@
             <animationref id="rocket_circ" />
             <animationref id="rocket_linear1" />
             <animationref id="rocket_linear2" />
+            <animationref id="rocket_circ2" />
+            <animationref id="rocket_linear3" />
         </animation>
 
 
