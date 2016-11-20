@@ -16,7 +16,7 @@ uniform float sV;
 
 
 
-vec4 colorSeclect(vec2 tex, vec4 color1, vec4 color2)
+vec4 colorSelect(vec2 tex, vec4 color1, vec4 color2)
 {
 				if(((tex.x > (sU/divU)) && (tex.x < (sU+1.0)/divU)) && ((tex.y > (sV/divV)) && (tex.y < (sV+1.0)/divV)) ){
 							return colorMark;
@@ -37,9 +37,9 @@ void main() {
 
   vec4 finalColor = texture2D(uSampler, vTextureCoord);
 
-  vec4 colorToMix = colorSeclect(vTextureCoord,color1,color2);
+  vec4 mixColor = colorSelect(vTextureCoord,color1,color2);
 
-  finalColor.rgba *= colorToMix;
+  finalColor.rgba *= mixColor;
 
   gl_FragColor = finalColor;
 }

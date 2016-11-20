@@ -76,10 +76,8 @@ Propellant.prototype.display = function() {
 
 };
 
-Propellant.prototype.update = function(currrTime) {
+Propellant.prototype.update = function(currTime) {
 
-  this.shader.setUniformsValues({t : this.values[this.index%this.values.length]});
+  this.shader.setUniformsValues({t : this.values[this.index % this.values.length]});
   this.index++;
-  if(this.index >= this.values.length)
-    this.index = 0;
 }
