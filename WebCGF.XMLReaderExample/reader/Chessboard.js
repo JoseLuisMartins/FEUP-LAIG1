@@ -8,7 +8,7 @@ function Chessboard(scene,du,dv,textureref,su,sv,c1,c2,cs) {
     this.scene=scene;
 
     this.shader = new CGFshader(scene.gl, "shaders\\texture1.vert", "shaders\\texture1.frag");
-    this.plane = new Plane(this.scene, 1, 1, du*3, dv*3);
+    this.plane = new Plane(this.scene, 1, 1, 100, 100);
 
 
     this.texture = this.scene.graph.textures[textureref].texture;
