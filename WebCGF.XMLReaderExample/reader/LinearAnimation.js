@@ -45,6 +45,7 @@ LinearAnimation.prototype.update = function(currTime) {
   if (this.distanceAcc > this.distances[this.currentControl]) {
     if (this.currentControl == this.controlPoints.length - 2) {
       this.finished = true;
+      this.render = false;
       return;
     }
     else {

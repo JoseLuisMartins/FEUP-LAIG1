@@ -42,6 +42,7 @@ CircularAnimation.prototype.update = function(currTime) {
     y = this.center.y;
     z = this.center.z + this.radius * Math.cos(this.theta + this.phi);
     this.finished = true;
+    this.render= false;
     return;
   }
 

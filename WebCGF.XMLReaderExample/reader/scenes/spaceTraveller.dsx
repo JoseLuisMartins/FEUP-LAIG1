@@ -362,7 +362,7 @@
       </primitive>
 
       <primitive id="chessboard">
-        <chessboard du="10" dv="10" textureref="boardTex" su="1" sv="1">
+        <chessboard du="10" dv="10" textureref="boardTex" su="2" sv="1">
                    <c1 r="0" g="0.4" b="0.2" a="1.0" />
                    <c2 r="0.7" g="0.6" b="0.0" a="1.0" />
                    <cs r="1.0" g="0.0" b="1.0" a="1.0" />
