@@ -297,6 +297,7 @@
         <animation id="rocket_linear3" span="2" type="linear">
               <controlpoint xx="-60" yy="8" zz="55" />
               <controlpoint xx="40" yy="8" zz="55" />
+              <controlpoint xx="45" yy="12" zz="55" />
           </animation>
 
 
@@ -363,7 +364,7 @@
       </primitive>
 
       <primitive id="chessboard1">
-        <chessboard du="10" dv="10" textureref="boardTex" su="2" sv="1">
+        <chessboard du="3" dv="7" textureref="boardTex" su="2" sv="6">
                    <c1 r="0" g="0.4" b="0.2" a="1.0" />
                    <c2 r="0.7" g="0.6" b="0.0" a="1.0" />
                    <cs r="1.0" g="0.0" b="1.0" a="1.0" />
@@ -371,7 +372,7 @@
       </primitive>
 
       <primitive id="chessboard2">
-        <chessboard du="4" dv="4" textureref="boardTex2" su="0" sv="0">
+        <chessboard du="7" dv="3" textureref="boardTex2" su="6" sv="2">
                    <c1 r="1.0" g="0.4" b="0.2" a="1.0" />
                    <c2 r="0.1" g="0.6" b="0.5" a="1.0" />
                    <cs r="0.5" g="1.0" b="1.0" a="1.0" />
