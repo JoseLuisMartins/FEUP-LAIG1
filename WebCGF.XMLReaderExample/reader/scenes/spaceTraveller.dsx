@@ -29,7 +29,7 @@
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="p1" near="0.1" far="1500" angle="22">
-            <from x="15" y="15" z="500" />
+            <from x="15" y="15" z="50" />
             <to x="0" y="0" z="0" />
         </perspective>
 
@@ -384,6 +384,10 @@
         <vehicle />
       </primitive>
 
+      <primitive id="board">
+        <board />
+      </primitive>
+
 
     </primitives>
 
@@ -431,7 +435,8 @@
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
-
+                <primitiveref id="board"/>
+<!--
                 <componentref id="plane" />
                 <componentref id="patch" />
                 <componentref id="chessboard1" />
@@ -448,7 +453,7 @@
                 <componentref id="neptune" />
                 <componentref id="robot" />
                 <componentref id="rocket" />
-
+-->
             </children>
 
         </component>

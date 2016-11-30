@@ -599,6 +599,11 @@ MySceneGraph.prototype.createPrimitive = function(primitiveName, primitiveTag) {
 
         break;
 
+        case 'board':
+              primitive = new Board(this.scene);
+
+        break;
+
         default:
             this.onXMLError("Error loading primitives (invalid primitive tag).");
             return null;
