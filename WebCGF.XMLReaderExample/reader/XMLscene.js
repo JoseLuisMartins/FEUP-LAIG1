@@ -37,7 +37,7 @@ XMLscene.prototype.init = function (application) {
 
 
   var client = new Client();
-	client.getPrologRequest("oi", function(data) {
+	client.getPrologRequest("quit", function(data) {
 	console.log(data.target.response);
 });
 

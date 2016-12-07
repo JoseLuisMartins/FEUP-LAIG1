@@ -5,13 +5,13 @@
 function Board(scene) {
 	CGFobject.call(this,scene);
 
-  this.elements=new Array(14);
-  for (var i = 0; i < 14; i++) {
-    this.elements[i]=new Array(11);
+  this.elements=new Array(26);
+  for (var i = 0; i < 26; i++) {
+    this.elements[i]=new Array(20);
   }
 
-  for (var i = 0; i < 14; i++) {
-    for (var j = 0; j < 11; j++) {
+  for (var i = 0; i < 26; i++) {
+    for (var j = 0; j < 20; j++) {
       var id = (i+1) + "" + (j+1);
       this.elements[j][i] = new  BoardElement(scene,id,null);
     }
@@ -28,8 +28,8 @@ Board.prototype.display = function() {
   this.scene.pushMatrix();
 
 
-  for (var i = 0; i < 14; i++) {
-    for (var j = 0; j < 11; j++) {
+  for (var i = 0; i < 26; i++) {
+    for (var j = 0; j < 20; j++) {
       this.scene.pushMatrix();
       this.scene.translate(j,i,0);
       this.elements[j][i].display();
