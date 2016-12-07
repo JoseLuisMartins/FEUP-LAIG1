@@ -2,13 +2,11 @@
  * Prism
  * @constructor
  */
- function Prism(scene, slices, stacks) {
+ function Prism(scene) {
  	CGFobject.call(this,scene);
 
-	this.slices = slices;
-	this.stacks = stacks;
+  this.quad= new Rectangle(scene, new Point3(-0.5,-0.5,0), new Point3(0.5,0.5,0));
 
- 	this.initBuffers();
  };
 
  Prism.prototype = Object.create(CGFobject.prototype);
@@ -43,8 +41,4 @@
 
   this.scene.popMatrix();
 
-	}
-
- 	this.primitiveType = this.scene.gl.TRIANGLES;
- 	this.initGLBuffers();
  };

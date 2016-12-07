@@ -33,7 +33,7 @@ XMLscene.prototype.init = function (application) {
 
   this.setUpdatePeriod(30);
 
-
+  this.setPickEnabled(true);
 
 };
 
@@ -156,7 +156,7 @@ XMLscene.prototype.updateMaterial = function () {
 
 XMLscene.prototype.display = function () {
   // ---- BEGIN Background, camera and axis setup
-
+  this.logPicking();
   // Clear image and depth buffer everytime we update the scene
   this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
   this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -202,4 +202,23 @@ XMLscene.prototype.update = function(currTime) {
       if(this.graph.primitives[id] instanceof Vehicle)
         this.graph.primitives[id].update(currTime);
   }
+}
+
+
+XMLscene.prototype.logPicking = function ()
+{
+	if (this.pickMode == false) {
+		if (this.pickResults != null && this.pickResults.length > 0) {
+			for (var i=0; i< this.pickResults.length; i++) {
+				var obj = this.pickResults[i][0];
+				if (obj)
+				{
+					var Id = this.pickResults[i][1];
+          console.log(obj);
+					console.log("Picked with pick id " + Id);
+				}
+			}
+			this.pickResults.splice(0,this.pickResults.length);
+		}
+	}
 }

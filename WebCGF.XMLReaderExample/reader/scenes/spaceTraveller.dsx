@@ -427,7 +427,7 @@
             <!-- id="none" remove a textura recebida do pai -->
             <!-- a textura declarada sobrepoe a textura recebida do -->
             <!-- objecto "pai" -->
-            <texture id="earthTex" />
+            <texture id="abstract_orange" />
 
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
