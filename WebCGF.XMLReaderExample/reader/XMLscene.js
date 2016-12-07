@@ -35,6 +35,12 @@ XMLscene.prototype.init = function (application) {
 
   this.setPickEnabled(true);
 
+
+  var client = new Client();
+	client.getPrologRequest("oi", function(data) {
+	console.log(Reply.getText(data));
+});
+
 };
 
 XMLscene.prototype.initLights = function () {
