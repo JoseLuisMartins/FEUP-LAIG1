@@ -11,10 +11,11 @@ function getUrlVars() {
     return vars;
 }
 
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js','utils.js', 'Sphere.js', 'Rectangle.js', 'Triangle.js',
-    'Cylinder.js', 'CylinderSurface.js', 'CylinderBase.js', 'Torus.js', 'DataStructures.js','MyInterface.js', 'Animation.js',
-    'LinearAnimation.js', 'CircularAnimation.js', 'Animated.js','Patch.js','Plane.js','Vehicle.js','Chessboard.js','Propellant.js',
-    'Pawn.js','BoardElement.js','Prism.js','Board.js','client.js',
+serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js','utils.js', 'primitives/Sphere.js', 'primitives/Rectangle.js', 'primitives/Triangle.js',
+    'primitives/Cylinder.js', 'primitives/CylinderSurface.js', 'primitives/CylinderBase.js', 'primitives/Torus.js', 'DataStructures.js','MyInterface.js',
+    'animations/Animation.js','animations/LinearAnimation.js', 'animations/CircularAnimation.js', 'animations/Animated.js','primitives/Patch.js','primitives/Plane.js',
+    'primitives/Vehicle.js','primitives/Chessboard.js','primitives/Propellant.js','gameJs/Pawn.js','gameJs/BoardElement.js',
+    'primitives/Cube.js','gameJs/Board.js','network/client.js','gameJs/Blockade.js',
 
 main=function()
 {

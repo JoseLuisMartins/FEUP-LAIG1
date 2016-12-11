@@ -436,7 +436,7 @@
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
                 <primitiveref id="board"/>
-<!--
+
                 <componentref id="plane" />
                 <componentref id="patch" />
                 <componentref id="chessboard1" />
@@ -453,7 +453,7 @@
                 <componentref id="neptune" />
                 <componentref id="robot" />
                 <componentref id="rocket" />
--->
+
             </children>
 
         </component>

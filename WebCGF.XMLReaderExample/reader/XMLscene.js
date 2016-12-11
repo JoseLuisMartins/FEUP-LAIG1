@@ -35,11 +35,7 @@ XMLscene.prototype.init = function (application) {
 
   this.setPickEnabled(true);
 
-
-  var client = new Client();
-	client.getPrologRequest("quit", function(data) {
-	console.log(data.target.response);
-});
+  this.blockade= new Blockade(this);
 
 };
 

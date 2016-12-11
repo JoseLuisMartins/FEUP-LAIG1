@@ -1,18 +1,18 @@
 /**
- * Prism
+ * Cube
  * @constructor
  */
- function Prism(scene) {
+ function Cube(scene) {
  	CGFobject.call(this,scene);
 
   this.quad= new Rectangle(scene, new Point3(-0.5,-0.5,0), new Point3(0.5,0.5,0));
 
  };
 
- Prism.prototype = Object.create(CGFobject.prototype);
- Prism.prototype.constructor = Prism;
+ Cube.prototype = Object.create(CGFobject.prototype);
+ Cube.prototype.constructor = Cube;
 
- Prism.prototype.display = function() {
+ Cube.prototype.display = function() {
   this.scene.pushMatrix();
 
   this.scene.translate(0,0,0.5);//plano xy positivo

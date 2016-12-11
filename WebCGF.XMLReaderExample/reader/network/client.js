@@ -1,5 +1,5 @@
 /**
-* Pawn
+* Client
 * @constructor
 */
 

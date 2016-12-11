@@ -5,7 +5,7 @@
 function BoardElement(scene,id, texture) {
 	CGFobject.call(this,scene);
 	this.id=id;
-	this.body = new Prism(scene);
+	this.body = new Cube(scene);
 
 };
 
