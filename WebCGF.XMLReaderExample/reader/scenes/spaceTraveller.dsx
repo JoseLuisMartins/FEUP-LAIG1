@@ -435,7 +435,7 @@
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
-                <primitiveref id="board"/>
+        <!--        <primitiveref id="board"/>
 
                 <componentref id="plane" />
                 <componentref id="patch" />
@@ -452,7 +452,7 @@
                 <componentref id="uranus" />
                 <componentref id="neptune" />
                 <componentref id="robot" />
-                <componentref id="rocket" />
+                <componentref id="rocket" /> -->
 
             </children>
 

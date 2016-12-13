@@ -27,6 +27,7 @@ Board.prototype.display = function() {
 
   this.scene.pushMatrix();
 
+	this.scene.scale(0.4,0.4,0.4);
 
   for (var i = 0; i < 26; i++) {
     for (var j = 0; j < 20; j++) {

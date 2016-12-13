@@ -4,8 +4,11 @@
 parse_input(handshake, handshake).
 parse_input(oi, 'entao tudo bem?').
 parse_input(quit, goodbye).
-parse_input(board(X), X):- board(X).
-
+parse_input(board, X):- board(X).
+parse_input(orange1,[X,Y]):- position([orange, 1], X, Y).
+parse_input(orange2,[X,Y]):- position([orange, 2], X, Y).
+parse_input(yellow1,[X,Y]):- position([yellow, 1], X, Y).
+parse_input(yellow2,[X,Y]):- position([yellow, 2], X, Y).
 
 parse_input(test(C,N), Res) :- test(C,Res,N).
 
