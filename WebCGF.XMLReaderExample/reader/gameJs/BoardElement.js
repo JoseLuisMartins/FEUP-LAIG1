@@ -9,6 +9,8 @@ function BoardElement(scene,id, texture) {
 	this.body = new Cube(scene);
 	this.piece = null;
 	this.selected=false;
+	this.selectable=false;
+
 };
 
 BoardElement.prototype = Object.create(CGFobject.prototype);
@@ -18,7 +20,8 @@ BoardElement.prototype.constructor = BoardElement;
 BoardElement.prototype.display = function() {
 
 	this.scene.pushMatrix();
-  this.scene.registerForPick(this.id, this);
+	if(this.selectable)
+  	this.scene.registerForPick(this.id, this);
 
 	if(this.selected)
 		this.scene.translate(0,0,1);
@@ -38,4 +41,12 @@ BoardElement.prototype.setPiece = function(Npiece) {
 
 BoardElement.prototype.select = function() {
 	this.selected = !this.selected;
+}
+
+BoardElement.prototype.enableselection = function() {
+	this.selectable = true;
+}
+
+BoardElement.prototype.disableselection = function() {
+	this.selectable = false;
 }

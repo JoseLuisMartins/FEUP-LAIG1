@@ -1,5 +1,5 @@
 
-function Blockade(scene){
+function Blockade(scene,mode){
   this.scene=scene;
 
 
@@ -20,6 +20,8 @@ Blockade.prototype.init = function (){
   this.yellow2 = new Pawn(this.scene,null);
 
   this.updatePawnPos();
+
+  this.state=new PlayingState(this.scene,this.board,this.orange1,this.orange2,this.yellow1,this.yellow2);
 }
 
 Blockade.prototype.logPicking = function ()
@@ -49,35 +51,44 @@ Blockade.prototype.display = function ()
 Blockade.prototype.updatePawnPos = function ()
 {
   var game=this;
-  this.client.getPrologRequest("orange1", function(data) {
+  console.log(game.orange1.x);
 
+  this.client.getPrologRequest("orange1", function(data) {
     var parsed =JSON.parse(data.target.responseText);
-    game.setPawnPos(parsed[0],parsed[1],game.orange1);
+    game.orange1.x=parsed[0];
+    game.orange1.y=parsed[1];
+    game.setPawnPos(game.orange1);
+
   });
 
   this.client.getPrologRequest("orange2", function(data) {
     var parsed =JSON.parse(data.target.responseText);
-
-    game.setPawnPos(parsed[0],parsed[1],game.orange2);
+    game.orange2.x=parsed[0];
+    game.orange2.y=parsed[1];
+    game.setPawnPos(game.orange2);
   });
 
   this.client.getPrologRequest("yellow1", function(data) {
     var parsed =JSON.parse(data.target.responseText);
-
-    game.setPawnPos(parsed[0],parsed[1],game.yellow1);
+    game.yellow1.x=parsed[0];
+    game.yellow1.y=parsed[1];
+    game.setPawnPos(game.yellow1);
   });
 
   this.client.getPrologRequest("yellow2", function(data) {
     var parsed =JSON.parse(data.target.responseText);
-
-    game.setPawnPos(parsed[0],parsed[1],game.yellow2);
+    game.yellow2.x=parsed[0];
+    game.yellow2.y=parsed[1];
+    game.setPawnPos(game.yellow2);
   });
+console.log(game.orange1.x);
 }
 
-Blockade.prototype.setPawnPos = function (x,y,pawn){
+Blockade.prototype.setPawnPos = function (pawn){
   //clear last possition
 
   //set new position
-  console.log(pawn);
-  this.board.elements[x][y].setPiece(pawn);
+
+  this.board.elements[pawn.x][pawn.y].setPiece(pawn);
+
 }
