@@ -92,8 +92,10 @@ PlayingState.prototype.picking = function (){
                   this.pawnSelected.select();
                   this.pawnSelected=obj;
                 }else{//selecionou uma tile
-                  console.log(obj);
-                  //this.makeMove();
+                  this.tileSelected = obj;
+                  this.makeMove();
+                  //this.updatePawnPosition(this.pawnSelected.piece);
+
                 }
 
               break;
@@ -114,7 +116,7 @@ PlayingState.prototype.picking = function (){
 }
 
 PlayingState.prototype.enableTilesSelect = function (){
-  console.log("tiles");
+
   var x = this.pawnSelected.piece.x;
   var y = this.pawnSelected.piece.y;
 
@@ -127,8 +129,6 @@ PlayingState.prototype.enableTilesSelect = function (){
     enableCellSelect(x+4, y, this.board.elements);
     enableCellSelect(x, y-4, this.board.elements);
     enableCellSelect(x, y+4, this.board.elements);
-
-
 }
 
 function enableCellSelect(x,y,elements){
@@ -139,9 +139,11 @@ function enableCellSelect(x,y,elements){
 PlayingState.prototype.makeMove = function (){
 
   var state=this;
+  var offsetX= (this.tileSelected.x - this.pawnSelected.piece.x)/2;
+  var offsetY= (this.tileSelected.y - this.pawnSelected.piece.y)/2;
 
   this.client.getPrologRequest("move(" + this.pawnSelected.piece.identifier + ","
-                                       + 1 + "," + 0 + ")", function(data) {
+                                       + offsetX + "," + offsetY + ")", function(data) {
     console.log(data.target.responseText);
   });
 }
