@@ -5,10 +5,17 @@ parse_input(handshake, handshake).
 parse_input(oi, 'entao tudo bem?').
 parse_input(quit, goodbye).
 parse_input(board, X):- board(X).
-parse_input(orange1,[X,Y]):- position([orange, 1], X, Y).
-parse_input(orange2,[X,Y]):- position([orange, 2], X, Y).
-parse_input(yellow1,[X,Y]):- position([yellow, 1], X, Y).
-parse_input(yellow2,[X,Y]):- position([yellow, 2], X, Y).
+
+parse_input(move(Pawn, X, Y),[NewPosX,NewPosY]) :-
+  retract(board(Board)),
+  validPosition(Pawn, Board, X, Y,Nx,Ny),
+  moveOneSpace(Pawn, Nx, Ny, Board, NewBoard),
+  assert(board(NewBoard)),
+  position(Pawn, NewPosX,NewPosY).
+
+
+parse_input([Type,Id],[X,Y]):- position([Type, Id], X, Y).
+
 
 
 

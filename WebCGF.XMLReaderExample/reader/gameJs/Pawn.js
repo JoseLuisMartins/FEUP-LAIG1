@@ -7,6 +7,7 @@ function Pawn(scene, texture,identifier) {
 
 	this.body = new Cylinder(scene, 0.5,0.5,1,10,10);
 	this.identifier=identifier;
+
 	this.x=0;
 	this.y=0;
 

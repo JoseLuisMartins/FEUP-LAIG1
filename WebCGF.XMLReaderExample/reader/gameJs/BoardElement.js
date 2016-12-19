@@ -3,7 +3,7 @@
 * @constructor
 */
 
-function BoardElement(scene,id, texture) {
+function BoardElement(scene,id, texture,x,y) {
 	CGFobject.call(this,scene);
 	this.id=id;
 	this.body = new Cube(scene);
@@ -13,6 +13,11 @@ function BoardElement(scene,id, texture) {
 	this.material = new CGFappearance(scene);
 	this.material.setTexture(texture);
 	this.visible=true;
+	this.x=x;
+	this.y=y;
+
+	this.materialSelected = new CGFappearance(scene);
+	this.materialSelected.setTexture(new CGFtexture(scene, "resources\\images\\mercury.jpg"));
 };
 
 BoardElement.prototype = Object.create(CGFobject.prototype);
@@ -28,13 +33,16 @@ BoardElement.prototype.display = function() {
 	  	this.scene.registerForPick(this.id, this);
 
 
-		if(this.selected)
-			this.scene.translate(0,0,1);
+
 
 		if(this.piece != null)
 				this.piece.display();
 
-		this.material.apply();
+		if(this.selected)
+			this.materialSelected.apply();
+		else
+			this.material.apply();
+
 		this.body.display();
 
 		if(this.selectable)//so that further objects dont have the same pick id
