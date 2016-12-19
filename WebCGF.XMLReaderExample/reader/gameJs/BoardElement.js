@@ -35,7 +35,7 @@ BoardElement.prototype.display = function() {
 		if(this.selectable)
 			this.scene.registerForPick(this.id, this);
 
-		if(this.piece != null)
+		if(this.piece !== null)
 				this.piece.display();
 
 		if(this.selected)

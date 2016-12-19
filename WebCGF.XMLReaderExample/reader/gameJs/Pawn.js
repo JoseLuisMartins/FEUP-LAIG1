@@ -2,12 +2,15 @@
 * Pawn
 * @constructor
 */
-function Pawn(scene, texture,identifier) {
+function Pawn(scene, texture, identifier) {
 	CGFobject.call(this,scene);
 
-	this.body = new Cylinder(scene, 0.5,0.5,1,10,10);
-	this.identifier=identifier;
+	this.scene = scene;
 
+	this.body = new Cylinder(scene, 0.5, 0.1, 1, 20, 20);
+	this.head = new Sphere(scene, 0.2, 20, 20);
+
+	this.identifier = identifier;
 	this.x=0;
 	this.y=0;
 
@@ -22,9 +25,12 @@ Pawn.prototype.constructor = Pawn;
 Pawn.prototype.display = function() {
 
 	this.scene.pushMatrix();
+		this.material.apply();
+  		this.body.display();
+	this.scene.popMatrix();
 
-	this.material.apply();
-  this.body.display();
-
+	this.scene.pushMatrix();
+		this.scene.translate(0, 0, 1);
+		this.head.display();
 	this.scene.popMatrix();
 }

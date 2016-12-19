@@ -1,4 +1,4 @@
-function State(scene){
+function State(scene) {
 
 
 }
