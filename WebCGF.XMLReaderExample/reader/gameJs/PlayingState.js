@@ -21,6 +21,7 @@ function PlayingState(scene,board,orange1,orange2,yellow1,yellow2){
   this.orange2=orange2;
   this.yellow1=yellow1;
   this.yellow=yellow2;
+  this.waitingForRequest=false;
 
   this.handleState();
 }
@@ -47,7 +48,8 @@ PlayingState.prototype.handleState = function (){
 }
 
 PlayingState.prototype.enablePieceSelect = function (){
-  
+  console.log("X: " + this.orange1.x);
+
   if(this.currentPlayer == players.ORANGE) {
     this.board.elements[this.orange1.x][this.orange1.y].enableselection();
     this.board.elements[this.orange2.x][this.orange2.y].enableselection();

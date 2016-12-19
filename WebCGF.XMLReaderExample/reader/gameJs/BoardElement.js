@@ -10,7 +10,9 @@ function BoardElement(scene,id, texture) {
 	this.piece = null;
 	this.selected=false;
 	this.selectable=false;
-
+	this.material = new CGFappearance(scene);
+	this.material.setTexture(texture);
+	this.visible=true;
 };
 
 BoardElement.prototype = Object.create(CGFobject.prototype);
@@ -18,21 +20,24 @@ BoardElement.prototype.constructor = BoardElement;
 
 
 BoardElement.prototype.display = function() {
-
-	this.scene.pushMatrix();
-	if(this.selectable)
-  	this.scene.registerForPick(this.id, this);
-
-	if(this.selected)
-		this.scene.translate(0,0,1);
-
-	if(this.piece != null)
-			this.piece.display();
+	if(this.visible){
+		this.scene.pushMatrix();
 
 
-	this.body.display();
+		if(this.selectable)
+	  	this.scene.registerForPick(this.id, this);
 
-  this.scene.popMatrix();
+		if(this.selected)
+			this.scene.translate(0,0,1);
+
+		if(this.piece != null)
+				this.piece.display();
+
+		this.material.apply();
+		this.body.display();
+
+	  this.scene.popMatrix();
+	}
 }
 
 BoardElement.prototype.setPiece = function(Npiece) {
@@ -49,4 +54,8 @@ BoardElement.prototype.enableselection = function() {
 
 BoardElement.prototype.disableselection = function() {
 	this.selectable = false;
+}
+
+BoardElement.prototype.setVisible = function(value) {
+	this.visible = value;
 }

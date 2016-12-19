@@ -188,16 +188,13 @@ XMLscene.prototype.display = function () {
 
     this.updateLights();
 
-    var material = new CGFappearance(this);
-    material.setTexture(this.graph.textures['abstract_orange'].texture);
-    material.apply();
+  
     this.blockade.display();
 
 
     if(this.graph.displayGraph())
       return;
   };
-
 
 };
 

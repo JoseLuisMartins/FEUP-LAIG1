@@ -14,14 +14,16 @@ Blockade.prototype.constructor=Blockade;
 
 Blockade.prototype.init = function (){
 
-  this.orange1 = new Pawn(this.scene,null);
-  this.orange2 = new Pawn(this.scene,null);
-  this.yellow1 = new Pawn(this.scene,null);
-  this.yellow2 = new Pawn(this.scene,null);
+  this.orange1 = new Pawn(this.scene,"resources\\images\\abstractorange.jpg","orange1");
+  this.orange2 = new Pawn(this.scene,"resources\\images\\abstractorange.jpg","orange2");
+  this.yellow1 = new Pawn(this.scene,"resources\\images\\boardTex.png","yellow1");
+  this.yellow2 = new Pawn(this.scene,"resources\\images\\boardTex.png","yellow2");
 
-  this.updatePawnPos();
+  this.waiting=0;
 
-  this.state=new PlayingState(this.scene,this.board,this.orange1,this.orange2,this.yellow1,this.yellow2);
+  this.updateAllPawnPositions();
+
+
 }
 
 Blockade.prototype.logPicking = function ()
@@ -48,47 +50,44 @@ Blockade.prototype.display = function ()
   this.board.display();
 }
 
-Blockade.prototype.updatePawnPos = function ()
-{
-  var game=this;
-  console.log(game.orange1.x);
 
-  this.client.getPrologRequest("orange1", function(data) {
-    var parsed =JSON.parse(data.target.responseText);
-    game.orange1.x=parsed[0];
-    game.orange1.y=parsed[1];
-    game.setPawnPos(game.orange1);
+Blockade.prototype.waitUpdatePositions = function(){
 
-  });
-
-  this.client.getPrologRequest("orange2", function(data) {
-    var parsed =JSON.parse(data.target.responseText);
-    game.orange2.x=parsed[0];
-    game.orange2.y=parsed[1];
-    game.setPawnPos(game.orange2);
-  });
-
-  this.client.getPrologRequest("yellow1", function(data) {
-    var parsed =JSON.parse(data.target.responseText);
-    game.yellow1.x=parsed[0];
-    game.yellow1.y=parsed[1];
-    game.setPawnPos(game.yellow1);
-  });
-
-  this.client.getPrologRequest("yellow2", function(data) {
-    var parsed =JSON.parse(data.target.responseText);
-    game.yellow2.x=parsed[0];
-    game.yellow2.y=parsed[1];
-    game.setPawnPos(game.yellow2);
-  });
-console.log(game.orange1.x);
 }
 
+Blockade.prototype.updatePawnPosition = function(pawn){
+  var game=this;
+
+  this.client.getPrologRequest(pawn.identifier, function(data) {
+    var parsed =JSON.parse(data.target.responseText);
+    game.clearPawnPos(pawn);
+    pawn.x=parsed[0];
+    pawn.y=parsed[1];
+    game.setPawnPos(pawn);
+    game.waiting++;
+    game.goToPlaystate();
+  });
+}
+Blockade.prototype.updateAllPawnPositions = function ()
+{
+  this.updatePawnPosition(this.orange1);
+  this.updatePawnPosition(this.orange2);
+  this.updatePawnPosition(this.yellow1);
+  this.updatePawnPosition(this.yellow2);
+
+}
+
+Blockade.prototype.goToPlaystate = function (){
+  if(this.waiting == 4)
+    this.state=new PlayingState(this.scene,this.board,this.orange1,this.orange2,this.yellow1,this.yellow2);
+
+}
+
+
 Blockade.prototype.setPawnPos = function (pawn){
-  //clear last possition
-
-  //set new position
-
   this.board.elements[pawn.x][pawn.y].setPiece(pawn);
+}
 
+Blockade.prototype.clearPawnPos = function (pawn){
+  this.board.elements[pawn.x][pawn.y].setPiece(null);
 }

@@ -29,7 +29,7 @@
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="p1" near="0.1" far="1500" angle="22">
-            <from x="15" y="15" z="50" />
+            <from x="30" y="25" z="10" />
             <to x="0" y="0" z="0" />
         </perspective>
 
