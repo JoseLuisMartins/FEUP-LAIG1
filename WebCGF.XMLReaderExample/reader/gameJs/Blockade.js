@@ -32,7 +32,7 @@ Blockade.prototype.logPicking = function ()
 		if (this.scene.pickResults != null && this.scene.pickResults.length > 0) {
 			for (var i=0; i< this.scene.pickResults.length; i++) {
 				var obj = this.scene.pickResults[i][0];
-				if (obj)
+				if (obj instanceof BoardElement)
 				{
 					var Id = this.scene.pickResults[i][1];
           obj.select();

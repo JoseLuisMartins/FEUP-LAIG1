@@ -10,11 +10,10 @@ function Board(scene) {
   for (var i = 0; i < 27; i++) {
     this.elements[i]=new Array(21);
   }
-
+	var id=0;
   for (var i = 0; i < 27; i++) {
     for (var j = 0; j < 21; j++) {
-      var id = (i+1) + "" + (j+1);
-      this.elements[j][i] = new  BoardElement(scene,id,elementTex);
+      this.elements[j][i] = new  BoardElement(scene,id++,elementTex);
 				if(j % 2 == 1 || i % 2 == 1)
 					this.elements[j][i].setVisible(false);
     }
@@ -41,6 +40,8 @@ Board.prototype.display = function() {
       this.scene.popMatrix();
     }
   }
+
+	
 
 	this.scene.popMatrix();
 }

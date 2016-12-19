@@ -27,6 +27,7 @@ BoardElement.prototype.display = function() {
 		if(this.selectable)
 	  	this.scene.registerForPick(this.id, this);
 
+
 		if(this.selected)
 			this.scene.translate(0,0,1);
 
@@ -35,6 +36,10 @@ BoardElement.prototype.display = function() {
 
 		this.material.apply();
 		this.body.display();
+
+		if(this.selectable)//so that further objects dont have the same pick id
+			this.scene.clearPickRegistration();
+
 
 	  this.scene.popMatrix();
 	}
