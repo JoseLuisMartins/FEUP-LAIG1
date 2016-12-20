@@ -3,8 +3,13 @@ function Blockade(scene,mode){
   this.scene=scene;
 
 
-  this.client= new Client();
+  this.client = new Client();
   this.board = new Board(scene);
+
+  var WallBoardTex=new CGFtexture(scene, "resources\\images\\boardTex2.jpg");
+  this.WallBoard1 = new WallBoard(scene,WallBoardTex);
+  this.WallBoard2 = new WallBoard(scene,WallBoardTex);
+
   this.prologBoard=null;
 
   this.init();
@@ -32,9 +37,24 @@ Blockade.prototype.logPicking = function ()
     this.state.picking();
 }
 
-Blockade.prototype.display = function ()
-{
+Blockade.prototype.display = function (){
+
+  this.scene.pushMatrix();
+
   this.board.display();
+
+  this.scene.pushMatrix();
+  this.scene.translate(0,0,2.5);
+  this.WallBoard1.display();
+  this.scene.popMatrix();
+
+  this.scene.pushMatrix();
+  this.scene.translate(10,0,-3);
+  this.scene.rotate(Math.PI,0,1,0);
+  this.WallBoard1.display();
+  this.scene.popMatrix();
+
+  this.scene.popMatrix();
 }
 
 
