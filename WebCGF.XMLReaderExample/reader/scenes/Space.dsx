@@ -13,13 +13,9 @@
 
 
 <dsx>
-
-
     <!-- deve definir-se um objeto para raiz do grafo , assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
     <scene root="root" axis_length="0.3" />
-
-
 
     <views default="p1" >
 
@@ -325,7 +321,7 @@
             <cylinder base="0.5" top="0.5" height="1" slices="50" stacks="20" />
         </primitive>
 
-    <primitive id="cone">
+        <primitive id="cone">
             <cylinder base="0.5" top="0" height="1" slices="50" stacks="20" />
         </primitive>
 
@@ -337,14 +333,14 @@
             <torus inner="0.5" outer="1" slices="40" loops="40" />
         </primitive>
 
-      <primitive id="ring">
+        <primitive id="ring">
               <torus inner="5.33" outer="7.87" slices="40" loops="40" />
-          </primitive>
+        </primitive>
 
 
-      <primitive id="plane">
-         <plane dimX="5" dimY="5" partsX="20" partsY="20"/>
-      </primitive>
+        <primitive id="plane">
+            <plane dimX="5" dimY="5" partsX="20" partsY="20"/>
+        </primitive>
 
       <primitive id="patch">
            <patch orderU="2" orderV="3" partsU="20" partsV="20" >

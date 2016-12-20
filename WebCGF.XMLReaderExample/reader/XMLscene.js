@@ -37,8 +37,7 @@ XMLscene.prototype.init = function (application) {
 
   this.blockade= new Blockade(this);
 
-
-  this.table = new SunUmbrella(this);
+  this.table = new Chair(this);
 };
 
 XMLscene.prototype.initLights = function () {
@@ -183,7 +182,6 @@ XMLscene.prototype.display = function () {
   // only get executed after the graph has loaded correctly.
   // This is one possible way to do it
 
-
   if (this.graph.loadedOk)
   {
 
@@ -195,7 +193,7 @@ XMLscene.prototype.display = function () {
       return;
   }
 
-  //this.table.display();
+//  this.table.display();
 };
 
 
