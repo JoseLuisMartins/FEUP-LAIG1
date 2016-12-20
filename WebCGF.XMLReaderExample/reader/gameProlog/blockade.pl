@@ -65,5 +65,5 @@ changeCurrentPlayer(P) :-
 
 %check's if anyone has won
 checkEnd :-
-		(position([orange | _],X,Y) , ((X =:= 6 ; X =:= 14) , Y =:= 20) , winMessage(orange));
-		(position([yellow | _],X,Y) , ((X =:= 6 ; X =:= 14) , Y =:= 6) , winMessage(yellow)).
+		(position([orange | _],X,Y) , ((X =:= 6 ; X =:= 14) , Y =:= 20));
+		(position([yellow | _],X,Y) , ((X =:= 6 ; X =:= 14) , Y =:= 6)).

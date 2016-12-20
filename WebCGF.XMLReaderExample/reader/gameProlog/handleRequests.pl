@@ -14,17 +14,34 @@ parse_input(move(Pawn, X, Y),[NewPosX,NewPosY]) :-
   assert(board(NewBoard)),
   position(Pawn, NewPosX,NewPosY).
 
+parse_input(move(Pawn, X1, Y1, X2, Y2),[NewPosX,NewPosY]) :-
+  board(Board),
+  validPosition(Pawn, Board, X1, Y1,Nx1,Ny1),
+  moveOneSpace(Pawn, Nx1, Ny1, Board, AuxBoard),
+  validPosition(Pawn, AuxBoard, X2, Y2,Nx2,Ny2),
+  moveOneSpace(Pawn, Nx2, Ny2, AuxBoard, NewBoard),
+  retract(board(Board)),
+  assert(board(NewBoard)),
+  position(Pawn, NewPosX,NewPosY).
+
+parse_input(move(Pawn, X1, Y1, X2, Y2),[NewPosX,NewPosY]) :-
+  NewPosX is - 1,
+  NewPosY is - 1.
 
 
 parse_input(move(Pawn, X, Y),[NewPosX,NewPosY]) :-
-  NewPosX is -1,
-  NewPosY is -1.
-
-
+  NewPosX is - 1,
+  NewPosY is - 1.
 
 parse_input([Type,Id],[X,Y]):- position([Type, Id], X, Y).
 
 
+parse_input(checkEnd,Res):-
+  checkEnd,
+  Res is 1.
+
+parse_input(checkEnd,Res):-
+  Res is 0.
 
 
 

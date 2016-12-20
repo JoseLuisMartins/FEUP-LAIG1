@@ -66,7 +66,7 @@ PlayingState.prototype.handleState = function (){
       break;
     case states.CHECK_END:
           //verificar vencedor
-
+          this.checkEnd();
           //proximo estado
           this.currentState=states.CHANGE_PLAYER;
           this.handleState();
@@ -192,13 +192,44 @@ function handleTilePicking(x,y,elements,enable){
 }
 
 PlayingState.prototype.tryMove = function (){
-
-  var state=this;
+  //verificar movimentação de 2 espaços
   var offsetX= (this.tileSelected.x - this.pawnSelected.piece.x)/2;
   var offsetY= (this.tileSelected.y - this.pawnSelected.piece.y)/2;
-  //FALTA VER MOVIMENTOS DE DOIS ESPAÇOS
-  this.client.getPrologRequest("move(" + state.pawnSelected.piece.identifier + ","
-                                       + offsetX + "," + offsetY + ")", function(data) {
+
+  if(Math.abs(offsetX) + Math.abs(offsetY) == 2 ){
+    console.log('offsetX: ' + offsetX + ' offsetY: ' + offsetY);
+    var x1,y1,x2,y2;
+    if(Math.abs(offsetX) == 1){
+      x1=offsetX;
+      y1=0;
+      x2=0;
+      y2=offsetY;
+    }else{
+      x1=offsetX/2;
+      y1=offsetY/2;
+      x2=offsetX/2;
+      y2=offsetY/2;
+    }
+    this.moveRequest(true,x1,y1,x2,y2);
+  }else
+    this.moveRequest(false,offsetX,offsetY);
+
+}
+
+PlayingState.prototype.moveRequest = function (twospaces,x1,y1,x2,y2){
+
+  var state=this;
+
+  if(twospaces)
+    this.client.getPrologRequest("move(" + state.pawnSelected.piece.identifier + ","
+                                         + x1 + "," + y1 + ","
+                                         + x2 + "," + y2 + ")",handleMoveResponse);
+  else
+    this.client.getPrologRequest("move(" + state.pawnSelected.piece.identifier + ","
+                                         + x1 + "," + y1 + ")",handleMoveResponse);
+
+
+    function handleMoveResponse(data) {
 
     console.log(data.target.responseText);
     var data = JSON.parse(data.target.responseText);
@@ -217,8 +248,8 @@ PlayingState.prototype.tryMove = function (){
 
       state.currentState=states.ANIMATE_PLAY;
       state.handleState();
+    }
   }
-  });
 }
 
 PlayingState.prototype.setPawnPos = function (pawn){
@@ -227,4 +258,11 @@ PlayingState.prototype.setPawnPos = function (pawn){
 
 PlayingState.prototype.clearPawnPos = function (pawn){
   this.board.elements[pawn.x][pawn.y].setPiece(null);
+}
+
+PlayingState.prototype.checkEnd = function (){
+  this.client.getPrologRequest("checkEnd", function(data) {
+      var data = JSON.parse(data.target.responseText);
+      console.log(data);
+  });
 }
