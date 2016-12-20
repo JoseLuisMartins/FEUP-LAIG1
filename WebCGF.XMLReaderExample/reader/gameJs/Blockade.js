@@ -7,8 +7,8 @@ function Blockade(scene,mode){
   this.board = new Board(scene);
 
   var WallBoardTex=new CGFtexture(scene, "resources\\images\\boardTex2.jpg");
-  this.WallBoard1 = new WallBoard(scene,WallBoardTex);
-  this.WallBoard2 = new WallBoard(scene,WallBoardTex);
+  this.WallBoardOrange = new WallBoard(scene,WallBoardTex);
+  this.WallBoardYellow = new WallBoard(scene,WallBoardTex);
 
   this.prologBoard=null;
 
@@ -45,13 +45,13 @@ Blockade.prototype.display = function (){
 
   this.scene.pushMatrix();
   this.scene.translate(0,0,2.5);
-  this.WallBoard1.display();
+  this.WallBoardOrange.display();
   this.scene.popMatrix();
 
   this.scene.pushMatrix();
   this.scene.translate(10,0,-3);
   this.scene.rotate(Math.PI,0,1,0);
-  this.WallBoard1.display();
+  this.WallBoardYellow.display();
   this.scene.popMatrix();
 
   this.scene.popMatrix();
@@ -97,7 +97,7 @@ Blockade.prototype.updateAllPawnPositions = function ()
 
 Blockade.prototype.goToPlaystate = function (){
   if(this.waiting == 4)
-    this.state=new PlayingState(this.scene,this.client,this.board,this.orange1,this.orange2,this.yellow1,this.yellow2);
+    this.state=new PlayingState(this.scene,this.client,this.board,this.WallBoardOrange,this.WallBoardYellow,this.orange1,this.orange2,this.yellow1,this.yellow2);
 
 }
 

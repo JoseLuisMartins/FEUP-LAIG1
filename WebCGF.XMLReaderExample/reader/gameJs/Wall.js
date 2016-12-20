@@ -9,8 +9,8 @@ function Wall(scene,texture,type) {
   this.material = new CGFappearance(scene);
   this.material.setTexture(texture);
 
-
-  if(type == "h")
+  this.type=type;
+  if(this.type == "h")
     this.scaleParam = new Point3(1,1,0.2);
   else
     this.scaleParam = new Point3(0.2,1,1);
@@ -29,7 +29,7 @@ Wall.prototype.display = function() {
   this.scene.pushMatrix();
   this.material.apply();
 
-
+  this.scene.translate(0, 1, 0);
   this.scene.scale(this.scaleParam.x,this.scaleParam.y,this.scaleParam.z);
   this.body.display();
 

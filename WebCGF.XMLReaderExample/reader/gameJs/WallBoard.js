@@ -12,11 +12,19 @@ function WallBoard(scene,texture) {
   var greenTex=new CGFtexture(scene, "resources\\images\\green.png");
   var blueTex=new CGFtexture(scene, "resources\\images\\blue.jpg");
 
+  var elementNormalTex=new CGFtexture(scene, "resources\\images\\rocket_body.jpg");
+  var elementSelectedTex=new CGFtexture(scene, "resources\\images\\rocket_top.jpg");
+  var elementSelectableTex=new CGFtexture(scene, "resources\\images\\neptune.jpg");
+
   this.base = new Cube(scene);
+
+
   //green Walls - Vertically
-  this.greenWall = new Wall(scene,greenTex,"v");
+  this.greenWall =  new  BoardElement(scene,1000,elementNormalTex,elementSelectedTex,elementSelectableTex,0,0);
+  this.greenWall.setPiece(new Wall(scene,greenTex,"v"));
   //blue Walls - horizontally
-  this.blueWall = new Wall(scene,blueTex,"h");
+  this.blueWall = new  BoardElement(scene,1001,elementNormalTex,elementSelectedTex,elementSelectableTex,0,0);
+  this.blueWall.setPiece(new Wall(scene,blueTex,"h"));
 
 };
 
@@ -41,12 +49,12 @@ WallBoard.prototype.display = function() {
 
   this.scene.translate(5,0,0);
   this.scene.scale(1,0.5,1);
-
+//green
   this.scene.pushMatrix();
   this.scene.translate(0,0.4,1);
   this.greenWall.display();
   this.scene.popMatrix();
-
+//blue
   this.scene.pushMatrix();
   this.scene.translate(0,0.4,-1);
   this.blueWall.display();
@@ -54,6 +62,9 @@ WallBoard.prototype.display = function() {
 
   this.scene.popMatrix();
 
+}
 
-
+WallBoard.prototype.handleSelection = function(enable) {
+	this.greenWall.handleSelection(enable);
+  this.blueWall.handleSelection(enable);
 }
