@@ -31,6 +31,10 @@ function PlayingState(scene,client,board,orange1,orange2,yellow1,yellow2){
   this.waitingForRequest=false;
   this.client=client;
 
+  //game story
+  this.currentPlayId=0;
+  this.plays={};
+
 
   this.handleState();
 }
@@ -41,34 +45,43 @@ PlayingState.prototype.constructor=PlayingState;
 PlayingState.prototype.handleState = function (){
   switch (this.currentState) {
     case states.SELECT_PIECE:
-          this.enablePieceSelect();
+          this.handlePieceSelect(true);
       break;
     case states.SELECT_TILE:
-          this.enableTilesSelect();
+          this.handleTilesPicking(true);
       break;
     case states.ANIMATE_PLAY:
+          this.handleTilesPicking(false);
+          this.handlePieceSelect(false);
+
+          //fazer animaçao neste momento animacao é feita no move depois ai é só a validacao
+
       break;
     case states.CHECK_END:
       break;
-    case states.CHANGE_PLAYER://dar disable das tiles
+    case states.CHANGE_PLAYER://animaçao da camera
       break;
     default:
 
   }
 }
 
-PlayingState.prototype.enablePieceSelect = function (){
-  console.log("X: " + this.orange1.x);
+PlayingState.prototype.handlePieceSelect = function (enable){
 
   if(this.currentPlayer == players.ORANGE) {
-    this.board.elements[this.orange1.x][this.orange1.y].enableselection();
-    this.board.elements[this.orange2.x][this.orange2.y].enableselection();
+    this.board.elements[this.orange1.x][this.orange1.y].handleSelection(enable);
+    this.board.elements[this.orange2.x][this.orange2.y].handleSelection(enable);
   }else {
-    this.board.elements[this.yellow1.x][this.yellow1.y].enableselection();
-    this.board.elements[this.yellow2.x][this.yellow2.y].enableselection();
+    this.board.elements[this.yellow1.x][this.yellow1.y].handleSelection(enable);
+    this.board.elements[this.yellow2.x][this.yellow2.y].handleSelection(enable);
   }
 
+}
 
+PlayingState.prototype.deselectPlayElements = function (enable){
+  var play = this.plays[this.currentPlayId];
+  this.board.elements[play.pawnStart.x][play.pawnStart.y].select();
+  this.board.elements[play.pawnEnd.x][play.pawnEnd.y].select();
 }
 
 PlayingState.prototype.picking = function (){
@@ -90,18 +103,20 @@ PlayingState.prototype.picking = function (){
             case states.SELECT_TILE:
                 if(obj.piece !== null){//selecionou outro peao
                   this.pawnSelected.select();
+                  this.handleTilesPicking(false);//disable das tiles do peao antigo
                   this.pawnSelected=obj;
+                  this.handleState();
                 }else{//selecionou uma tile
                   this.tileSelected = obj;
                   this.makeMove();
-                  this.updatePawnPosition(this.pawnSelected.piece);
-                  this.currentState=states.SELECT_PIECE;
+                  this.currentState=states.ANIMATE_PLAY;
                   this.handleState();
                 }
 
               break;
             case states.ANIMATE_PLAY:
               break;
+            //SELECIONAR PAREDE!!!!!!!!!!
             case states.CHECK_END:
               break;
             case states.CHANGE_PLAYER:
@@ -116,25 +131,26 @@ PlayingState.prototype.picking = function (){
   }
 }
 
-PlayingState.prototype.enableTilesSelect = function (){
+PlayingState.prototype.handleTilesPicking = function (enable){
 
   var x = this.pawnSelected.piece.x;
   var y = this.pawnSelected.piece.y;
 
   for (var i = y-2 ; i <=  y+2; i+=2) {
     for (var j = x-2; j <=  x+2; j+=2) {
-      enableCellSelect(j, i, this.board.elements);
+      if(!(i == y && j == x))
+        handleTilePicking(j, i, this.board.elements,enable);
     }
   }
-    enableCellSelect(x-4, y, this.board.elements);
-    enableCellSelect(x+4, y, this.board.elements);
-    enableCellSelect(x, y-4, this.board.elements);
-    enableCellSelect(x, y+4, this.board.elements);
+    handleTilePicking(x-4, y, this.board.elements,enable);
+    handleTilePicking(x+4, y, this.board.elements,enable);
+    handleTilePicking(x, y-4, this.board.elements,enable);
+    handleTilePicking(x, y+4, this.board.elements,enable);
 }
 
-function enableCellSelect(x,y,elements){
+function handleTilePicking(x,y,elements,enable){
   if(x >= 0 && x <= 20 && y >= 0 && y <= 26)
-    elements[x][y].enableselection();
+    elements[x][y].handleSelection(enable);
 }
 
 PlayingState.prototype.makeMove = function (){
@@ -143,24 +159,28 @@ PlayingState.prototype.makeMove = function (){
   var offsetX= (this.tileSelected.x - this.pawnSelected.piece.x)/2;
   var offsetY= (this.tileSelected.y - this.pawnSelected.piece.y)/2;
 
-  this.client.getPrologRequest("move(" + this.pawnSelected.piece.identifier + ","
+  this.client.getPrologRequest("move(" + state.pawnSelected.piece.identifier + ","
                                        + offsetX + "," + offsetY + ")", function(data) {
+
     console.log(data.target.responseText);
-  });
-}
 
-PlayingState.prototype.updatePawnPosition = function(pawn){
-  var state = this;
+    var pawn = state.pawnSelected.piece;
+    var oldPos = new Point2(pawn.x,pawn.y);
+    state.clearPawnPos(state.pawnSelected.piece);
 
-  this.client.getPrologRequest(pawn.identifier, function(data) {
-    var parsed = JSON.parse(data.target.responseText);
-    state.clearPawnPos(pawn);
-    pawn.x = parsed[0];
-    pawn.y = parsed[1];
+    var newPos = JSON.parse(data.target.responseText);
+    pawn.x=newPos[0];
+    pawn.y=newPos[1];
+
+    state.plays[state.currentPlayId]= new Play(state.currentPlayId,
+                                             oldPos,
+                                             new Point2(pawn.x,pawn.y));
+
     state.setPawnPos(pawn);
-    state.waiting++;
+    state.deselectPlayElements();
   });
 }
+
 
 
 PlayingState.prototype.setPawnPos = function (pawn){

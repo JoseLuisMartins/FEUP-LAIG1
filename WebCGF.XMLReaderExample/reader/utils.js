@@ -129,3 +129,12 @@ class  LinearAnimationInfo {
 		this.span=span;
   }
 }
+
+class Play{
+	constructor(id, pawnStart, pawnEnd) {
+		this.id=id;
+		this.pawnStart=pawnStart;
+		this.pawnEnd=pawnEnd;
+		//falta as paredes associadas a jogada
+  }
+}

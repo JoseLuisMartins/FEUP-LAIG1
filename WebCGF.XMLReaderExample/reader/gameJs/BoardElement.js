@@ -65,13 +65,10 @@ BoardElement.prototype.select = function() {
 	this.selected = !this.selected;
 }
 
-BoardElement.prototype.enableselection = function() {
-	this.selectable = true;
+BoardElement.prototype.handleSelection = function(enable) {
+	this.selectable = enable;
 }
 
-BoardElement.prototype.disableselection = function() {
-	this.selectable = false;
-}
 
 BoardElement.prototype.setVisible = function(value) {
 	this.visible = value;
