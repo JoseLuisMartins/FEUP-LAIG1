@@ -73,8 +73,8 @@ PlayingState.prototype.enablePieceSelect = function (){
 
 PlayingState.prototype.picking = function (){
 
-  if (this.scene.pickMode == false) {
-    if (this.scene.pickResults != null && this.scene.pickResults.length > 0) {
+  if (this.scene.pickMode === false) {
+    if (this.scene.pickResults !== null && this.scene.pickResults.length > 0) {
       for (var i=0; i< this.scene.pickResults.length; i++) {
         var obj = this.scene.pickResults[i][0];
         if (obj instanceof BoardElement)
@@ -88,14 +88,15 @@ PlayingState.prototype.picking = function (){
                   this.handleState();
               break;
             case states.SELECT_TILE:
-                  if(obj.piece != null){//selecionou outro peao
+                if(obj.piece !== null){//selecionou outro peao
                   this.pawnSelected.select();
                   this.pawnSelected=obj;
                 }else{//selecionou uma tile
                   this.tileSelected = obj;
                   this.makeMove();
-                  //this.updatePawnPosition(this.pawnSelected.piece);
-
+                  this.updatePawnPosition(this.pawnSelected.piece);
+                  this.currentState=states.SELECT_PIECE;
+                  this.handleState();
                 }
 
               break;
@@ -149,14 +150,23 @@ PlayingState.prototype.makeMove = function (){
 }
 
 PlayingState.prototype.updatePawnPosition = function(pawn){
-  var state=this;
+  var state = this;
 
   this.client.getPrologRequest(pawn.identifier, function(data) {
-    var parsed =JSON.parse(data.target.responseText);
-    game.clearPawnPos(pawn);
-    pawn.x=parsed[0];
-    pawn.y=parsed[1];
-    game.setPawnPos(pawn);
-    game.waiting++;
+    var parsed = JSON.parse(data.target.responseText);
+    state.clearPawnPos(pawn);
+    pawn.x = parsed[0];
+    pawn.y = parsed[1];
+    state.setPawnPos(pawn);
+    state.waiting++;
   });
+}
+
+
+PlayingState.prototype.setPawnPos = function (pawn){
+  this.board.elements[pawn.x][pawn.y].setPiece(pawn);
+}
+
+PlayingState.prototype.clearPawnPos = function (pawn){
+  this.board.elements[pawn.x][pawn.y].setPiece(null);
 }
