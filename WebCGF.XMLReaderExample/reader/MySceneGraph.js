@@ -536,10 +536,11 @@ MySceneGraph.prototype.createPrimitive = function(primitiveName, primitiveTag) {
 
         case 'sphere':
             var radius = this.reader.getFloat(primitiveTag, 'radius');
+            var coverage = this.reader.getFloat(primitiveTag, 'coverage');
             var slices = this.reader.getInteger(primitiveTag, 'slices');
             var stacks = this.reader.getInteger(primitiveTag, 'stacks');
 
-            primitive = new Sphere(this.scene, radius, slices, stacks);
+            primitive = new Sphere(this.scene, radius, coverage, slices, stacks);
             break;
 
         case 'torus':
@@ -576,9 +577,11 @@ MySceneGraph.prototype.createPrimitive = function(primitiveName, primitiveTag) {
                 primitive = new Patch(this.scene, orderU, orderV, partsU, partsV,controlPoints);
               }
         break;
+
         case 'vehicle':
               primitive=new Vehicle(this.scene);
         break;
+
         case 'chessboard':
               var du = this.reader.getFloat(primitiveTag, 'du');
               var dv = this.reader.getFloat(primitiveTag, 'dv');
@@ -596,12 +599,22 @@ MySceneGraph.prototype.createPrimitive = function(primitiveName, primitiveTag) {
               var cs = this.getRGBAElement(primitiveTag.children[2]);
 
               primitive = new Chessboard(this.scene,du,dv,textureref,su,sv,c1,c2,cs);
-
         break;
 
         case 'board':
               primitive = new Board(this.scene);
+        break;
 
+        case 'cube':
+             primitive = new Cube(this.scene);
+        break;
+
+        case 'round_table':
+             primitive = new RoundTable(this.scene);
+        break;
+
+        case 'sun_umbrella':
+             primitive = new SunUmbrella(this.scene);
         break;
 
         default:

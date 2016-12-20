@@ -1,9 +1,10 @@
-function Sphere(scene, radius, slices, stacks) {
+function Sphere(scene, radius, coverage, slices, stacks) {
     CGFobject.call(this, scene);
 
     this.radius = radius;
     this.slices = slices;
     this.stacks = stacks;
+    this.coverage = coverage * Math.PI / 180;
 
     this.initBuffers();
 };
@@ -24,7 +25,7 @@ Sphere.prototype.initBuffers = function() {
         var cosTheta = Math.cos(theta);
 
         for (var slice = 0; slice <= this.slices; slice++) {
-            var phi = slice * 2 * Math.PI / this.slices;
+            var phi = slice * this.coverage / this.slices;
             var sinPhi = Math.sin(phi);
             var cosPhi = Math.cos(phi);
 

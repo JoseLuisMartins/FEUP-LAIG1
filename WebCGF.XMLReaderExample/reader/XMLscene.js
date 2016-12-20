@@ -37,6 +37,8 @@ XMLscene.prototype.init = function (application) {
 
   this.blockade= new Blockade(this);
 
+
+  this.table = new SunUmbrella(this);
 };
 
 XMLscene.prototype.initLights = function () {
@@ -182,20 +184,18 @@ XMLscene.prototype.display = function () {
   // This is one possible way to do it
 
 
-
   if (this.graph.loadedOk)
   {
 
     this.updateLights();
 
-  
     this.blockade.display();
 
-
-    if(this.graph.displayGraph())
+    if (this.graph.displayGraph())
       return;
-  };
+  }
 
+  //this.table.display();
 };
 
 
@@ -203,7 +203,7 @@ XMLscene.prototype.display = function () {
 XMLscene.prototype.update = function(currTime) {
   if (this.graph.loadedOk){
     for(var id in this.graph.animations)
-    this.graph.animations[id].update(currTime);
+      this.graph.animations[id].update(currTime);
 
     for(var id in this.graph.primitives)
       if(this.graph.primitives[id] instanceof Vehicle)
