@@ -26,7 +26,7 @@ function PlayingState(scene,client,board,orange1,orange2,yellow1,yellow2){
   this.orange1=orange1;
   this.orange2=orange2;
   this.yellow1=yellow1;
-  this.yellow=yellow2;
+  this.yellow2=yellow2;
   //conection
   this.waitingForRequest=false;
   this.client=client;
@@ -60,11 +60,27 @@ PlayingState.prototype.handleState = function (){
           this.deselectPlayElements();
           //fazer animaçao - mover
           this.animatePlay();
-
+          //proximo estado
+          this.currentState=states.CHECK_END;
+          this.handleState();
       break;
     case states.CHECK_END:
+          //verificar vencedor
+
+          //proximo estado
+          this.currentState=states.CHANGE_PLAYER;
+          this.handleState();
       break;
     case states.CHANGE_PLAYER://animaçao da camera
+          //proximo jogador
+          if(this.currentPlayer==players.ORANGE)
+            this.currentPlayer=players.YELLOW;
+          else
+            this.currentPlayer=players.ORANGE;
+
+          //proximo estado
+          this.currentState=states.SELECT_PIECE;
+          this.handleState();
       break;
     default:
 
@@ -180,7 +196,7 @@ PlayingState.prototype.tryMove = function (){
   var state=this;
   var offsetX= (this.tileSelected.x - this.pawnSelected.piece.x)/2;
   var offsetY= (this.tileSelected.y - this.pawnSelected.piece.y)/2;
-
+  //FALTA VER MOVIMENTOS DE DOIS ESPAÇOS
   this.client.getPrologRequest("move(" + state.pawnSelected.piece.identifier + ","
                                        + offsetX + "," + offsetY + ")", function(data) {
 
