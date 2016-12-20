@@ -2,7 +2,7 @@
 * Pawn
 * @constructor
 */
-function Pawn(scene, texture, identifier) {
+function Pawn(scene, texture, identifier,type) {
 	CGFobject.call(this,scene);
 
 	this.scene = scene;
@@ -10,6 +10,7 @@ function Pawn(scene, texture, identifier) {
 	this.body = new Cylinder(scene, 0.5, 0.1, 1, 20, 20);
 	this.head = new Sphere(scene, 0.2, 20, 20);
 
+	this.type = type;
 	this.identifier = identifier;
 	this.x=0;
 	this.y=0;

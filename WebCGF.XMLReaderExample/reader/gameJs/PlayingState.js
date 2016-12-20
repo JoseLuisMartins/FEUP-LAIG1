@@ -51,10 +51,15 @@ PlayingState.prototype.handleState = function (){
           this.handleTilesPicking(true);
       break;
     case states.ANIMATE_PLAY:
+          //tornar tiles da ultima jogada nao selecionaveis
+          var lastPlayerPos = this.plays[this.currentPlayId].pawnStart;
           this.handleTilesPicking(false);
+          //tornar as pecas do jogador atual nao selecionaveis,para preparar a proxima jogada
           this.handlePieceSelect(false);
-
-          //fazer animaçao neste momento animacao é feita no move depois ai é só a validacao
+          //e desselecionar peça e tile selecionada no decorrer da jogada
+          this.deselectPlayElements();
+          //fazer animaçao - mover
+          this.animatePlay();
 
       break;
     case states.CHECK_END:
@@ -65,6 +70,22 @@ PlayingState.prototype.handleState = function (){
 
   }
 }
+
+PlayingState.prototype.animatePlay = function (){
+  var pawn = this.pawnSelected.piece;
+  //dados da jogada
+  var play = this.plays[this.currentPlayId];
+  //limpar posicao atual do peao
+  this.clearPawnPos(pawn);
+  //atualizar posicao do peao
+  pawn.x = play.pawnEnd.x;
+  pawn.y = play.pawnEnd.y;
+
+  //este set depois deve ser uma animacao
+  this.setPawnPos(pawn);
+
+}
+
 
 PlayingState.prototype.handlePieceSelect = function (enable){
 
@@ -79,9 +100,10 @@ PlayingState.prototype.handlePieceSelect = function (enable){
 }
 
 PlayingState.prototype.deselectPlayElements = function (enable){
-  var play = this.plays[this.currentPlayId];
-  this.board.elements[play.pawnStart.x][play.pawnStart.y].select();
-  this.board.elements[play.pawnEnd.x][play.pawnEnd.y].select();
+  var pawn = this.pawnSelected;
+  var tile = this.tileSelected;
+  this.board.elements[pawn.x][pawn.y].select();
+  this.board.elements[tile.x][tile.y].select();
 }
 
 PlayingState.prototype.picking = function (){
@@ -101,16 +123,16 @@ PlayingState.prototype.picking = function (){
                   this.handleState();
               break;
             case states.SELECT_TILE:
-                if(obj.piece !== null){//selecionou outro peao
+            console.log(this.pawnSelected.piece.type);
+                if(obj.piece !== null && this.pawnSelected.piece.type === obj.piece.type){//selecionou outro peao
                   this.pawnSelected.select();
                   this.handleTilesPicking(false);//disable das tiles do peao antigo
                   this.pawnSelected=obj;
                   this.handleState();
                 }else{//selecionou uma tile
                   this.tileSelected = obj;
-                  this.makeMove();
-                  this.currentState=states.ANIMATE_PLAY;
-                  this.handleState();
+                  this.tryMove();
+
                 }
 
               break;
@@ -131,8 +153,8 @@ PlayingState.prototype.picking = function (){
   }
 }
 
+//faz o enable/disable das tiles em que é possivel jogar á volta da posicao x,y
 PlayingState.prototype.handleTilesPicking = function (enable){
-
   var x = this.pawnSelected.piece.x;
   var y = this.pawnSelected.piece.y;
 
@@ -153,7 +175,7 @@ function handleTilePicking(x,y,elements,enable){
     elements[x][y].handleSelection(enable);
 }
 
-PlayingState.prototype.makeMove = function (){
+PlayingState.prototype.tryMove = function (){
 
   var state=this;
   var offsetX= (this.tileSelected.x - this.pawnSelected.piece.x)/2;
@@ -163,25 +185,25 @@ PlayingState.prototype.makeMove = function (){
                                        + offsetX + "," + offsetY + ")", function(data) {
 
     console.log(data.target.responseText);
+    var data = JSON.parse(data.target.responseText);
+    var newPos = new Point2(data[0],data[1]);
 
-    var pawn = state.pawnSelected.piece;
-    var oldPos = new Point2(pawn.x,pawn.y);
-    state.clearPawnPos(state.pawnSelected.piece);
+    if(newPos.x == -1 && newPos.y == -1){//nao é possivel mover
+      console.log('you cant move');
+      //desselecionar a tile para onde é impossivel mover
+      state.tileSelected.select();
 
-    var newPos = JSON.parse(data.target.responseText);
-    pawn.x=newPos[0];
-    pawn.y=newPos[1];
+    }else{//passar ao estado de animacao e atualizar variaveis
+      var pawn = state.pawnSelected.piece;
+      var oldPos = new Point2(pawn.x,pawn.y);
 
-    state.plays[state.currentPlayId]= new Play(state.currentPlayId,
-                                             oldPos,
-                                             new Point2(pawn.x,pawn.y));
+      state.plays[state.currentPlayId]= new Play(state.currentPlayId,oldPos, newPos);
 
-    state.setPawnPos(pawn);
-    state.deselectPlayElements();
+      state.currentState=states.ANIMATE_PLAY;
+      state.handleState();
+  }
   });
 }
-
-
 
 PlayingState.prototype.setPawnPos = function (pawn){
   this.board.elements[pawn.x][pawn.y].setPiece(pawn);

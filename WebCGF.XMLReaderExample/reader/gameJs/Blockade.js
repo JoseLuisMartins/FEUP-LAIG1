@@ -14,10 +14,10 @@ Blockade.prototype.constructor=Blockade;
 
 Blockade.prototype.init = function (){
 
-  this.orange1 = new Pawn(this.scene,"resources\\images\\abstractorange.jpg","[orange,1]");
-  this.orange2 = new Pawn(this.scene,"resources\\images\\abstractorange.jpg","[orange,2]");
-  this.yellow1 = new Pawn(this.scene,"resources\\images\\boardTex.png","[yellow,1]");
-  this.yellow2 = new Pawn(this.scene,"resources\\images\\boardTex.png","[yellow,2]");
+  this.orange1 = new Pawn(this.scene,"resources\\images\\abstractorange.jpg","[orange,1]","o");
+  this.orange2 = new Pawn(this.scene,"resources\\images\\abstractorange.jpg","[orange,2]","o");
+  this.yellow1 = new Pawn(this.scene,"resources\\images\\boardTex.png","[yellow,1]","y");
+  this.yellow2 = new Pawn(this.scene,"resources\\images\\boardTex.png","[yellow,2]","y");
   this.state=null;
   this.waiting=0;
 

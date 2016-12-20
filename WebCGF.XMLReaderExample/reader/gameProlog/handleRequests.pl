@@ -7,11 +7,19 @@ parse_input(quit, goodbye).
 parse_input(board, X):- board(X).
 
 parse_input(move(Pawn, X, Y),[NewPosX,NewPosY]) :-
-  retract(board(Board)),
+  board(Board),
   validPosition(Pawn, Board, X, Y,Nx,Ny),
   moveOneSpace(Pawn, Nx, Ny, Board, NewBoard),
+  retract(board(Board)),
   assert(board(NewBoard)),
   position(Pawn, NewPosX,NewPosY).
+
+
+
+parse_input(move(Pawn, X, Y),[NewPosX,NewPosY]) :-
+  NewPosX is -1,
+  NewPosY is -1.
+
 
 
 parse_input([Type,Id],[X,Y]):- position([Type, Id], X, Y).

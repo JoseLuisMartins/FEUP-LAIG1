@@ -53,8 +53,8 @@ validPosition(Pawn, Board, X, Y,Nx,Ny) :-
     ((Elem = square ; Elem = [orange, base] ; Elem = [yellow, base]),
       Nx is X ,Ny is Y, !,
       noWallBlocking(Pawn, Board, X, Y)) ;
-    ((Elem = [orange, 1] ; Elem = [orange, 2] ; Elem = [yellow, 1];Elem = [yellow, 1] ),
-      checkJumpOver(Pawn,X,Y,Nx,Ny),
+    ((Elem = [orange, 1] ; Elem = [orange, 2] ; Elem = [yellow, 1];Elem = [yellow, 2] ),
+      checkJumpOver(Pawn,X,Y,Nx,Ny),write('fodeu'),
       Aux1 is Nx + X,
       Aux2 is Ny + Y, !,
       noWallBlocking(Pawn, Board, Aux1, Aux2))
