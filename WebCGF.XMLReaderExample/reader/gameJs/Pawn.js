@@ -8,7 +8,7 @@ function Pawn(scene, texture, identifier,type) {
 	this.scene = scene;
 
 	this.body = new Cylinder(scene, 0.5, 0.1, 1, 20, 20);
-	this.head = new Sphere(scene, 0.2, 20, 20);
+	this.head = new Sphere(scene, 0.2,360, 20, 20);
 
 	this.type = type;
 	this.identifier = identifier;
@@ -17,7 +17,7 @@ function Pawn(scene, texture, identifier,type) {
 
 	this.material = new CGFappearance(scene);
 	this.material.setTexture(new CGFtexture(scene, texture));
-};
+}
 
 Pawn.prototype = Object.create(CGFobject.prototype);
 Pawn.prototype.constructor = Pawn;
@@ -34,4 +34,4 @@ Pawn.prototype.display = function() {
 		this.scene.translate(0, 0, 1);
 		this.head.display();
 	this.scene.popMatrix();
-}
+};

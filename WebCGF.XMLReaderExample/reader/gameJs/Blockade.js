@@ -19,23 +19,23 @@ Blockade.prototype.constructor=Blockade;
 
 Blockade.prototype.init = function (){
 
-  this.orange1 = new Pawn(this.scene,"resources\\images\\abstractorange.jpg","[orange,1]","o");
-  this.orange2 = new Pawn(this.scene,"resources\\images\\abstractorange.jpg","[orange,2]","o");
-  this.yellow1 = new Pawn(this.scene,"resources\\images\\boardTex.png","[yellow,1]","y");
-  this.yellow2 = new Pawn(this.scene,"resources\\images\\boardTex.png","[yellow,2]","y");
+  this.orange1 = new Pawn(this.scene,"resources\\images\\abstractorange.jpg","[orange,1]","orange");
+  this.orange2 = new Pawn(this.scene,"resources\\images\\abstractorange.jpg","[orange,2]","orange");
+  this.yellow1 = new Pawn(this.scene,"resources\\images\\boardTex.png","[yellow,1]","yellow");
+  this.yellow2 = new Pawn(this.scene,"resources\\images\\boardTex.png","[yellow,2]","yellow");
   this.state=null;
   this.waiting=0;
 
   this.updateAllPawnPositions();
+  this.initPrologGraph();
 
-
-}
+};
 
 Blockade.prototype.logPicking = function ()
 {
-	 if(this.state != null)
+	 if(this.state !== null)
     this.state.picking();
-}
+};
 
 Blockade.prototype.display = function (){
 
@@ -55,12 +55,12 @@ Blockade.prototype.display = function (){
   this.scene.popMatrix();
 
   this.scene.popMatrix();
-}
+};
 
 
 Blockade.prototype.waitUpdatePositions = function(){
 
-}
+};
 
 Blockade.prototype.updatePawnPosition = function(pawn){
   var game=this;
@@ -74,7 +74,7 @@ Blockade.prototype.updatePawnPosition = function(pawn){
     game.waiting++;
     game.goToPlaystate();
   });
-}
+};
 
 Blockade.prototype.getPrologBoard = function(){
   var game=this;
@@ -84,7 +84,16 @@ Blockade.prototype.getPrologBoard = function(){
     game.waiting++;
     game.goToPlaystate();
   });
-}
+};
+
+Blockade.prototype.initPrologGraph = function(){
+  var game=this;
+
+  this.client.getPrologRequest("init", function(data) {
+    game.waiting++;
+    game.goToPlaystate();
+  });
+};
 
 Blockade.prototype.updateAllPawnPositions = function ()
 {
@@ -93,19 +102,19 @@ Blockade.prototype.updateAllPawnPositions = function ()
   this.updatePawnPosition(this.yellow1);
   this.updatePawnPosition(this.yellow2);
 
-}
+};
 
 Blockade.prototype.goToPlaystate = function (){
-  if(this.waiting == 4)
+  if(this.waiting == 5)
     this.state=new PlayingState(this.scene,this.client,this.board,this.WallBoardOrange,this.WallBoardYellow,this.orange1,this.orange2,this.yellow1,this.yellow2);
 
-}
+};
 
 
 Blockade.prototype.setPawnPos = function (pawn){
   this.board.elements[pawn.x][pawn.y].setPiece(pawn);
-}
+};
 
 Blockade.prototype.clearPawnPos = function (pawn){
   this.board.elements[pawn.x][pawn.y].setPiece(null);
-}
+};

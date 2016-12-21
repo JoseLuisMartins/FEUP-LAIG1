@@ -6,6 +6,9 @@ parse_input(oi, 'entao tudo bem?').
 parse_input(quit, goodbye).
 parse_input(board, X):- board(X).
 
+parse_input(init,'mequie meu munino'):-
+  initGraph.
+
 parse_input(move(Pawn, X, Y),[NewPosX,NewPosY]) :-
   board(Board),
   validPosition(Pawn, Board, X, Y,Nx,Ny),
@@ -32,6 +35,17 @@ parse_input(move(Pawn, X1, Y1, X2, Y2),[NewPosX,NewPosY]) :-
 parse_input(move(Pawn, X, Y),[NewPosX,NewPosY]) :-
   NewPosX is - 1,
   NewPosY is - 1.
+
+parse_input(placewall(Player,X, Y,O),Sucess):-
+  board(Board),write(X),write(Y),
+  placeWall(Player,X, Y,O,Board, NewBoard),
+  retract(board(Board)),
+  assert(board(NewBoard)),
+  Sucess is 1.
+
+parse_input(placewall(Player,X, Y,O),Sucess):-
+  Sucess is 0.
+
 
 parse_input([Type,Id],[X,Y]):- position([Type, Id], X, Y).
 

@@ -26,7 +26,7 @@ function WallBoard(scene,texture) {
   this.blueWall = new  BoardElement(scene,1001,elementNormalTex,elementSelectedTex,elementSelectableTex,0,0);
   this.blueWall.setPiece(new Wall(scene,blueTex,"h"));
 
-};
+}
 
 WallBoard.prototype = Object.create(CGFobject.prototype);
 WallBoard.prototype.constructor = WallBoard;
@@ -52,11 +52,14 @@ WallBoard.prototype.display = function() {
 //green
   this.scene.pushMatrix();
   this.scene.translate(0,0.4,1);
+	this.scene.rotate(-Math.PI/2,1,0,0);
+
   this.greenWall.display();
   this.scene.popMatrix();
 //blue
   this.scene.pushMatrix();
   this.scene.translate(0,0.4,-1);
+	this.scene.rotate(-Math.PI/2,1,0,0);
   this.blueWall.display();
   this.scene.popMatrix();
 

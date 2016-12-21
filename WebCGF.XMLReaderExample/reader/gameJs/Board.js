@@ -9,6 +9,8 @@ function Board(scene) {
 	var elementSelectableTex=new CGFtexture(scene, "resources\\images\\neptune.jpg");
 	var elementBaseTex=new CGFtexture(scene, "resources\\images\\robotSkin.jpg");
 
+	this.wallTiles=[];
+
   this.elements=new Array(27);
   for (var i = 0; i < 27; i++) {
     this.elements[i]=new Array(21);
@@ -21,8 +23,11 @@ function Board(scene) {
 			else
 				this.elements[j][i] = new  BoardElement(scene,id++,elementNormalTex,elementSelectedTex,elementSelectableTex,j,i);
 
-			if(j % 2 == 1 || i % 2 == 1)
-				this.elements[j][i].setVisible(false);
+			if(j % 2 == 1 || i % 2 == 1){//walls
+				var wall=this.elements[j][i];
+				wall.setVisible(false);
+				this.wallTiles.push(wall);
+			}
     }
   }
 
@@ -50,4 +55,8 @@ Board.prototype.display = function() {
   }
 
 	this.scene.popMatrix();
-}
+};
+
+Board.prototype.getWallTiles = function() {
+	return this.wallTiles;
+};

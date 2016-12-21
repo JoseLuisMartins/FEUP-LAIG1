@@ -131,10 +131,17 @@ class  LinearAnimationInfo {
 }
 
 class Play{
-	constructor(id, pawnStart, pawnEnd) {
+	constructor(id) {
 		this.id=id;
+  }
+
+	setPlayerData(pawnStart,pawnEnd){
 		this.pawnStart=pawnStart;
 		this.pawnEnd=pawnEnd;
-		//falta as paredes associadas a jogada
-  }
+	}
+
+	setWallData(wallCoords,wallOrientation){
+		this.wallCoords=wallCoords;
+		this.wallOrientation=wallOrientation;
+	}
 }
