@@ -613,8 +613,30 @@ MySceneGraph.prototype.createPrimitive = function(primitiveName, primitiveTag) {
              primitive = new RoundTable(this.scene);
         break;
 
+        case 'square_table':
+             var float;
+              
+              if (primitiveTag.hasAttribute('float')) {
+                  float = this.reader.getBoolean(primitiveTag, 'float');
+              }
+              else { float = false; }
+
+             primitive = new SquareTable(this.scene, float);
+        break;
+
         case 'sun_umbrella':
              primitive = new SunUmbrella(this.scene);
+        break;
+
+        case 'chair':
+            var float;
+              
+            if (primitiveTag.hasAttribute('float')) {
+                float = this.reader.getBoolean(primitiveTag, 'float');
+            }
+            else { float = false; }
+
+            primitive = new Chair(this.scene, float);
         break;
 
         default:

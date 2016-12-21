@@ -37,7 +37,8 @@ XMLscene.prototype.init = function (application) {
 
   this.blockade= new Blockade(this);
 
-  this.table = new Chair(this);
+
+  this.table = new Chair(this, true);
 };
 
 XMLscene.prototype.initLights = function () {
@@ -182,6 +183,8 @@ XMLscene.prototype.display = function () {
   // only get executed after the graph has loaded correctly.
   // This is one possible way to do it
 
+
+
   if (this.graph.loadedOk)
   {
 
@@ -193,7 +196,7 @@ XMLscene.prototype.display = function () {
       return;
   }
 
-//  this.table.display();
+ // this.table.display();
 };
 
 
@@ -204,7 +207,11 @@ XMLscene.prototype.update = function(currTime) {
       this.graph.animations[id].update(currTime);
 
     for(var id in this.graph.primitives)
-      if(this.graph.primitives[id] instanceof Vehicle)
-        this.graph.primitives[id].update(currTime);
+      if(this.graph.primitives[id] instanceof Vehicle || 
+         this.graph.primitives[id] instanceof SquareTable ||
+         this.graph.primitives[id] instanceof Chair) {
+
+         this.graph.primitives[id].update(currTime);
+      }
   }
-}
+};
