@@ -1,12 +1,13 @@
 var states={
   SELECT_PIECE: 1,
   SELECT_TILE: 2,
-  ANIMATE_PLAY: 3,
-  SELECT_WALL: 4,
-  SELECT_WALL_TILE: 5,
-  ANIMATE_WALL: 6,
-  CHECK_END: 7,
-  CHANGE_PLAYER: 8,
+  FIRST_MOVE: 3,
+  SECOND_MOVE: 4,
+  SELECT_WALL: 5,
+  SELECT_WALL_TILE: 6,
+  ANIMATE_WALL: 7,
+  CHECK_END: 8,
+  CHANGE_PLAYER: 9,
 };
 
 var players={
@@ -70,18 +71,36 @@ PlayingState.prototype.handleState = function (){
     case states.SELECT_TILE:
           this.handleTilesPicking(true);
       break;
-    case states.ANIMATE_PLAY:
+    case states.FIRST_MOVE:
+    console.log("oi1");
           //tornar tiles da ultima jogada nao selecionaveis
           this.handleTilesPicking(false);
-          //tornar as pecas do jogador atual nao selecionaveis,para preparar a proxima jogada
+          //tornar as pecas do jogador atual nao selecionaveis,para preparar o proximo movimento
+          this.handlePiecePicking(false);
+          //e desselecionar peça e tile selecionada no decorrer da jogada
+          this.deselectPlayElements();
+          //fazer animaçao - mover
+
+          this.animatePawn();
+          //selecionar o peao a ser movido
+          var pawn=this.pawnPieceSelected;
+          this.pawnTileSelected=this.board.elements[pawn.x][pawn.y];
+          this.pawnTileSelected.select();
+          //dar enable das tiles
+          this.handleTilesPicking(true);
+      break;
+    case states.SECOND_MOVE:
+          //tornar tiles da ultima jogada nao selecionaveis
+          this.handleTilesPicking(false);
+          //tornar as pecas do jogador atual nao selecionaveis,para preparar o proximo movimento
           this.handlePiecePicking(false);
           //e desselecionar peça e tile selecionada no decorrer da jogada
           this.deselectPlayElements();
           //fazer animaçao - mover
           this.animatePawn();
-          //proximo estado
           this.currentState=states.SELECT_WALL;
           this.handleState();
+
       break;
     case states.SELECT_WALL:
           this.handleWallPicking(true);
@@ -228,7 +247,11 @@ PlayingState.prototype.picking = function (){
                   this.tryMove();
 
                 }
-
+                break;
+            case states.FIRST_MOVE:
+                  //proximo estado
+                  this.tileSelected = obj;
+                  this.tryMove();
               break;
             case states.SELECT_WALL:
               this.wallSelected=obj;
@@ -261,16 +284,10 @@ PlayingState.prototype.handleTilesPicking = function (enable){
   var x = this.pawnPieceSelected.x;
   var y = this.pawnPieceSelected.y;
 
-  for (var i = y-2 ; i <=  y+2; i+=2) {
-    for (var j = x-2; j <=  x+2; j+=2) {
-      if(!(i == y && j == x))
-        handleTilePicking(j, i, this.board.elements,enable);
-    }
-  }
-    handleTilePicking(x-4, y, this.board.elements,enable);
-    handleTilePicking(x+4, y, this.board.elements,enable);
-    handleTilePicking(x, y-4, this.board.elements,enable);
-    handleTilePicking(x, y+4, this.board.elements,enable);
+  handleTilePicking(x-2, y, this.board.elements,enable);
+  handleTilePicking(x+2, y, this.board.elements,enable);
+  handleTilePicking(x, y-2, this.board.elements,enable);
+  handleTilePicking(x, y+2, this.board.elements,enable);
 };
 
 function handleTilePicking(x,y,elements,enable){
@@ -278,39 +295,14 @@ function handleTilePicking(x,y,elements,enable){
     elements[x][y].handleSelection(enable);
 }
 
+
 PlayingState.prototype.tryMove = function (){
-  //verificar movimentação de 2 espaços
+
+  var state=this;
   var offsetX= (this.tileSelected.x - this.pawnPieceSelected.x)/2;
   var offsetY= (this.tileSelected.y - this.pawnPieceSelected.y)/2;
 
-  if(Math.abs(offsetX) + Math.abs(offsetY) == 2 ){
-    console.log('offsetX: ' + offsetX + ' offsetY: ' + offsetY);
-    var x1,y1,x2,y2;
-    if(Math.abs(offsetX) == 1){
-      x1=offsetX;
-      y1=0;
-      x2=0;
-      y2=offsetY;
-    }else{
-      x1=offsetX/2;
-      y1=offsetY/2;
-      x2=offsetX/2;
-      y2=offsetY/2;
-    }
-    this.moveRequest(true,x1,y1,x2,y2);
-  }else
-    this.moveRequest(false,offsetX,offsetY);
-
-};
-
-PlayingState.prototype.moveRequest = function (twospaces,x1,y1,x2,y2){
-
-  var state=this;
-
-  if(twospaces)
-    this.client.getPrologRequest("move(" + state.pawnPieceSelected.identifier + "," + x1 + "," + y1 + "," + x2 + "," + y2 + ")",handleMoveResponse);
-  else
-    this.client.getPrologRequest("move(" + state.pawnPieceSelected.identifier + "," + x1 + "," + y1 + ")",handleMoveResponse);
+  this.client.getPrologRequest("move(" + state.pawnPieceSelected.identifier + "," + offsetX + "," + offsetY + ")",handleMoveResponse);
 
 
     function handleMoveResponse(data) {
@@ -330,7 +322,12 @@ PlayingState.prototype.moveRequest = function (twospaces,x1,y1,x2,y2){
 
       state.plays[state.currentPlayId].setPlayerData(oldPos, newPos);
 
-      state.currentState=states.ANIMATE_PLAY;
+
+      if(state.currentState == states.SELECT_TILE)
+        state.currentState=states.FIRST_MOVE;
+      else
+        state.currentState=states.SECOND_MOVE;
+
       state.handleState();
     }
   }
@@ -373,7 +370,7 @@ PlayingState.prototype.tryPlaceWall = function (){
       state.handleState();
 
     }else {//nao foi possivel posicionar a parede
-      this.wallTileSelected.select();
+      state.wallTileSelected.select();
     }
 
   }

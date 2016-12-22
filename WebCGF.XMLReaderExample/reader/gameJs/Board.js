@@ -17,7 +17,7 @@ function Board(scene) {
     this.elements[i]=new Array(21);
   }
 	var id=0;
-  for (var i = 0; i < 27; i++) {
+  for (i = 0; i < 27; i++) {
     for (var j = 0; j < 21; j++) {
 			if((i==20 && j == 14) || (i==20 && j == 6) || (i==6 && j == 14) || (i==6 && j == 6))//bases
       	this.elements[j][i] = new  BoardElement(scene,id++,elementBaseTex,elementSelectedTex,elementSelectableTex,j,i);
