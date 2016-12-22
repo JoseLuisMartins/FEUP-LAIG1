@@ -11,6 +11,7 @@ function WallBoard(scene,texture) {
 
   var greenTex=new CGFtexture(scene, "resources\\images\\green.png");
   var blueTex=new CGFtexture(scene, "resources\\images\\blue.jpg");
+	var buttonTex=new CGFtexture(scene, "resources\\images\\skipButton.png");
 
   var elementNormalTex=new CGFtexture(scene, "resources\\images\\rocket_body.jpg");
   var elementSelectedTex=new CGFtexture(scene, "resources\\images\\rocket_top.jpg");
@@ -18,12 +19,13 @@ function WallBoard(scene,texture) {
 
   this.base = new Cube(scene);
 
-
+	//button
+	this.button = new  BoardElement(scene,10000,elementNormalTex,elementSelectableTex,buttonTex,0,0);
   //green Walls - Vertically
-  this.greenWall =  new  BoardElement(scene,1000,elementNormalTex,elementSelectedTex,elementSelectableTex,0,0);
+  this.greenWall =  new  BoardElement(scene,10001,elementNormalTex,elementSelectedTex,elementSelectableTex,0,0);
   this.greenWall.setPiece(new Wall(scene,greenTex,"v"));
   //blue Walls - horizontally
-  this.blueWall = new  BoardElement(scene,1001,elementNormalTex,elementSelectedTex,elementSelectableTex,0,0);
+  this.blueWall = new  BoardElement(scene,10002,elementNormalTex,elementSelectedTex,elementSelectableTex,0,0);
   this.blueWall.setPiece(new Wall(scene,blueTex,"h"));
 
 }
@@ -63,8 +65,19 @@ WallBoard.prototype.display = function() {
   this.blueWall.display();
   this.scene.popMatrix();
 
+//button
+	this.scene.pushMatrix();
+	this.scene.scale(0.5,0.5,0.5);
+	this.button.display();
+	this.scene.popMatrix();
+
   this.scene.popMatrix();
 
+};
+
+
+WallBoard.prototype.handleSelectionButton = function(enable) {
+  this.button.handleSelection(enable);
 };
 
 
@@ -82,4 +95,5 @@ WallBoard.prototype.handleSelectionGreenWall = function(enable) {
 WallBoard.prototype.handleSelection= function(enable) {
 	this.greenWall.handleSelection(enable);
   this.blueWall.handleSelection(enable);
+	this.button.handleSelection(enable);
 };

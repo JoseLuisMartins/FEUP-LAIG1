@@ -122,6 +122,9 @@ PlayingState.prototype.handleState = function (){
   }
 };
 
+
+
+
 PlayingState.prototype.resetVariables = function (){
   this.pawnTileSelected= null;
   this.pawnPieceSelected= null;
@@ -141,6 +144,13 @@ PlayingState.prototype.handleMovement = function (){
   this.animatePawn();
   //verificar se ganhou
   this.checkEnd();
+};
+
+PlayingState.prototype.checkEnd = function (){
+  this.client.getPrologRequest("checkEnd", function(data) {
+      var Resdata = JSON.parse(data.target.responseText);
+      console.log(Resdata);
+  });
 };
 
 
@@ -187,6 +197,8 @@ PlayingState.prototype.checkHasWalls = function (enable){
     }
 
     function enableWallPick(blueWallsNumber,greenWallsNumber,board){
+      board.handleSelectionButton(true);
+
       if(blueWallsNumber > 0)
         board.handleSelectionBlueWall(true);
 
@@ -296,7 +308,6 @@ PlayingState.prototype.picking = function (){
                 }else{//selecionou uma tile
                   this.tileSelected = obj;
                   this.tryMove();
-
                 }
                 break;
             case states.FIRST_MOVE:
@@ -306,7 +317,15 @@ PlayingState.prototype.picking = function (){
               break;
             case states.SELECT_WALL:
               this.wallSelected=obj;
-              this.currentState=states.SELECT_WALL_TILE;
+
+              if(obj.piece === null){
+                this.currentState=states.CHANGE_PLAYER;
+                this.wallSelected.select();
+                this.handleWallPicking(false);
+              }
+              else
+                this.currentState=states.SELECT_WALL_TILE;
+
               this.handleState();
               break;
             case states.SELECT_WALL_TILE:
@@ -437,11 +456,4 @@ PlayingState.prototype.setPawnPos = function (pawn){
 
 PlayingState.prototype.clearPawnPos = function (pawn){
   this.board.elements[pawn.x][pawn.y].setPiece(null);
-};
-
-PlayingState.prototype.checkEnd = function (){
-  this.client.getPrologRequest("checkEnd", function(data) {
-      var Resdata = JSON.parse(data.target.responseText);
-      console.log(Resdata);
-  });
 };
