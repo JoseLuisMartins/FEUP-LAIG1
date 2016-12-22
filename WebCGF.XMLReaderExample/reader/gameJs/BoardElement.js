@@ -10,7 +10,6 @@ function BoardElement(scene,id, textureNormal,textureSelected,textureSelectable,
 	this.piece = null;
 	this.selected=false;
 	this.selectable=false;
-	this.visible=true;
 	this.x=x;
 	this.y=y;
 
@@ -29,7 +28,6 @@ BoardElement.prototype.constructor = BoardElement;
 
 
 BoardElement.prototype.display = function() {
-	if(this.visible){
 		this.scene.pushMatrix();
 
 		if(this.selectable)
@@ -54,7 +52,7 @@ BoardElement.prototype.display = function() {
 
 
 	  this.scene.popMatrix();
-	}
+
 };
 
 BoardElement.prototype.setPiece = function(Npiece) {
@@ -67,9 +65,4 @@ BoardElement.prototype.select = function() {
 
 BoardElement.prototype.handleSelection = function(enable) {
 	this.selectable = enable;
-};
-
-
-BoardElement.prototype.setVisible = function(value) {
-	this.visible = value;
 };

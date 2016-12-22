@@ -90,7 +90,17 @@ PlayingState.prototype.handleState = function (){
           this.handleWallTilesPicking(true);
       break;
     case states.ANIMATE_WALL:
+          //tornar as paredes nao selicionaveis novamente
+          this.handleWallTilesPicking(false);
+          //tornar o tabuleiro auxiliar nao selicionavel novamente
+          this.handleWallPicking(false);
+          //tornar o elemento da parede do board e do board auxiliar não selecionado
+          this.wallTileSelected.select();
+          this.wallSelected.select();
+          //posicionar a parede
           this.animateWall();
+          this.currentState=states.CHECK_END;
+          this.handleState();
       break;
     case states.CHECK_END:
           //verificar vencedor
@@ -129,7 +139,6 @@ PlayingState.prototype.handleWallTilesPicking = function (enable){
   var walls = this.board.getWallTiles();
   for (var i = 0; i < walls.length; i++) {
     walls[i].handleSelection(enable);
-    walls[i].setVisible(enable);
   }
 };
 
@@ -334,6 +343,20 @@ PlayingState.prototype.tryPlaceWall = function (){
   var wallY = this.wallTileSelected.y;
   var wallType = this.wallSelected.piece.type;
 
+  if(wallType == "h"){
+    if(wallX % 2 == 1)
+      wallX++;
+
+    if(wallY % 2 === 0)
+      wallY++;
+  }else{
+    if(wallX % 2 === 0)
+      wallX++;
+
+    if(wallY % 2 == 1)
+      wallY++;
+  }
+
   console.log("x: " +  wallX + " y: " +  wallY);
   this.client.getPrologRequest("placewall(" + this.pawnPieceSelected.type + "," +  wallX + "," +
                                 wallY + "," + wallType + ")", handleWallResponse);
@@ -350,8 +373,7 @@ PlayingState.prototype.tryPlaceWall = function (){
       state.handleState();
 
     }else {//nao foi possivel posicionar a parede
-
-
+      this.wallTileSelected.select();
     }
 
   }

@@ -37,7 +37,7 @@ parse_input(move(Pawn, X, Y),[NewPosX,NewPosY]) :-
   NewPosY is - 1.
 
 parse_input(placewall(Player,X, Y,O),Sucess):-
-  board(Board),write(X),write(Y),
+  board(Board),
   placeWall(Player,X, Y,O,Board, NewBoard),
   retract(board(Board)),
   assert(board(NewBoard)),

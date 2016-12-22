@@ -8,6 +8,7 @@ function Board(scene) {
 	var elementSelectedTex=new CGFtexture(scene, "resources\\images\\rocket_top.jpg");
 	var elementSelectableTex=new CGFtexture(scene, "resources\\images\\neptune.jpg");
 	var elementBaseTex=new CGFtexture(scene, "resources\\images\\robotSkin.jpg");
+	var elementWallBaseTex=new CGFtexture(scene, "resources\\images\\wall.jpg");
 
 	this.wallTiles=[];
 
@@ -20,18 +21,17 @@ function Board(scene) {
     for (var j = 0; j < 21; j++) {
 			if((i==20 && j == 14) || (i==20 && j == 6) || (i==6 && j == 14) || (i==6 && j == 6))//bases
       	this.elements[j][i] = new  BoardElement(scene,id++,elementBaseTex,elementSelectedTex,elementSelectableTex,j,i);
+			else if(j % 2 == 1 || i % 2 == 1){//walls
+				this.elements[j][i] = new  BoardElement(scene,id++,elementWallBaseTex,elementSelectedTex,elementSelectableTex,j,i);
+				this.wallTiles.push(this.elements[j][i]);
+			}
 			else
 				this.elements[j][i] = new  BoardElement(scene,id++,elementNormalTex,elementSelectedTex,elementSelectableTex,j,i);
 
-			if(j % 2 == 1 || i % 2 == 1){//walls
-				var wall=this.elements[j][i];
-				wall.setVisible(false);
-				this.wallTiles.push(wall);
-			}
     }
   }
 
-};
+}
 
 Board.prototype = Object.create(CGFobject.prototype);
 Board.prototype.constructor = Board;
