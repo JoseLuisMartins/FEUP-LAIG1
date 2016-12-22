@@ -6,8 +6,7 @@ var states={
   SELECT_WALL: 5,
   SELECT_WALL_TILE: 6,
   ANIMATE_WALL: 7,
-  CHECK_END: 8,
-  CHANGE_PLAYER: 9,
+  CHANGE_PLAYER: 8,
 };
 
 var players={
@@ -24,10 +23,10 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
   this.board=board;
   this.wallBoardOrange=wallBoardOrange;
   this.wallBoardYellow=wallBoardYellow;
-
-  //game cycle
   this.currentState= states.SELECT_PIECE;
   this.currentPlayer= players.ORANGE;
+
+  //game cycle
   this.pawnTileSelected= null;
   this.pawnPieceSelected= null;
   this.tileSelected= null;
@@ -72,15 +71,8 @@ PlayingState.prototype.handleState = function (){
           this.handleTilesPicking(true);
       break;
     case states.FIRST_MOVE:
-          //tornar tiles da ultima jogada nao selecionaveis
-          this.handleTilesPicking(false);
-          //tornar as pecas do jogador atual nao selecionaveis,para preparar o proximo movimento
-          this.handlePiecePicking(false);
-          //e desselecionar peça e tile selecionada no decorrer da jogada
-          this.deselectPlayElements();
-          //fazer animaçao - mover
+          this.handleMovement();
 
-          this.animatePawn();
           //selecionar o peao a ser movido
           var pawn=this.pawnPieceSelected;
           this.pawnTileSelected=this.board.elements[pawn.x][pawn.y];
@@ -89,20 +81,12 @@ PlayingState.prototype.handleState = function (){
           this.handleTilesPicking(true);
       break;
     case states.SECOND_MOVE:
-          //tornar tiles da ultima jogada nao selecionaveis
-          this.handleTilesPicking(false);
-          //tornar as pecas do jogador atual nao selecionaveis,para preparar o proximo movimento
-          this.handlePiecePicking(false);
-          //e desselecionar peça e tile selecionada no decorrer da jogada
-          this.deselectPlayElements();
-          //fazer animaçao - mover
-          this.animatePawn();
-          this.currentState=states.SELECT_WALL;
-          this.handleState();
-
+          this.handleMovement();
+          //se ouver parede posicionar uma senão passar para o proximo jogador
+          this.checkHasWalls();
       break;
     case states.SELECT_WALL:
-          this.handleWallPicking(true);
+
       break;
     case states.SELECT_WALL_TILE:
           this.handleWallTilesPicking(true);
@@ -117,13 +101,6 @@ PlayingState.prototype.handleState = function (){
           this.wallSelected.select();
           //posicionar a parede
           this.animateWall();
-          this.currentState=states.CHECK_END;
-          this.handleState();
-      break;
-    case states.CHECK_END:
-          //verificar vencedor
-          this.checkEnd();
-          //proximo estado
           this.currentState=states.CHANGE_PLAYER;
           this.handleState();
       break;
@@ -133,13 +110,39 @@ PlayingState.prototype.handleState = function (){
             this.currentPlayer=players.YELLOW;
           else
             this.currentPlayer=players.ORANGE;
+
+          this.resetVariables();
+
           //proximo jogador prolog
           this.changePlayer();
+
       break;
     default:
 
   }
 };
+
+PlayingState.prototype.resetVariables = function (){
+  this.pawnTileSelected= null;
+  this.pawnPieceSelected= null;
+  this.tileSelected= null;
+  this.wallSelected= null;
+  this.wallTileSelected= null;
+};
+
+PlayingState.prototype.handleMovement = function (){
+  //tornar tiles da ultima jogada nao selecionaveis
+  this.handleTilesPicking(false);
+  //tornar as pecas do jogador atual nao selecionaveis,para preparar o proximo movimento
+  this.handlePiecePicking(false);
+  //e desselecionar peça e tile selecionada no decorrer da jogada
+  this.deselectPlayElements();
+  //fazer animaçao - mover
+  this.animatePawn();
+  //verificar se ganhou
+  this.checkEnd();
+};
+
 
 PlayingState.prototype.changePlayer = function (enable){
     var state=this;
@@ -153,6 +156,46 @@ PlayingState.prototype.changePlayer = function (enable){
     }
 
 };
+
+PlayingState.prototype.checkHasWalls = function (enable){
+    var state=this;
+
+    this.client.getPrologRequest("hasWalls(" +   this.pawnPieceSelected.type + ")",handleCheckWallRequest);
+
+
+    function handleCheckWallRequest(data){
+      console.log(data.target.responseText);
+      var numberWalls = JSON.parse(data.target.responseText);
+
+      var blueWallsNumber = numberWalls[0];
+      var greenWallsNumber = numberWalls[1];
+
+      var total = blueWallsNumber + greenWallsNumber;
+
+      if(total === 0)//não exitem mais paredes para posicionar
+        state.currentState=states.CHANGE_PLAYER;
+      else{
+        state.currentState=states.SELECT_WALL;
+
+        if(state.currentPlayer == players.ORANGE)
+          enableWallPick(blueWallsNumber,greenWallsNumber,state.wallBoardOrange);
+        else
+          enableWallPick(blueWallsNumber,greenWallsNumber,state.wallBoardYellow);
+      }
+
+      state.handleState();
+    }
+
+    function enableWallPick(blueWallsNumber,greenWallsNumber,board){
+      if(blueWallsNumber > 0)
+        board.handleSelectionBlueWall(true);
+
+      if(greenWallsNumber > 0)
+        board.handleSelectionGreenWall(true);
+    }
+
+};
+
 
 PlayingState.prototype.handleWallPicking = function (enable){
   if(this.currentPlayer==players.ORANGE)
@@ -239,7 +282,7 @@ PlayingState.prototype.picking = function (){
           switch (this.currentState) {
             case states.SELECT_PIECE:
                   this.pawnTileSelected=obj;
-                  this.pawnPieceSelected=this.pawnTileSelected.piece;
+                  this.pawnPieceSelected=obj.piece;
                   this.currentState=states.SELECT_TILE;
                   this.handleState();
               break;

@@ -7,7 +7,7 @@ parse_input(quit, goodbye).
 
 parse_input(board, X):- board(X).
 
-parse_input(init,'mequie meu munino'):-
+parse_input(init,'i'):-
   retract(board(_)),
   boardDefault(X),
   assert(board(X)),
@@ -25,10 +25,9 @@ parse_input(init,'mequie meu munino'):-
   retract(currentPlayer(_)),
   assert(currentPlayer(orange)),
   initGraph,
-  board(Z),
-  displayBoard(Z).
+  board(Z).
 
-parse_input(init,'mequie meu munino'):-
+parse_input(init,'i'):-
   initGraph.
 
 
@@ -59,9 +58,12 @@ parse_input(placewall(Player,X, Y,O),Sucess):-
 
 parse_input([Type,Id],[X,Y]):- position([Type, Id], X, Y).
 
-parse_input(changePlayer,"muito xiroo este prolog"):-
+parse_input(changePlayer,"c"):-
   retract(currentPlayer(P)),
   changeCurrentPlayer(P).
+
+parse_input(hasWalls(P),[HorWalls,VerWalls]):-
+  wallNumber(P,HorWalls,VerWalls).
 
 
 parse_input(checkEnd,Res):-

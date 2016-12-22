@@ -65,9 +65,21 @@ WallBoard.prototype.display = function() {
 
   this.scene.popMatrix();
 
-}
+};
 
-WallBoard.prototype.handleSelection = function(enable) {
+
+WallBoard.prototype.handleSelectionBlueWall = function(enable) {
+  this.blueWall.handleSelection(enable);
+};
+
+
+WallBoard.prototype.handleSelectionGreenWall = function(enable) {
+	this.greenWall.handleSelection(enable);
+};
+
+
+
+WallBoard.prototype.handleSelection= function(enable) {
 	this.greenWall.handleSelection(enable);
   this.blueWall.handleSelection(enable);
-}
+};
