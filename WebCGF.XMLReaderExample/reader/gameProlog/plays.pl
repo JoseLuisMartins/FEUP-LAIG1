@@ -93,7 +93,7 @@ handleWallBot(2, Player, Board, NewBoard,O,X,Y) :-
 	placeWall(Player, X, Y, O, Board, NewBoard).
 
 
-handleWallBot(_, _, Board, Board) :-
+handleWallBot(_, _, Board, Board,_,_,_) :-
 	true.
 
 
@@ -116,14 +116,14 @@ moveOneSpaceBot(Pawn, [X,Y], Board,NewBoard) :-
 
 %iterate's a wall list trying to place one of the walls in the list
 %iterateWallList(+WallList, +Player, +Board, -NewBoard)
-iterateWallList([], _, Board, Board,_,_,_) :- %ver cruzados tambem
+iterateWallList([], _, Board, Board,-1,-1,-1) :- %ver cruzados tambem
 	 true.
 
 iterateWallList([[X,Y,O] | _], Player, Board, NewBoard,O,X,Y) :-
 	placeWall(Player, X, Y, O, Board, NewBoard).
 
-iterateWallList([[_,_,_] | Res], Player, Board, NewBoard,_,_,_) :-
-	iterateWallList(Res,Player,Board,NewBoard).
+iterateWallList([[_,_,_] | Res], Player, Board, NewBoard,O,X,Y) :-
+	iterateWallList(Res,Player,Board,NewBoard,O,X,Y).
 
 
 %moves one space randomly
