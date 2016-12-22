@@ -20,10 +20,11 @@ playHuman(Player, Board, NewBoard) :-
 
 %make a play bot side
 %playBot(+L,+Player, +Board, -NewBoard)
-playBot(L, Player,Board,NewBoard):-
+playBot(L, Player,Board,NewBoard,Id,Px,Py,O,Wx,Wy):-
 	format('--------------Its Bot ~s turn----------- ~n',[Player]),
-	moveBot(L, Player, Board, AuxBoard),
-	handleWallBot(L, Player, AuxBoard, NewBoard).
+	moveBot(L, Player, Board, AuxBoard,Id),
+	position([Player, Id], Px, Py),
+	handleWallBot(L, Player, AuxBoard, NewBoard,O,Wx,Wy).
 
 
 %move asking the coords
@@ -61,7 +62,7 @@ moveOneSpaceHuman(Pawn,Board,NewBoard) :-
 
 %move (Pc calculates the coords)
 %moveBot(+L, +Player, +Board, -NewBoard)
-moveBot(1, Player, Board, NewBoard) :-
+moveBot(1, Player, Board, NewBoard,N) :-
 	evaluateBestPawn(Player,N),
 	auxMoveBot(Player,N,Board,AuxBoard),
 	(
@@ -70,7 +71,7 @@ moveBot(1, Player, Board, NewBoard) :-
 	).
 
 
-moveBot(2, Player, Board, NewBoard) :-
+moveBot(2, Player, Board, NewBoard,N) :-
 	random_member(N, [1, 2]),
 	Pawn = [Player, N],
 	moveOneSpaceRandom(Pawn, Board, AuxBoard),
@@ -79,13 +80,13 @@ moveBot(2, Player, Board, NewBoard) :-
 
 %handles the wall part of the play (PC calculating the coords)
 %handleWallBot(+L,+Player, +Board, -NewBoard)
-handleWallBot(1, Player, Board, NewBoard) :-
+handleWallBot(1, Player, Board, NewBoard,O,Wx,Wy) :-
 	hasWalls(Player), !,
 	evaluateBestWall(Player,Walls),
-	iterateWallList(Walls,Player,Board,NewBoard).
+	iterateWallList(Walls,Player,Board,NewBoard,O,Wx,Wy).
 
 
-handleWallBot(2, Player, Board, NewBoard) :-
+handleWallBot(2, Player, Board, NewBoard,O,X,Y) :-
 	hasWalls(Player), !,
 	repeat,
 		once(randomWall(X, Y, O)),
@@ -115,13 +116,13 @@ moveOneSpaceBot(Pawn, [X,Y], Board,NewBoard) :-
 
 %iterate's a wall list trying to place one of the walls in the list
 %iterateWallList(+WallList, +Player, +Board, -NewBoard)
-iterateWallList([], _, Board, Board) :- %ver cruzados tambem
+iterateWallList([], _, Board, Board,_,_,_) :- %ver cruzados tambem
 	 true.
 
-iterateWallList([[X,Y,O] | _], Player, Board, NewBoard) :-
+iterateWallList([[X,Y,O] | _], Player, Board, NewBoard,O,X,Y) :-
 	placeWall(Player, X, Y, O, Board, NewBoard).
 
-iterateWallList([[_,_,_] | Res], Player, Board, NewBoard) :-
+iterateWallList([[_,_,_] | Res], Player, Board, NewBoard,_,_,_) :-
 	iterateWallList(Res,Player,Board,NewBoard).
 
 

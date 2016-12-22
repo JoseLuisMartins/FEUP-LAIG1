@@ -1,5 +1,11 @@
+var mode={
+  HUMAN_VS_HUMAN: 1,
+  HUMAN_VS_BOT: 2,
+  BOT_VS_BOT: 3,
+};
 
-function Blockade(scene,mode){
+
+function Blockade(scene,gameMode){
   this.scene=scene;
 
 
@@ -11,6 +17,8 @@ function Blockade(scene,mode){
   this.WallBoardYellow = new WallBoard(scene,WallBoardTex);
 
   this.prologBoard=null;
+
+  this.mode=mode.HUMAN_VS_BOT;
 
   this.init();
 }
@@ -57,9 +65,6 @@ Blockade.prototype.display = function (){
 };
 
 
-Blockade.prototype.waitUpdatePositions = function(){
-
-};
 
 Blockade.prototype.updatePawnPosition = function(pawn){
   var game=this;
@@ -106,7 +111,7 @@ Blockade.prototype.updateAllPawnPositions = function ()
 
 Blockade.prototype.goToPlaystate = function (){
   if(this.waiting == 5)
-    this.state=new PlayingState(this.scene,this.client,this.board,this.WallBoardOrange,this.WallBoardYellow,this.orange1,this.orange2,this.yellow1,this.yellow2);
+    this.state=new PlayingState(this.scene,this.client,this.board,this.WallBoardOrange,this.WallBoardYellow,this.orange1,this.orange2,this.yellow1,this.yellow2,this.mode);
 
 };
 

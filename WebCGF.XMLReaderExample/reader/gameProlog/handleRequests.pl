@@ -24,8 +24,7 @@ parse_input(init,'i'):-
   assert(position([yellow, 2], 14, 20)),
   retract(currentPlayer(_)),
   assert(currentPlayer(orange)),
-  initGraph,
-  board(Z).
+  initGraph.
 
 parse_input(init,'i'):-
   initGraph.
@@ -55,6 +54,14 @@ parse_input(placewall(Player,X, Y,O),Sucess):-
 parse_input(placewall(Player,X, Y,O),Sucess):-
   Sucess is 0.
 
+parse_input(botPlay(Player),[Id,Px,Py,O,Wx,Wy]):-
+  retract(board(Board)),
+  playBot(1,Player,Board,NewBoard,Id,Px,Py,Or,Wx,Wy),
+  getOrientationInteger(Or,O),
+  assert(board(NewBoard)).
+
+getOrientationInteger(h,0).
+getOrientationInteger(v,1).
 
 parse_input([Type,Id],[X,Y]):- position([Type, Id], X, Y).
 

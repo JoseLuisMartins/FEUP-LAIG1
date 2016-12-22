@@ -135,9 +135,11 @@ class Play{
 		this.id=id;
   }
 
-	setPlayerData(pawnStart,pawnEnd){
+	setPlayerData(pawnStart,pawnEnd,pawnIdentifier,pawnType){
 		this.pawnStart=pawnStart;
 		this.pawnEnd=pawnEnd;
+		this.pawnidentifier=pawnIdentifier;
+		this.pawnType=pawnType;
 	}
 
 	setWallData(wallCoords,wallOrientation){

@@ -14,8 +14,15 @@ var players={
   YELLOW: 2,
 };
 
+var mode={
+  HUMAN_VS_HUMAN: 1,
+  HUMAN_VS_BOT: 2,
+  BOT_VS_BOT: 3,
+};
 
-function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1,orange2,yellow1,yellow2){
+
+
+function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1,orange2,yellow1,yellow2,mode){
 
   this.scene=scene;
   //game
@@ -32,7 +39,9 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
   this.tileSelected= null;
   this.wallSelected= null;
   this.wallTileSelected= null;
-
+  this.mode = mode;
+  console.log("modeeeeeeeeeeeeeeee");
+console.log(this.mode);
   //pawns
   this.orange1=orange1;
   this.orange2=orange2;
@@ -53,7 +62,7 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
   this.currentPlayId=0;
   this.plays={};
 
-
+  //começar o jogo - VER MODO E DIFICULDADE DEPOIS
   this.handleState();
 }
 
@@ -112,7 +121,8 @@ PlayingState.prototype.handleState = function (){
             this.currentPlayer=players.ORANGE;
 
           this.resetVariables();
-
+          //passar para a proxima jogada
+          this.currentPlayId++;
           //proximo jogador prolog
           this.changePlayer();
 
@@ -161,11 +171,100 @@ PlayingState.prototype.changePlayer = function (enable){
 
     function handleChangePlayerRequest(data) {
       //proximo estado
+      if(state.mode == mode.HUMAN_VS_BOT){// player vs bot
+        state.playBot();
+      }else{
       state.currentState=states.SELECT_PIECE;
       state.handleState();
+      }
     }
 
 };
+
+PlayingState.prototype.playBot = function (){
+    var state=this;
+
+    var pawnType;
+    //request para ir busacar a jogada do bot e depois trocar para o jogador humano
+    if(this.currentPlayer==players.ORANGE)
+      pawnType = "orange";
+    else
+      pawnType = "yellow";
+
+    this.client.getPrologRequest("botPlay(" + pawnType + ")",handleBotPlayRequest);
+
+
+    function handleBotPlayRequest(data){
+
+      var botPlay = JSON.parse(data.target.responseText);
+      console.log(botPlay);
+
+      //pawn
+      var pawnId = botPlay[0];
+      var pawnEndx = botPlay[1];
+      var pawnEndy = botPlay[2];
+
+      var pawnIdentifier = "[" + pawnType + "," + pawnId + "]" ;
+
+      var currentPawn;
+      if(pawnType == "orange"){
+        if(pawnId == 1)
+          currentPawn=state.orange1;
+        else
+          currentPawn=state.orange2;
+      }else {
+        if(pawnId == 1)
+          currentPawn=state.yellow1;
+        else
+          currentPawn=state.yellow2;
+      }
+
+      var pawnStartX = currentPawn.x;
+      var pawnStartY = currentPawn.y;
+
+      //walls
+      var wallOrientation;
+      if(botPlay[3] === 0)
+        wallOrientation="h";
+      else
+        wallOrientation="v";
+
+
+      var wallX = botPlay[4];
+      var wallY = botPlay[5];
+
+      //build play
+      var play=new Play(state.currentPlayId);
+      console.log(wallX);
+      console.log(wallY);
+
+      play.setPlayerData(new Point2(pawnStartX,pawnStartY),
+                         new Point2(pawnEndx,pawnEndy),
+                         pawnIdentifier,
+                         pawnType);
+
+      play.setWallData(new Point2(wallX,wallY),
+                       wallOrientation);
+
+
+      state.plays[state.currentPlayId]=play;
+
+      //make the play
+      state.pawnPieceSelected=currentPawn;
+      state.animatePawn();
+      state.animateWall();
+
+      //next state
+      if(state.mode == mode.HUMAN_VS_BOT){// player vs bot
+        state.currentPlayer= players.ORANGE;
+        state.currentState=states.SELECT_PIECE;
+        state.handleState();
+      }//falta ver o bot contra bot
+
+    }
+
+};
+
 
 PlayingState.prototype.checkHasWalls = function (enable){
     var state=this;
@@ -390,7 +489,7 @@ PlayingState.prototype.tryMove = function (){
       var pawn = state.pawnPieceSelected;
       var oldPos = new Point2(pawn.x,pawn.y);
 
-      state.plays[state.currentPlayId].setPlayerData(oldPos, newPos);
+      state.plays[state.currentPlayId].setPlayerData(oldPos, newPos,pawn.identifier,pawn.type);
 
 
       if(state.currentState == states.SELECT_TILE)
@@ -443,11 +542,6 @@ PlayingState.prototype.tryPlaceWall = function (){
 
   }
 };
-
-
-
-
-
 
 
 PlayingState.prototype.setPawnPos = function (pawn){
