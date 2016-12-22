@@ -26,7 +26,6 @@ Blockade.prototype.init = function (){
   this.state=null;
   this.waiting=0;
 
-  this.updateAllPawnPositions();
   this.initPrologGraph();
 
 };
@@ -90,6 +89,7 @@ Blockade.prototype.initPrologGraph = function(){
   var game=this;
 
   this.client.getPrologRequest("init", function(data) {
+    game.updateAllPawnPositions();
     game.waiting++;
     game.goToPlaystate();
   });

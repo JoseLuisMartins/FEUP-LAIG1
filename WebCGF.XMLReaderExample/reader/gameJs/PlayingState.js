@@ -72,7 +72,6 @@ PlayingState.prototype.handleState = function (){
           this.handleTilesPicking(true);
       break;
     case states.FIRST_MOVE:
-    console.log("oi1");
           //tornar tiles da ultima jogada nao selecionaveis
           this.handleTilesPicking(false);
           //tornar as pecas do jogador atual nao selecionaveis,para preparar o proximo movimento
@@ -129,20 +128,30 @@ PlayingState.prototype.handleState = function (){
           this.handleState();
       break;
     case states.CHANGE_PLAYER://animaçao da camera
-          //proximo jogador
-          //!!!!!!!!!!!!CHAMAR CHANGE PLAYER DO PROLOG!!!!!!!!!!!!!!!!!
+          //proximo jogador js
           if(this.currentPlayer==players.ORANGE)
             this.currentPlayer=players.YELLOW;
           else
             this.currentPlayer=players.ORANGE;
-
-          //proximo estado
-          this.currentState=states.SELECT_PIECE;
-          this.handleState();
+          //proximo jogador prolog
+          this.changePlayer();
       break;
     default:
 
   }
+};
+
+PlayingState.prototype.changePlayer = function (enable){
+    var state=this;
+
+    this.client.getPrologRequest("changePlayer",handleChangePlayerRequest);
+
+    function handleChangePlayerRequest(data) {
+      //proximo estado
+      state.currentState=states.SELECT_PIECE;
+      state.handleState();
+    }
+
 };
 
 PlayingState.prototype.handleWallPicking = function (enable){
@@ -185,7 +194,6 @@ PlayingState.prototype.animateWall = function (){
 
   //need to animate this
   if(play.wallOrientation == "h"){
-    console.log("wallx: " + wallx + " wally: " + wally);
     this.board.elements[wallx][wally].setPiece(this.blueWall);
     this.board.elements[wallx+1][wally].setPiece(this.blueWall);
     this.board.elements[wallx+2][wally].setPiece(this.blueWall);
@@ -307,7 +315,7 @@ PlayingState.prototype.tryMove = function (){
 
     function handleMoveResponse(data) {
 
-    console.log(data.target.responseText);
+
     var Posdata = JSON.parse(data.target.responseText);
     var newPos = new Point2(Posdata[0],Posdata[1]);
 
@@ -354,13 +362,11 @@ PlayingState.prototype.tryPlaceWall = function (){
       wallY++;
   }
 
-  console.log("x: " +  wallX + " y: " +  wallY);
+
   this.client.getPrologRequest("placewall(" + this.pawnPieceSelected.type + "," +  wallX + "," +
                                 wallY + "," + wallType + ")", handleWallResponse);
 
   function handleWallResponse(data) {
-
-    console.log(data.target.responseText);
 
 
     if(data.target.responseText == "1"){//passar para o proximo estado e posicionar a parede
