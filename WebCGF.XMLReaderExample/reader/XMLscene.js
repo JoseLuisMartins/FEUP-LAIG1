@@ -37,7 +37,12 @@ XMLscene.prototype.init = function (application) {
 
   this.blockade= new Blockade(this);
 
-  this.obj = new SpaceStation(this);
+  this.obj = new Cube(this);
+  var controlPoints = [new Point3(0,0,0), new Point3(5, 0, 0), new Point3(10, -5, 0)];
+  var slopes = [0, 5, 0];
+  var angles = [new Point3(0, 0, 0), new Point3(0, Math.PI/2, 0), new Point3(0, Math.PI/2, 0)];
+  this.anim = new KeyframeAnimation("amizade", 5, controlPoints, slopes, angles);
+  this.anim.render = true;
 };
 
 XMLscene.prototype.initLights = function () {
@@ -182,6 +187,7 @@ XMLscene.prototype.display = function () {
   // only get executed after the graph has loaded correctly.
   // This is one possible way to do it
 
+  /*
   if (this.graph.loadedOk)
   {
 
@@ -192,8 +198,16 @@ XMLscene.prototype.display = function () {
     if (this.graph.displayGraph())
       return;
   }
-
-  //this.obj.display();
+  */
+  this.pushMatrix();
+    var pos = this.anim.getCurrentPosition();
+    var ang = this.anim.getCurrentAngle();
+    this.translate(pos.x, pos.y, pos.z);
+    this.rotate(ang.x, 1, 0, 0);
+    this.rotate(ang.y, 0, 1, 0);
+    this.rotate(ang.z, 0, 0, 1);
+    this.obj.display();
+  this.popMatrix();
 };
 
 
@@ -208,4 +222,6 @@ XMLscene.prototype.update = function(currTime) {
          this.graph.primitives[id].update(currTime);
       }
   }
+
+  this.anim.update(currTime);
 };

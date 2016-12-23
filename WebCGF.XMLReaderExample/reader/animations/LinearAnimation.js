@@ -85,4 +85,4 @@ LinearAnimation.prototype.distanceBetweenPoints = function(point1, point2) {
   var dz = point2.z - point1.z;
 
   return Math.sqrt(dx*dx + dy*dy + dz*dz);
-}
+};
