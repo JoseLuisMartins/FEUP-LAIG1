@@ -10,7 +10,7 @@ function WallBoard(scene,texture) {
   this.material.setTexture(texture);
 
   var greenTex=new CGFtexture(scene, "resources\\images\\green.png");
-  var blueTex=new CGFtexture(scene, "resources\\images\\blue.jpg");
+  var blueTex=new CGFtexture(scene, "resources\\images\\blue.png");
 	var buttonTex=new CGFtexture(scene, "resources\\images\\skipButton.png");
 
   var elementNormalTex=new CGFtexture(scene, "resources\\images\\rocket_body.jpg");
@@ -22,10 +22,12 @@ function WallBoard(scene,texture) {
 	//button
 	this.button = new  BoardElement(scene,10000,elementNormalTex,elementSelectedTex,buttonTex,0,0);
   //green Walls - Vertically
-  this.greenWall =  new  BoardElement(scene,10001,elementNormalTex,elementSelectedTex,elementSelectableTex,0,0);
+  this.greenWall =  new  BoardElement(scene,10001,elementNormalTex,elementSelectedTex,elementSelectableTex,1,0);
+	this.greenWall.setWall(true);
   this.greenWall.setPiece(new Wall(scene,greenTex,"v"));
   //blue Walls - horizontally
   this.blueWall = new  BoardElement(scene,10002,elementNormalTex,elementSelectedTex,elementSelectableTex,0,0);
+	this.blueWall.setWall(true);
   this.blueWall.setPiece(new Wall(scene,blueTex,"h"));
 
 }

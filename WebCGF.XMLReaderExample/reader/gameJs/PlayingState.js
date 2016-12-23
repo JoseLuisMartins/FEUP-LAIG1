@@ -50,7 +50,7 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
 
   //walls
   var greenTex=new CGFtexture(scene, "resources\\images\\green.png");
-  var blueTex=new CGFtexture(scene, "resources\\images\\blue.jpg");
+  var blueTex=new CGFtexture(scene, "resources\\images\\blue.png");
   this.greenWall=new Wall(scene,greenTex,"v");
   this.blueWall=new Wall(scene,blueTex,"h");
 
