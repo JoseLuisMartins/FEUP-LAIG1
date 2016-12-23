@@ -17,7 +17,6 @@ var players={
 var mode={
   HUMAN_VS_HUMAN: 1,
   HUMAN_VS_BOT: 2,
-  BOT_VS_BOT: 3,
 };
 
 
@@ -112,19 +111,74 @@ PlayingState.prototype.handleState = function (){
           this.wallTileSelected.select();
           this.wallSelected.select();
           //posicionar a parede
-          this.animateWall();
+          this.animateWall(true);
           this.currentState=states.CHANGE_PLAYER;
           this.handleState();
       break;
     case states.CHANGE_PLAYER://animaçao da camera
-          this.prepareForNextRound(this);
-          this.changePlayer();
+          if(this.plays[this.currentPlayId].wallCoords === null){
+            this.prepareForNextRound(this);
+            this.changePlayer();
+          }else
+            this.handleNextButon(true);
+
 
       break;
     default:
 
   }
 };
+
+PlayingState.prototype.handleNextButon = function (enable){
+  if(this.currentPlayer==players.ORANGE)
+    this.wallBoardOrange.handleSelectionButton(enable);
+  else
+    this.wallBoardYellow.handleSelectionButton(enable);
+};
+
+PlayingState.prototype.undo = function (){
+  console.log("-------------------------undo----------------------");
+
+
+    switch (this.mode) {
+      case mode.HUMAN_VS_HUMAN:
+        undoAux();
+        break;
+      case mode.HUMAN_VS_BOT:
+        if(this.currentPlayer == players.ORANGE)
+          undoAux();
+        break;
+      default:
+
+    }
+
+
+    function undoAux(){
+      var currentPlay =  this.plays[this.currentPlayId];
+
+      if(currentPlay.wallCoords !== null){// já posicionou as paredes
+
+      }else if(currentPlay.start2 !== null) {//já fez o segundo movimento
+
+      }else if(currentPlay.start1 !== null){//já fez o primeiro movimento
+
+      }
+
+
+
+
+
+      this.currentState=states.SELECT_PIECE;
+      this.handleState();
+    }
+
+
+};
+
+PlayingState.prototype.prologUndo = function (){
+
+};
+
 
 PlayingState.prototype.prepareForNextRound = function (context){
   //proximo jogador js
@@ -246,13 +300,12 @@ PlayingState.prototype.playBot = function (){
       console.log(wallX);
       console.log(wallY);
 
-      play.setPlayerData(new Point2(pawnStartX,pawnStartY),
-                         new Point2(pawnEndx,pawnEndy),
-                         pawnIdentifier,
-                         pawnType);
+      play.setPlayerData1(new Point2(pawnStartX,pawnStartY),
+                          null,
+                          currentPawn);
 
-      play.setWallData(new Point2(wallX,wallY),
-                       wallOrientation);
+      play.setPlayerData2(null,
+                          new Point2(pawnEndx,pawnEndy));
 
 
       state.plays[state.currentPlayId]=play;
@@ -262,10 +315,13 @@ PlayingState.prototype.playBot = function (){
       state.animatePawn();
 
       if(wallOrientation != "x")//se foi possivel posicionar uma parede
-        state.animateWall();
+        play.setWallData(new Point2(wallX,wallY),wallOrientation);
+
+
+      state.animateWall(true);
 
       //next state
-      state.prepareForNextRound(state);// tambem é valido para bot vs bot
+      state.prepareForNextRound(state);
 
       if(state.mode == mode.HUMAN_VS_BOT){// player vs bot, voltar á maquina de estados
         state.currentState=states.SELECT_PIECE;
@@ -338,35 +394,49 @@ PlayingState.prototype.handleWallTilesPicking = function (enable){
 
 
 PlayingState.prototype.animatePawn = function (){
-  var pawn = this.pawnPieceSelected;
+
   //dados da jogada
   var play = this.plays[this.currentPlayId];
+  var pawn = play.pawn;
   //limpar posicao atual do peao
   this.clearPawnPos(pawn);
   //atualizar posicao do peao
-  pawn.x = play.pawnEnd.x;
-  pawn.y = play.pawnEnd.y;
-
+  if(this.currentState == states.FIRST_MOVE){
+    pawn.x = play.end1.x;
+    pawn.y = play.end1.y;
+  }else{
+    pawn.x = play.end2.x;
+    pawn.y = play.end2.y;
+  }
   //este set depois deve ser uma animacao
   this.setPawnPos(pawn);
 
 };
 
-PlayingState.prototype.animateWall = function (){
+PlayingState.prototype.animateWall = function (placeWall){
   var play = this.plays[this.currentPlayId];
 
   var wallx=play.wallCoords.x;
   var wally=play.wallCoords.y;
 
+  var piece;
+
+  if(!placeWall)
+    piece=null;
+  else if(play.wallOrientation == "h")
+    piece=this.blueWall;
+  else if(play.wallOrientation == "v")
+    piece=this.greenWall;
+
   //need to animate this
   if(play.wallOrientation == "h"){
-    this.board.elements[wallx][wally].setPiece(this.blueWall);
-    this.board.elements[wallx+1][wally].setPiece(this.blueWall);
-    this.board.elements[wallx+2][wally].setPiece(this.blueWall);
-  }else{
-    this.board.elements[wallx][wally].setPiece(this.greenWall);
-    this.board.elements[wallx][wally+1].setPiece(this.greenWall);
-    this.board.elements[wallx][wally+2].setPiece(this.greenWall);
+    this.board.elements[wallx][wally].setPiece(piece);
+    this.board.elements[wallx+1][wally].setPiece(piece);
+    this.board.elements[wallx+2][wally].setPiece(piece);
+  }else if(play.wallOrientation == "v"){
+    this.board.elements[wallx][wally].setPiece(piece);
+    this.board.elements[wallx][wally+1].setPiece(piece);
+    this.board.elements[wallx][wally+2].setPiece(piece);
   }
 
 };
@@ -429,10 +499,10 @@ PlayingState.prototype.picking = function (){
             case states.SELECT_WALL:
               this.wallSelected=obj;
 
-              if(obj.piece === null){
+              if(Id === 10000){//botao
                 this.currentState=states.CHANGE_PLAYER;
-                this.wallSelected.select();
                 this.handleWallPicking(false);
+                obj.select();
               }
               else
                 this.currentState=states.SELECT_WALL_TILE;
@@ -440,16 +510,29 @@ PlayingState.prototype.picking = function (){
               this.handleState();
               break;
             case states.SELECT_WALL_TILE:
-              if(obj.piece instanceof Wall && obj.piece.type !== this.wallSelected.piece.type){
+            if(Id === 10000){//botao
+              this.currentState=states.CHANGE_PLAYER;
+              this.handleWallTilesPicking(false);
+              this.wallSelected.select();
+              obj.select();
+              this.handleWallPicking(false);
+              this.handleState();
+            }else if(obj.piece instanceof Wall && obj.piece.type !== this.wallSelected.piece.type){
                 this.wallSelected.select();
                 this.wallSelected=obj;
-              }else{
-                this.wallTileSelected=obj;
-                this.tryPlaceWall();
+            }else{
+              this.wallTileSelected=obj;
+              this.tryPlaceWall();
 
-              }
+            }
 
               break;
+            case states.CHANGE_PLAYER:
+                this.handleNextButon(false);
+                obj.select();
+                this.prepareForNextRound(this);
+                this.changePlayer();
+                break;
             default:
 
           }
@@ -500,14 +583,18 @@ PlayingState.prototype.tryMove = function (){
     }else{//passar ao estado de animacao e atualizar variaveis
       var pawn = state.pawnPieceSelected;
       var oldPos = new Point2(pawn.x,pawn.y);
+      var play=state.plays[state.currentPlayId];
 
-      state.plays[state.currentPlayId].setPlayerData(oldPos, newPos,pawn.identifier,pawn.type);
 
 
-      if(state.currentState == states.SELECT_TILE)
+
+      if(state.currentState == states.SELECT_TILE){
         state.currentState=states.FIRST_MOVE;
-      else
+        play.setPlayerData1(oldPos, newPos, pawn);
+      }else{
         state.currentState=states.SECOND_MOVE;
+        play.setPlayerData2(oldPos, newPos);
+      }
 
       state.handleState();
     }

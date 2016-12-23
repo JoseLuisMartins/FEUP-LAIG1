@@ -187,7 +187,7 @@ XMLscene.prototype.display = function () {
 
     this.updateLights();
 
-    //this.blockade.display();
+    this.blockade.display();
 
     if (this.graph.displayGraph())
       return;

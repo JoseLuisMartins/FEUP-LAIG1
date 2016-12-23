@@ -49,5 +49,11 @@ MyInterface.prototype.processKeyDown = function(event) {
         case (109): //M
             this.scene.updateMaterial();
             break;
+        case (90):
+        case (122): //z
+            this.scene.blockade.undo();
+            break;
+
+
     }
 };

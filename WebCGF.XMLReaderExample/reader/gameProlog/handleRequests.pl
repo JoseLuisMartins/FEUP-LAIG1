@@ -74,6 +74,19 @@ parse_input(changePlayer,"c"):-
 parse_input(hasWalls(P),[HorWalls,VerWalls]):-
   wallNumber(P,HorWalls,VerWalls).
 
+parse_input(undo(Identifier,PawnX,PawnY,WallX,WallY,v),Res):-
+  retract(position(Identifier, Oldx, Oldy)),
+  retract(board(Board)),
+  emptyPosition(Oldx,Oldy,Board,AuxBoard),
+	assert(position(Identifier, PawnX, PawnY)),
+  retract(wallNumber(Player, H, V)),
+	Nw is V - 1,
+	assert(wallNumber(Player, H, Nv)),
+  setBoardCell(WallX, WallY, [vertical, empty], AuxBoard, AuxAuxBoard),
+	NWallY is Y + 2,
+	setBoardCell(WallX, NWallY, [vertical, empty], AuxAuxBoard, NewBoard),
+  assert(board(NewBoard)).
+
 
 parse_input(checkEnd,Res):-
   checkEnd,

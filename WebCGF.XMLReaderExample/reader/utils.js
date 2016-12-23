@@ -133,13 +133,23 @@ class  LinearAnimationInfo {
 class Play{
 	constructor(id) {
 		this.id=id;
+		this.end1=null;
+		this.pawn=null;
+		this.start2=null;
+		this.end2=null;
+		this.wallCoords=null;
+		this.wallOrientation=null;
   }
 
-	setPlayerData(pawnStart,pawnEnd,pawnIdentifier,pawnType){
-		this.pawnStart=pawnStart;
-		this.pawnEnd=pawnEnd;
-		this.pawnidentifier=pawnIdentifier;
-		this.pawnType=pawnType;
+	setPlayerData1(start1,end1,pawn){
+		this.start1=start1;
+		this.end1=end1;
+		this.pawn=pawn;
+	}
+
+	setPlayerData2(start2,end2){
+		this.start2=start2;
+		this.end2=end2;
 	}
 
 	setWallData(wallCoords,wallOrientation){

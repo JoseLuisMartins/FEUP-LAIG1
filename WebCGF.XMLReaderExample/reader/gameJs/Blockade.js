@@ -1,7 +1,6 @@
 var mode={
   HUMAN_VS_HUMAN: 1,
   HUMAN_VS_BOT: 2,
-  BOT_VS_BOT: 3,
 };
 
 var difficulty={
@@ -16,6 +15,7 @@ function Blockade(scene,gameMode){
 
   this.client = new Client();
   this.board = new Board(scene);
+  this.state=null;
 
   var WallBoardTex=new CGFtexture(scene, "resources\\images\\boardTex2.jpg");
   this.WallBoardOrange = new WallBoard(scene,WallBoardTex);
@@ -23,7 +23,7 @@ function Blockade(scene,gameMode){
 
   this.prologBoard=null;
 
-  this.gameMode=mode.HUMAN_VS_BOT;
+  this.gameMode=mode.HUMAN_VS_HUMAN;
   this.gameDifficulty=difficulty.HARD;
 
   this.init();
@@ -37,7 +37,7 @@ Blockade.prototype.init = function (){
   this.orange2 = new Pawn(this.scene,"resources\\images\\abstractorange.jpg","[orange,2]","orange");
   this.yellow1 = new Pawn(this.scene,"resources\\images\\boardTex.png","[yellow,1]","yellow");
   this.yellow2 = new Pawn(this.scene,"resources\\images\\boardTex.png","[yellow,2]","yellow");
-  this.state=null;
+
   this.waiting=0;
 
   this.initPrologGraph();
@@ -122,6 +122,14 @@ Blockade.prototype.goToPlaystate = function (){
 
 };
 
+Blockade.prototype.undo = function (){
+
+    if(this.state instanceof PlayingState)
+      this.state.undo();
+
+
+
+};
 
 Blockade.prototype.setPawnPos = function (pawn){
   this.board.elements[pawn.x][pawn.y].setPiece(pawn);

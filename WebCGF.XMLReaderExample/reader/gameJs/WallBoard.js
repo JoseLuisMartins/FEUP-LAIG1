@@ -20,7 +20,7 @@ function WallBoard(scene,texture) {
   this.base = new Cube(scene);
 
 	//button
-	this.button = new  BoardElement(scene,10000,elementNormalTex,elementSelectableTex,buttonTex,0,0);
+	this.button = new  BoardElement(scene,10000,elementNormalTex,elementSelectedTex,buttonTex,0,0);
   //green Walls - Vertically
   this.greenWall =  new  BoardElement(scene,10001,elementNormalTex,elementSelectedTex,elementSelectableTex,0,0);
   this.greenWall.setPiece(new Wall(scene,greenTex,"v"));
