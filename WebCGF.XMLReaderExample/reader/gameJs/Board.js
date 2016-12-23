@@ -23,6 +23,7 @@ function Board(scene) {
       	this.elements[j][i] = new  BoardElement(scene,id++,elementBaseTex,elementSelectedTex,elementSelectableTex,j,i);
 			else if(j % 2 == 1 || i % 2 == 1){//walls
 				this.elements[j][i] = new  BoardElement(scene,id++,elementWallBaseTex,elementSelectedTex,elementSelectableTex,j,i);
+				this.elements[j][i].setWall(true);
 				this.wallTiles.push(this.elements[j][i]);
 			}
 			else
@@ -41,14 +42,14 @@ Board.prototype.display = function() {
 
   this.scene.pushMatrix();
 
-	this.scene.translate(-5,0,5);
+	this.scene.translate(-7,0,6);
 	this.scene.rotate(-Math.PI/2,1,0,0);
-	this.scene.scale(0.4,0.4,0.4);
+	this.scene.scale(0.8,0.8,0.8);
 
   for (var i = 0; i < 27; i++) {
     for (var j = 0; j < 21; j++) {
       this.scene.pushMatrix();
-        this.scene.translate(j,i,0);
+        this.scene.translate(j*0.6,i*0.6,0);
         this.elements[j][i].display();
       this.scene.popMatrix();
     }

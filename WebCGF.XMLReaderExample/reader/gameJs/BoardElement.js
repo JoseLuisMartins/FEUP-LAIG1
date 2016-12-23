@@ -10,6 +10,7 @@ function BoardElement(scene,id, textureNormal,textureSelected,textureSelectable,
 	this.piece = null;
 	this.selected=false;
 	this.selectable=false;
+	this.isWall=false;
 	this.x=x;
 	this.y=y;
 
@@ -45,6 +46,16 @@ BoardElement.prototype.display = function() {
 
 
 
+
+		if(this.isWall)
+			if(this.x % 2 == 1)
+				if(this.y % 2 == 1)
+					this.scene.scale(0.2,1,0.2);
+				else
+					this.scene.scale(0.2,1,1);
+			else
+				this.scene.scale(1,0.2,1);
+
 		this.body.display();
 
 		if(this.selectable)//so that further objects dont have the same pick id
@@ -65,4 +76,8 @@ BoardElement.prototype.select = function() {
 
 BoardElement.prototype.handleSelection = function(enable) {
 	this.selectable = enable;
+};
+
+BoardElement.prototype.setWall = function(enable) {
+	this.isWall = enable;
 };

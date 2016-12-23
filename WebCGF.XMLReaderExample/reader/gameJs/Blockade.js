@@ -24,7 +24,7 @@ function Blockade(scene,gameMode){
   this.prologBoard=null;
 
   this.gameMode=mode.HUMAN_VS_BOT;
-  this.gameDifficulty=difficulty.EASY;
+  this.gameDifficulty=difficulty.HARD;
 
   this.init();
 }
