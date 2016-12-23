@@ -5,13 +5,18 @@
 function Studio(scene) {
 	CGFobject.call(this, scene);
 
-    this.studio = new CylinderTwoSided(scene, 50, 50, 40, 40, 40);
+    this.studio = new CylinderTwoSided(scene, 80, 80, 80, 40, 40);
     this.studioApperance = new CGFappearance(scene);
-    this.studioApperance.setAmbient(1, 0, 0, 1);
+    this.studioApperance.loadTexture("resources\\images\\rocket_top.jpg");
+    this.studioApperance.setAmbient(1, 1, 1, 1);
+    this.studioApperance.setDiffuse(1, 1, 1, 0.5);
 
-    this.floor = new Cylinder(scene, 50, 40, 10, 40, 40);
+    this.floor = new Cylinder(scene, 80, 60, 10, 40, 40);
     this.floorApperance = new CGFappearance(scene);
     this.floorApperance.setAmbient(0, 0, 0, 1);
+    this.floorApperance.setDiffuse(0, 0, 0.7, 1);
+    this.floorApperance.setSpecular(1, 1, 1, 0.4);
+
 
     this.table = new DebateTable(scene);
     this.chair = new Chair(scene, false);
@@ -66,7 +71,7 @@ Studio.prototype.display = function() {
     this.scene.popMatrix();
 
     this.studioApperance.apply();
-	//this.studio.display();
+	this.studio.display();
 
     this.floorApperance.apply();
     this.floor.display();

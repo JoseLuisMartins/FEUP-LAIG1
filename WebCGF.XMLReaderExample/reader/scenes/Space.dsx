@@ -126,24 +126,12 @@
         <!-- objetos respetivos podem a violar esta regra.         -->
         <!-- Nao necessario aplicar fatores de escala em  -->
         <!-- quadricas (esfera, ciclindro...) -->
-        <texture id="boardTex" file="resources\\images\\boardTex.png" length_s="1.0" length_t="1.0" />
-        <texture id="boardTex2" file="resources\\images\\boardTex2.jpg" length_s="1.0" length_t="1.0" />
         <texture id="earthTex" file="resources\\images\\earth.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="jupiterTex" file="resources\\images\\jupiter.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="neptuneTex" file="resources\\images\\neptune.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="saturnTex" file="resources\\images\\saturn.png" length_s="1.0" length_t="1.0" />
-        <texture id="marsTex" file="resources\\images\\mars.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="eye" file="resources\\images\\eye.png" length_s="1" length_t="1" />
-        <texture id="robot_skin" file="resources\\images\\robotSkin.jpg" length_s="1.0" length_t="1.0" />
         <texture id="black" file="resources\\images\\black.jpg" length_s="1.0" length_t="1.0" />
         <texture id="abstract_orange" file="resources\\images\\abstractorange.jpg" length_s="1.0" length_t="1.0" />
         <texture id="space" file="resources\\images\\space.png" length_s="1" length_t="1" />
-        <texture id="saturnRingTex" file="resources\\images\\SaturnRing.png" length_s="1.0" length_t="1.0" />
         <texture id="flameTex" file="resources\\images\\flame.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="sunTex" file="resources\\images\\sun.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="venusTex" file="resources\\images\\venus.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="mercuryTex" file="resources\\images\\mercury.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="uranusTex" file="resources\\images\\uranus.png" length_s="1.0" length_t="1.0" />
+        <texture id="chairTex" file="resources\\images\\wood.jpg" length_s="1" length_t="1" />
     </textures>
 
 
@@ -243,6 +231,10 @@
             <sphere radius="0.5" coverage="360" slices="40" stacks="40" />
         </primitive>
 
+        <primitive id="planet_sphere">
+            <sphere radius="50" coverage="360" slices="40" stacks="40" />
+        </primitive>
+
         <primitive id="half_sphere">
             <sphere radius="0.5" coverage="180" slices="40" stacks="40" />
         </primitive>
@@ -303,6 +295,10 @@
         <primitive id="chair">
             <chair />
         </primitive>
+
+        <primitive id="space_station">
+            <space_station />
+        </primitive>
     </primitives>
 
 
@@ -345,18 +341,55 @@
 
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
-
-                <!-- deve existir uma ou mais tags "componentref" e/ou -->
-                <!-- "primitiveref", identificando outros -->
-                <!-- componentes ou primitivas -->
-
                 <componentref id="universe" />
+                <componentref id="earth" />
+                <componentref id="space_station" />
                 <componentref id="game_setup" />
                 <componentref id="rocket" />
+            </children>
+        </component>
+
+        <component id="earth">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="0" y="-70" z="-70" />
+                <rotate axis="x" angle="180" />
+            </transformation>
+
+            <materials>
+                <material id="inherit" />
+                <material id="inherit" />
+                <material id="m1" />
+            </materials>
+
+
+            <texture id="earthTex" />
+
+
+            <children>
+                <primitiveref id="planet_sphere" />
             </children>
 
         </component>
 
+        <component id="space_station">
+
+            <transformation>
+                <rotate axis="x" angle="-90" />
+            </transformation>
+
+            <materials>
+                <material id="inherit"  />
+            </materials>
+
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="space_station" />
+            </children>
+        </component>
 
         <component id="game_setup">
 
@@ -371,16 +404,14 @@
             </materials>
 
 
-            <texture id="earthTex" />
+            <texture id="black" />
 
             <children>
                 <componentref id="chair1" />
                 <componentref id="chair2" />
                 <primitiveref id="square_table" />
             </children>
-
         </component>
-
 
         <component id="chair1">
 
@@ -394,7 +425,7 @@
             </materials>
 
 
-            <texture id="black" />
+            <texture id="chairTex" />
 
             <children>
                 <primitiveref id="chair" />
@@ -413,7 +444,7 @@
             </materials>
 
 
-            <texture id="black" />
+            <texture id="chairTex" />
 
             <children>
                 <primitiveref id="chair" />

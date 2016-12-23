@@ -624,6 +624,15 @@ MySceneGraph.prototype.createPrimitive = function(primitiveName, primitiveTag) {
         case 'chair':
             primitive = new Chair(this.scene);
         break;
+        
+        case 'space_station':
+            primitive = new SpaceStation(this.scene);
+        break;
+
+        case 'studio':
+            primitive = new Studio(this.scene);
+        break;
+
 
         default:
             this.onXMLError("Error loading primitives (invalid primitive tag).");
