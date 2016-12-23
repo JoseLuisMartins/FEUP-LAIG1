@@ -13,8 +13,6 @@
 
 
 <dsx>
-
-
     <!-- deve definir-se um objeto para raiz do grafo , assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
     <scene root="root" axis_length="0.3" />
@@ -54,7 +52,6 @@
 
         <ambient r="0.5" g="0.5" b="0.5" a="0.8" />
         <background r="0.1" g="0.1" b="0.2" a="1" />
-
     </illumination>
 
 
@@ -85,7 +82,7 @@
             <specular r="0.5" g="0.5" b="0.5" a="0.5" />
         </spot>
 
-        <spot id="Sun Ray 2" enabled="0" angle="50" exponent="1">
+        <spot id="Sun Ray 2" enabled="1" angle="50" exponent="1">
             <!-- atencao, "target" e' diferente de "direction" -->
             <target x="-70" y="-5" z="0" />
             <location x="-70" y="1" z="0" w="1" />
@@ -94,7 +91,7 @@
             <specular r="0.5" g="1" b="0.5" a="0.5" />
         </spot>
 
-        <spot id="Sun Ray 3" enabled="0" angle="10" exponent="1">
+        <spot id="Sun Ray 3" enabled="1" angle="10" exponent="1">
             <!-- atencao, "target" e' diferente de "direction" -->
             <target x="-120" y="1" z="0" />
             <location x="-70" y="1" z="0" w="1" />
@@ -103,7 +100,7 @@
             <specular r="0.5" g="0.5" b="0.5" a="0.5" />
         </spot>
 
-        <spot id="Sun Ray 4" enabled="0" angle="20" exponent="1">
+        <spot id="Sun Ray 4" enabled="1" angle="20" exponent="1">
             <!-- atencao, "target" e' diferente de "direction" -->
             <target x="-70" y="5" z="0" />
             <location x="-70" y="1" z="0" w="1" />
@@ -117,37 +114,11 @@
 
 
     <textures>
-
-        <!-- Deve existir um ou mais blocos "texture" -->
-        <!-- Os identificadores "id" nao podem ser repetidos -->
-        <!-- length_s e length_t sao fatores de escala de textura:-->
-        <!-- Exemplo length_s=3.0: uma ocorrencia da textura, em -->
-        <!-- comprimento, deve cobrir um comprimento igual -->
-        <!-- a 3 unidades;  -->
-        <!-- Exemplo length_t=0.4, uma ocorrencia da textura, em -->
-        <!-- largura, deve cobrir uma largura igual a 0.4 unidades.  -->
-        <!-- Transf. Geometr. do tipo escalamento sobre os -->
-        <!-- objetos respetivos podem a violar esta regra.         -->
-        <!-- Nao necessario aplicar fatores de escala em  -->
-        <!-- quadricas (esfera, ciclindro...) -->
-        <texture id="boardTex" file="resources\\images\\boardTex.png" length_s="1.0" length_t="1.0" />
-        <texture id="boardTex2" file="resources\\images\\boardTex2.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="earthTex" file="resources\\images\\earth.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="jupiterTex" file="resources\\images\\jupiter.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="neptuneTex" file="resources\\images\\neptune.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="saturnTex" file="resources\\images\\saturn.png" length_s="1.0" length_t="1.0" />
-        <texture id="marsTex" file="resources\\images\\mars.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="eye" file="resources\\images\\eye.png" length_s="1" length_t="1" />
-        <texture id="robot_skin" file="resources\\images\\robotSkin.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="black" file="resources\\images\\black.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="abstract_orange" file="resources\\images\\abstractorange.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="space" file="resources\\images\\space.png" length_s="1" length_t="1" />
-        <texture id="saturnRingTex" file="resources\\images\\SaturnRing.png" length_s="1.0" length_t="1.0" />
-        <texture id="flameTex" file="resources\\images\\flame.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="sunTex" file="resources\\images\\sun.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="venusTex" file="resources\\images\\venus.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="mercuryTex" file="resources\\images\\mercury.jpg" length_s="1.0" length_t="1.0" />
-        <texture id="uranusTex" file="resources\\images\\uranus.png" length_s="1.0" length_t="1.0" />
+        <texture id="space" file="resources\\images\\sky.jpg" length_s="1" length_t="1" />
+        <texture id="waterTex" file="resources\\images\\water.jpg" length_s="0.1" length_t="0.1" />
+        <texture id="sandTex" file="resources\\images\\sand.jpg" length_s="1" length_t="1" />
+        <texture id="woodTex" file="resources\\images\\wood.jpg" length_s="1" length_t="1" />
+        <texture id="redWhiteTex" file="resources\\images\\red_white_stripes.jpg" length_s="1" length_t="1" />
     </textures>
 
 
@@ -366,23 +337,6 @@
             </patch>
         </primitive>
 
-        <primitive id="chessboard1">
-            <chessboard du="3" dv="7" textureref="boardTex" su="2" sv="6">
-                    <c1 r="0" g="0.4" b="0.2" a="1.0" />
-                    <c2 r="0.7" g="0.6" b="0.0" a="1.0" />
-                    <cs r="1.0" g="0.0" b="1.0" a="1.0" />
-            </chessboard>
-        </primitive>
-
-        <primitive id="chessboard2">
-            <chessboard du="7" dv="3" textureref="boardTex2" su="6" sv="2">
-                    <c1 r="1.0" g="0.4" b="0.2" a="1.0" />
-                    <c2 r="0.1" g="0.6" b="0.5" a="1.0" />
-                    <cs r="0.5" g="1.0" b="1.0" a="1.0" />
-            </chessboard>
-        </primitive>
-
-
         <primitive id="vehicle">
             <vehicle />
         </primitive>
@@ -442,7 +396,7 @@
             <!-- id="none" remove a textura recebida do pai -->
             <!-- a textura declarada sobrepoe a textura recebida do -->
             <!-- objecto "pai" -->
-            <texture id="abstract_orange" />
+            <texture id="none" />
 
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
@@ -451,12 +405,10 @@
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
 
-                
-
                 <componentref id="beach" />
                 <componentref id="universe" />
-                <componentref id="sun" />
                 <componentref id="umbrella" />
+                <componentref id="buoy" />
             </children>
 
         </component>
@@ -474,7 +426,7 @@
             </materials>
 
 
-            <texture id="marsTex" />
+            <texture id="sandTex" />
 
             <children>
                 <primitiveref id="half_sphere" />
@@ -497,10 +449,31 @@
             </materials>
 
 
-            <texture id="earthTex" />
+            <texture id="none" />
 
             <children>
                 <primitiveref id="sun_umbrella" />
+            </children>
+
+        </component>
+
+        <component id="buoy">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+                <translate x="-2" y="3" z="4" />
+                <rotate axis="x" angle="95" />
+            </transformation>
+
+            <materials>
+                <material id="inherit"  />
+            </materials>
+
+
+            <texture id="redWhiteTex" />
+
+            <children>
+                <primitiveref id="torus" />
             </children>
 
         </component>
@@ -519,7 +492,7 @@
             </materials>
 
 
-            <texture id="earthTex" />
+            <texture id="none" />
 
             <children>
                 <componentref id="chairs" />
@@ -540,7 +513,7 @@
             </materials>
 
 
-            <texture id="earthTex" />
+            <texture id="woodTex" />
 
             <children>
                 <componentref id="chair1" />
@@ -561,7 +534,7 @@
             </materials>
 
 
-            <texture id="earthTex" />
+            <texture id="inherit" />
 
             <children>
                 <componentref id="chair_leg1" />
@@ -585,7 +558,7 @@
             </materials>
 
 
-            <texture id="earthTex" />
+            <texture id="inherit" />
 
             <children>
                 <componentref id="chair_leg1" />
@@ -610,7 +583,7 @@
             </materials>
 
 
-            <texture id="earthTex" />
+            <texture id="inherit" />
 
             <children>
                 <componentref id="chair_stripe1" />
@@ -632,7 +605,7 @@
             </materials>
 
 
-            <texture id="earthTex" />
+            <texture id="inherit" />
 
             <children>
                 <primitiveref id="cube" />
@@ -651,7 +624,7 @@
             </materials>
 
 
-            <texture id="earthTex" />
+            <texture id="inherit" />
 
             <children>
                 <primitiveref id="cube" />
@@ -670,7 +643,7 @@
             </materials>
 
 
-            <texture id="earthTex" />
+            <texture id="inherit" />
 
             <children>
                 <primitiveref id="cube" />
@@ -690,7 +663,7 @@
             </materials>
 
 
-            <texture id="earthTex" />
+            <texture id="inherit" />
 
             <children>
                 <primitiveref id="cube" />
@@ -711,7 +684,7 @@
             </materials>
 
 
-            <texture id="earthTex" />
+            <texture id="inherit" />
 
             <children>
                 <primitiveref id="cube" />
@@ -730,7 +703,7 @@
             </materials>
 
 
-            <texture id="earthTex" />
+            <texture id="inherit" />
 
             <children>
                 <primitiveref id="cube" />
@@ -749,7 +722,7 @@
             </materials>
 
 
-            <texture id="earthTex" />
+            <texture id="inherit" />
 
             <children>
                 <primitiveref id="cube" />
@@ -768,7 +741,7 @@
             </materials>
 
 
-            <texture id="earthTex" />
+            <texture id="inherit" />
 
             <children>
                 <primitiveref id="cube" />
@@ -787,7 +760,7 @@
             </materials>
 
 
-            <texture id="earthTex" />
+            <texture id="inherit" />
 
             <children>
                 <primitiveref id="cube" />
@@ -842,7 +815,7 @@
             </materials>
 
 
-            <texture id="inherit" />
+            <texture id="waterTex" />
 
 
             <children>
@@ -977,35 +950,6 @@
 
             <children>
                 <primitiveref id="rectangle" />
-            </children>
-
-        </component>
-
-
-        <component id="sun">
-
-            <!-- bloco "transformation" obrigatorio -->
-            <transformation>
-                <translate x="-10" y="20" z="-30" />
-                <scale x="2" y="2" z="2" />
-            </transformation>
-
-            <!-- bloco opcional -->
-
-
-            <materials>
-                <material id="inherit" />
-                <material id="inherit" />
-                <material id="m1" />
-            </materials>
-
-
-
-            <texture id="sunTex" />
-
-
-            <children>
-                <primitiveref id="sphere" />
             </children>
 
         </component>

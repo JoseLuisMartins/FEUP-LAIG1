@@ -2,15 +2,10 @@
 * Chair
 * @constructor
 */
-function Chair(scene, float) {
+function Chair(scene) {
 	CGFobject.call(this, scene);
-    this.float = float;
 
     this.obj = new Cube(scene);
-
-    if (this.float) {
-        this.propellant = new Propellant(scene);
-    }
 }
 
 Chair.prototype = Object.create(CGFobject.prototype);
@@ -82,38 +77,4 @@ Chair.prototype.display = function() {
             this.obj.display();
         this.scene.popMatrix();
     this.scene.popMatrix();
-
-
-    if (this.float) {
-        this.scene.pushMatrix();
-            this.scene.translate(-0.5, -0.47, -0.8);
-            this.scene.scale(0.08, 0.08, 0.2);
-            this.propellant.display();
-	    this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-            this.scene.translate(0.5, -0.47, -0.8);
-            this.scene.scale(0.08, 0.08, 0.2);
-            this.propellant.display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-            this.scene.translate(-0.5, 0.53, -0.8);
-            this.scene.scale(0.08, 0.08, 0.2);
-            this.propellant.display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-            this.scene.translate(0.5, 0.53, -0.8);
-            this.scene.scale(0.08, 0.08, 0.2);
-            this.propellant.display();
-        this.scene.popMatrix();
-    }
-};
-
-
-Chair.prototype.update = function(currrTime) {
-    if (this.float) {
-        this.propellant.update();
-    }
 };
