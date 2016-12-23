@@ -21,7 +21,6 @@ playHuman(Player, Board, NewBoard) :-
 %make a play bot side
 %playBot(+L,+Player, +Board, -NewBoard)
 playBot(L, Player,Board,NewBoard,Id,Px,Py,O,Wx,Wy):-
-	format('--------------Its Bot ~s turn----------- ~n',[Player]),
 	moveBot(L, Player, Board, AuxBoard,Id),
 	position([Player, Id], Px, Py),
 	handleWallBot(L, Player, AuxBoard, NewBoard,O,Wx,Wy).

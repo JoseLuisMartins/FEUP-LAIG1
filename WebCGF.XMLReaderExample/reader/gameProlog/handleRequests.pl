@@ -82,21 +82,6 @@ parse_input(checkEnd,Res):-
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 parse_input(test(C,N), Res) :- test(C,Res,N).
 
 

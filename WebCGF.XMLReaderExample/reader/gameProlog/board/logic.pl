@@ -55,7 +55,7 @@ validPosition(Pawn, Board, X, Y,Nx,Ny) :-
       noWallBlocking(Pawn, Board, X, Y)) ;
     ((Elem = [orange, 1] ; Elem = [orange, 2] ; Elem = [yellow, 1];Elem = [yellow, 2] ),
       noWallBlocking(Pawn, Board, X, Y),
-      checkJumpOver(Pawn,X,Y,Nx,Ny),
+      checkJumpOver(Board,Pawn,X,Y,Nx,Ny),
       Aux1 is Nx + X,
       Aux2 is Ny + Y, !,
       noWallBlocking(Pawn, Board, Aux1, Aux2))
@@ -75,11 +75,14 @@ noWallBlocking(Pawn, Board, X, Y) :-
 
 %checks if it's possible to jump over the other player
 %checkJumpOver(+Pawn,+X,+Y,-Nx,-Ny)
-checkJumpOver(Pawn,X,Y,Nx,Ny) :-
+checkJumpOver(Board,Pawn,X,Y,Nx,Ny) :-
     Nx is X + X,
     Ny is Y + Y,
     targetCoords(Pawn, Nx,Ny, Tx,Ty),
-  	inBounds(Tx, Ty).
+  	inBounds(Tx, Ty),%alterado por causa de 3 peoes consecutivos
+    elementCoords(Board, Tx, Ty, Elem),
+    (Elem = square ; Elem = [orange, base] ; Elem = [yellow, base]).
+
 
 %check's if the player is in the board bounds
 %inBounds(+Tx, +Ty)
