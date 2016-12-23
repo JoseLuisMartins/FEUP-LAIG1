@@ -7,7 +7,7 @@
 function MyInterface() {
     //call CGFinterface constructor
     CGFinterface.call(this);
-};
+}
 
 MyInterface.prototype = Object.create(CGFinterface.prototype);
 MyInterface.prototype.constructor = MyInterface;
@@ -34,7 +34,7 @@ MyInterface.prototype.addLight = function(type, i, name) {
     else
         this.spot.add(this.scene.lightsStatus, i, this.scene.lightsStatus[i]).name(name);
 
-}
+};
 
 
 MyInterface.prototype.processKeyDown = function(event) {
@@ -49,5 +49,5 @@ MyInterface.prototype.processKeyDown = function(event) {
         case (109): //M
             this.scene.updateMaterial();
             break;
-    };
+    }
 };

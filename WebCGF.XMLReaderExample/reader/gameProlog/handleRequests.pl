@@ -58,10 +58,12 @@ parse_input(botPlay(Player,Difficulty),[Id,Px,Py,O,Wx,Wy]):-
   retract(board(Board)),
   playBot(Difficulty,Player,Board,NewBoard,Id,Px,Py,Or,Wx,Wy),
   getOrientationInteger(Or,O),
-  assert(board(NewBoard)).
+  assert(board(NewBoard)),
+  displayBoard(NewBoard).
 
 getOrientationInteger(h,0).
 getOrientationInteger(v,1).
+getOrientationInteger(-1,-1).
 
 parse_input([Type,Id],[X,Y]):- position([Type, Id], X, Y).
 

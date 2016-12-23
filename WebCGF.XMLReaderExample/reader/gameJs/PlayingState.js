@@ -79,7 +79,8 @@ PlayingState.prototype.handleState = function (){
           this.handlePiecePicking(true);
       break;
     case states.SELECT_TILE:
-          this.handleTilesPicking(true);
+          if(this.pawnPieceSelected !==null)
+            this.handleTilesPicking(true);
       break;
     case states.FIRST_MOVE:
           this.handleMovement();
@@ -231,8 +232,10 @@ PlayingState.prototype.playBot = function (){
       var wallOrientation;
       if(botPlay[3] === 0)
         wallOrientation="h";
-      else
+      else if( botPlay[3] == 1)
         wallOrientation="v";
+      else //nao foi possivel posicionar parede
+          wallOrientation="x";
 
 
       var wallX = botPlay[4];
@@ -257,7 +260,9 @@ PlayingState.prototype.playBot = function (){
       //make the play
       state.pawnPieceSelected=currentPawn;
       state.animatePawn();
-      state.animateWall();
+
+      if(wallOrientation != "x")//se foi possivel posicionar uma parede
+        state.animateWall();
 
       //next state
       state.prepareForNextRound(state);// tambem é valido para bot vs bot
@@ -409,7 +414,7 @@ PlayingState.prototype.picking = function (){
                   this.pawnTileSelected.select();
                   this.handleTilesPicking(false);//disable das tiles do peao antigo
                   this.pawnTileSelected=obj;
-                  this.pawnPieceSelected=this.pawnTileSelected.piece;
+                  this.pawnPieceSelected=obj.piece;
                   this.handleState();
                 }else{//selecionou uma tile
                   this.tileSelected = obj;
