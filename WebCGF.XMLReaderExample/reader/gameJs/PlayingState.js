@@ -22,7 +22,7 @@ var mode={
 
 
 
-function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1,orange2,yellow1,yellow2,mode){
+function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1,orange2,yellow1,yellow2,gameMode,gameDifficulty){
 
   this.scene=scene;
   //game
@@ -39,9 +39,10 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
   this.tileSelected= null;
   this.wallSelected= null;
   this.wallTileSelected= null;
-  this.mode = mode;
-  console.log("modeeeeeeeeeeeeeeee");
-console.log(this.mode);
+  this.mode = gameMode;
+  this.gameDifficulty=gameDifficulty;
+  this.gameEnded=false;
+
   //pawns
   this.orange1=orange1;
   this.orange2=orange2;
@@ -61,13 +62,14 @@ console.log(this.mode);
   //game story
   this.currentPlayId=0;
   this.plays={};
-
   //começar o jogo - VER MODO E DIFICULDADE DEPOIS
   this.handleState();
 }
 
 
 PlayingState.prototype.constructor=PlayingState;
+
+
 
 PlayingState.prototype.handleState = function (){
   switch (this.currentState) {
@@ -114,16 +116,7 @@ PlayingState.prototype.handleState = function (){
           this.handleState();
       break;
     case states.CHANGE_PLAYER://animaçao da camera
-          //proximo jogador js
-          if(this.currentPlayer==players.ORANGE)
-            this.currentPlayer=players.YELLOW;
-          else
-            this.currentPlayer=players.ORANGE;
-
-          this.resetVariables();
-          //passar para a proxima jogada
-          this.currentPlayId++;
-          //proximo jogador prolog
+          this.prepareForNextRound(this);
           this.changePlayer();
 
       break;
@@ -132,8 +125,18 @@ PlayingState.prototype.handleState = function (){
   }
 };
 
+PlayingState.prototype.prepareForNextRound = function (context){
+  //proximo jogador js
+  if(context.currentPlayer==players.ORANGE)
+    context.currentPlayer=players.YELLOW;
+  else
+    context.currentPlayer=players.ORANGE;
 
-
+  context.resetVariables();
+  //passar para a proxima jogada
+  context.currentPlayId++;
+  //proximo jogador prolog
+};
 
 PlayingState.prototype.resetVariables = function (){
   this.pawnTileSelected= null;
@@ -159,7 +162,9 @@ PlayingState.prototype.handleMovement = function (){
 PlayingState.prototype.checkEnd = function (){
   this.client.getPrologRequest("checkEnd", function(data) {
       var Resdata = JSON.parse(data.target.responseText);
-      console.log(Resdata);
+      console.log("Jogo terminou: " + Resdata);
+      if(Resdata == 1)
+        this.gameEnded=true;
   });
 };
 
@@ -173,9 +178,9 @@ PlayingState.prototype.changePlayer = function (enable){
       //proximo estado
       if(state.mode == mode.HUMAN_VS_BOT){// player vs bot
         state.playBot();
-      }else{
-      state.currentState=states.SELECT_PIECE;
-      state.handleState();
+      }else if(mode.HUMAN_VS_HUMAN){
+        state.currentState=states.SELECT_PIECE;
+        state.handleState();
       }
     }
 
@@ -191,7 +196,7 @@ PlayingState.prototype.playBot = function (){
     else
       pawnType = "yellow";
 
-    this.client.getPrologRequest("botPlay(" + pawnType + ")",handleBotPlayRequest);
+    this.client.getPrologRequest("botPlay(" + pawnType + "," + this.gameDifficulty + ")",handleBotPlayRequest);
 
 
     function handleBotPlayRequest(data){
@@ -255,11 +260,13 @@ PlayingState.prototype.playBot = function (){
       state.animateWall();
 
       //next state
-      if(state.mode == mode.HUMAN_VS_BOT){// player vs bot
-        state.currentPlayer= players.ORANGE;
+      state.prepareForNextRound(state);// tambem é valido para bot vs bot
+
+      if(state.mode == mode.HUMAN_VS_BOT){// player vs bot, voltar á maquina de estados
         state.currentState=states.SELECT_PIECE;
         state.handleState();
-      }//falta ver o bot contra bot
+      }
+
 
     }
 

@@ -61,7 +61,6 @@ validPosition(Pawn, Board, X, Y,Nx,Ny) :-
   ).
 
 validPosition(_, _, _, _,_,_) :-
-	displayLog('---- You can \'t move to that position. ----'),
 	fail.
 
 %checks if there is no wall blocking the position to where the Pawn is trying to move
@@ -91,13 +90,11 @@ inBounds(Tx, Ty) :-
 
 placeWall(Player, _, _, 'h', _, _) :-
 	wallNumber(Player, 0, _), !,
-	displayLog('---- You\'re out of horizontal walls ----'),
 	fail.
 
 
 placeWall(Player, _, _, 'v', _, _) :-
 	wallNumber(Player, _, 0), !,
-	displayLog('---- You\'re out of vertical walls ----'),
 	fail.
 
 %check if it's possible to place a wall and if it is place it creating a NewBoard
@@ -151,7 +148,6 @@ playerHasPath(_, _, _, Cost1, Cost2, Cost3, Cost4, Cost5, Cost6, Cost7, Cost8) :
 
 playerHasPath(X, Y, O, _, _, _, _, _, _, _, _) :-
   manageEdges(add, X, Y, O),
-  displayLog('You can\'t fully block a player'),
   fail.
 
 %manages the edges of the graph removing edges if a wall is placed so that the graph loses connectivity in that part
@@ -203,7 +199,6 @@ checkWallCoords(X, Y,'h',Board) :-
 
 
 checkWallCoords(_,_,_,_) :-
-	displayLog('---- Invalid wall coordenates ----'),
 	fail.
 
 
@@ -250,7 +245,6 @@ wallCoords(X,Y,Px,Py,Wx,Wy) :-
 %fails if the wall received is placed, suceeds if it is not
 %checkWallColision(+Wall)
 checkWallColision([_ | [placed | _ ]]) :-
-	displayLog('----There is a wall in the way you have to choose another path!----'),
 	fail.
 
 

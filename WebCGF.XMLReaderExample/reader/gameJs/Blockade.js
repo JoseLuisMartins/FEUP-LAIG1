@@ -4,6 +4,11 @@ var mode={
   BOT_VS_BOT: 3,
 };
 
+var difficulty={
+  HARD: 1,
+  EASY: 2,
+};
+
 
 function Blockade(scene,gameMode){
   this.scene=scene;
@@ -18,7 +23,8 @@ function Blockade(scene,gameMode){
 
   this.prologBoard=null;
 
-  this.mode=mode.HUMAN_VS_BOT;
+  this.gameMode=mode.HUMAN_VS_BOT;
+  this.gameDifficulty=difficulty.HARD;
 
   this.init();
 }
@@ -111,7 +117,8 @@ Blockade.prototype.updateAllPawnPositions = function ()
 
 Blockade.prototype.goToPlaystate = function (){
   if(this.waiting == 5)
-    this.state=new PlayingState(this.scene,this.client,this.board,this.WallBoardOrange,this.WallBoardYellow,this.orange1,this.orange2,this.yellow1,this.yellow2,this.mode);
+    this.state=new PlayingState(this.scene,this.client,this.board,this.WallBoardOrange,this.WallBoardYellow,
+      this.orange1,this.orange2,this.yellow1,this.yellow2,this.gameMode,this.gameDifficulty);
 
 };
 

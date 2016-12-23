@@ -56,8 +56,7 @@ moveOneSpaceHuman(Pawn,Board,NewBoard) :-
 	repeat, %verificar colisoes
 		once(getMovCoords(X,Y)),
 	validPosition(Pawn, Board, X, Y,Nx,Ny),
-	moveOneSpace(Pawn, Nx, Ny, Board, NewBoard),
-	displayBoard(NewBoard).
+	moveOneSpace(Pawn, Nx, Ny, Board, NewBoard).
 
 
 %move (Pc calculates the coords)
@@ -110,8 +109,8 @@ auxMoveBot(Player,N,Board,NewBoard) :-
 %moves one space receiving the coords
 %moveOneSpaceBot(+Pawn,+Coords,+Board,-NewBoard)
 moveOneSpaceBot(Pawn, [X,Y], Board,NewBoard) :-
-	moveOneSpace(Pawn, X, Y, Board, NewBoard),
-	displayBoard(NewBoard).
+	moveOneSpace(Pawn, X, Y, Board, NewBoard).
+
 
 
 %iterate's a wall list trying to place one of the walls in the list
@@ -132,8 +131,7 @@ moveOneSpaceRandom(Pawn, Board, NewBoard) :-
 	repeat,
 		randomMove(X, Y),
 	validPosition(Pawn, Board, X, Y,Nx,Ny),
-	moveOneSpace(Pawn, Nx, Ny, Board, NewBoard),
-	displayBoard(NewBoard).
+	moveOneSpace(Pawn, Nx, Ny, Board, NewBoard).
 
 %caculates a random offset (X,Y) to make a random move
 %randomMove(X, Y)
