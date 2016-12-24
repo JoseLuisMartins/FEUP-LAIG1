@@ -26,14 +26,16 @@ KeyframeAnimation.prototype.update = function(currTime) {
   if (!this.render)
     return;
 
+
+  if (this.timeElapsed >= this.switchTime) {
+      this.currentControlPoint++;
+      this.timeElapsed = 0;
+  }
+
   if (this.currentControlPoint == this.controlPoints.length - 1) {
     this.finished = true;
     this.render = false;
     return;
-  }
-  else if (this.timeElapsed >= this.switchTime) {
-      this.currentControlPoint++;
-      this.timeElapsed = 0;
   }
 
   if (this.lastCurrTime == -1) {
@@ -52,28 +54,28 @@ KeyframeAnimation.prototype.update = function(currTime) {
   h01 = this.h01(t);
   h11 = this.h11(t);
 
-  x = h00 * this.controlPoints[this.currentControlPoint].x + 
-      h10 * this.slopes[this.currentControlPoint] + 
-      h01 * this.controlPoints[this.currentControlPoint + 1].x + 
+  x = h00 * this.controlPoints[this.currentControlPoint].x +
+      h10 * this.slopes[this.currentControlPoint] +
+      h01 * this.controlPoints[this.currentControlPoint + 1].x +
       h11 * this.slopes[this.currentControlPoint + 1];
 
-  y = h00 * this.controlPoints[this.currentControlPoint].y + 
-      h10 * this.slopes[this.currentControlPoint] + 
-      h01 * this.controlPoints[this.currentControlPoint + 1].y + 
+  y = h00 * this.controlPoints[this.currentControlPoint].y +
+      h10 * this.slopes[this.currentControlPoint] +
+      h01 * this.controlPoints[this.currentControlPoint + 1].y +
       h11 * this.slopes[this.currentControlPoint + 1];
 
-  z = h00 * this.controlPoints[this.currentControlPoint].z + 
-      h10 * this.slopes[this.currentControlPoint] + 
-      h01 * this.controlPoints[this.currentControlPoint + 1].z + 
+  z = h00 * this.controlPoints[this.currentControlPoint].z +
+      h10 * this.slopes[this.currentControlPoint] +
+      h01 * this.controlPoints[this.currentControlPoint + 1].z +
       h11 * this.slopes[this.currentControlPoint + 1];
 
-  ax = h00 * this.angles[this.currentControlPoint].x + 
+  ax = h00 * this.angles[this.currentControlPoint].x +
        h01 * this.angles[this.currentControlPoint + 1].x;
 
-  ay = h00 * this.angles[this.currentControlPoint].y + 
+  ay = h00 * this.angles[this.currentControlPoint].y +
        h01 * this.angles[this.currentControlPoint + 1].y;
 
-  az = h00 * this.angles[this.currentControlPoint].z + 
+  az = h00 * this.angles[this.currentControlPoint].z +
        h01 * this.angles[this.currentControlPoint + 1].z;
 
   this.currentPosition.set(x, y, z);

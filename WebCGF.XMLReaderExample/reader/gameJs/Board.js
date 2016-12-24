@@ -42,9 +42,9 @@ Board.prototype.display = function() {
 
   this.scene.pushMatrix();
 
-	this.scene.translate(-7,0,6);
+	//this.scene.translate(0,0,0);
 	this.scene.rotate(-Math.PI/2,1,0,0);
-	this.scene.scale(0.8,0.8,0.8);
+	//this.scene.scale(0.8,0.8,0.8);
 
   for (var i = 0; i < 27; i++) {
     for (var j = 0; j < 21; j++) {

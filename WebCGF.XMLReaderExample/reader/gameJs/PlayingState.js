@@ -61,13 +61,59 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
   //game story
   this.currentPlayId=0;
   this.plays={};
-  //começar o jogo - VER MODO E DIFICULDADE DEPOIS
+
+  //animations
+  this.animating=false;
+  this.animation=null;
+  this.animationObject=null;
+
   this.handleState();
 }
 
 
 PlayingState.prototype.constructor=PlayingState;
 
+
+PlayingState.prototype.display = function (){
+  this.scene.pushMatrix();
+
+  this.board.display();
+
+  this.scene.pushMatrix();
+  this.scene.translate(0,0,2.5);
+  this.wallBoardOrange.display();
+  this.scene.popMatrix();
+
+  this.scene.pushMatrix();
+  this.scene.translate(10,0,-3);
+  this.scene.rotate(Math.PI,0,1,0);
+  this.wallBoardYellow.display();
+  this.scene.popMatrix();
+
+  this.scene.pushMatrix();
+  if(this.animating){
+    if(this.animation.finished)
+      this.animating=false;
+
+    var pos = this.animation.getCurrentPosition();
+    var ang = this.animation.getCurrentAngle();
+    this.scene.translate(pos.x, pos.y, pos.z);
+    this.scene.rotate(ang.x  - Math.PI/2, 1, 0, 0);
+    this.scene.rotate(ang.y, 0, 1, 0);
+    this.scene.rotate(ang.z, 0, 0, 1);
+    this.animationObject.display();
+  }
+  this.scene.popMatrix();
+
+
+  this.scene.popMatrix();
+
+};
+
+PlayingState.prototype.update = function (currtime){
+    if(this.animation !== null)
+      this.animation.update(currtime);
+};
 
 
 PlayingState.prototype.handleState = function (){
@@ -400,6 +446,10 @@ PlayingState.prototype.animatePawn = function (){
   var pawn = play.pawn;
   //limpar posicao atual do peao
   this.clearPawnPos(pawn);
+
+  var oldx=pawn.x*0.6;
+  var oldy=-pawn.y*0.6;
+
   //atualizar posicao do peao
   if(this.currentState == states.FIRST_MOVE){
     pawn.x = play.end1.x;
@@ -410,6 +460,30 @@ PlayingState.prototype.animatePawn = function (){
   }
   //este set depois deve ser uma animacao
   this.setPawnPos(pawn);
+
+
+  //animacao
+
+  var newx=pawn.x*0.6;
+  var newy=pawn.y*0.6;
+
+  this.animating=true;
+  this.animationObject=pawn;
+
+  var controlPoints= new Array(3);
+  controlPoints[0]= new Point3(oldx, 0 , oldy);
+  controlPoints[1]= new Point3(oldx + (newx-oldx)/2, 1, oldy + (-newy - oldy)/2);
+  controlPoints[2]= new Point3(newx , 0, - newy);
+
+  var slopes = [0,0,0];
+
+  var angles= new Array(3);
+  angles[0]= new Point3(0,0,0);
+  angles[1]= new Point3(0,0,0);
+  angles[2]= new Point3(0,0,0);
+
+  this.animation= new KeyframeAnimation("boas", 1, controlPoints, slopes, angles);
+  this.animation.render=true;
 
 };
 

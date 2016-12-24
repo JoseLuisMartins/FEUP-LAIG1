@@ -12,7 +12,7 @@ Client.prototype.constructor=Client;
 
 
 Client.prototype.getPrologRequest= function(requestString, onSuccess, onError, port){
-	var requestPort = port || 8081
+	var requestPort = port || 8081;
 	var request = new XMLHttpRequest();
 	request.open('GET', 'http://localhost:'+ requestPort + '/' + requestString, true);
 
@@ -21,4 +21,4 @@ Client.prototype.getPrologRequest= function(requestString, onSuccess, onError, p
 
 	request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 	request.send();
-}
+};

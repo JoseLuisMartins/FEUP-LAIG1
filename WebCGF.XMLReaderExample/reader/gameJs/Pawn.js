@@ -7,7 +7,7 @@ function Pawn(scene, texture, identifier,type) {
 
 	this.scene = scene;
 
-	this.body = new Cylinder(scene, 0.5, 0.1, 1, 20, 20);
+	this.body = new Cylinder(scene, 0.3, 0.1, 0.5, 20, 20);
 	this.head = new Sphere(scene, 0.2,360, 20, 20);
 
 	this.type = type;
@@ -26,7 +26,8 @@ Pawn.prototype.constructor = Pawn;
 Pawn.prototype.display = function() {
 
 	this.scene.pushMatrix();
-		this.material.apply();
+			this.material.apply();
+			this.scene.translate(0, 0, 0.5);
   		this.body.display();
 	this.scene.popMatrix();
 

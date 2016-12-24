@@ -40,7 +40,7 @@ MyInterface.prototype.addLight = function(type, i, name) {
 MyInterface.prototype.processKeyDown = function(event) {
 
 
-    switch (event.keyCode) {
+    switch (event.zkeyCode) {
         case (86):
         case (118): //V
             this.scene.updateView();

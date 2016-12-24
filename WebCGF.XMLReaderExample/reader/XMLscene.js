@@ -187,7 +187,7 @@ XMLscene.prototype.display = function () {
   // only get executed after the graph has loaded correctly.
   // This is one possible way to do it
 
-  /*
+
   if (this.graph.loadedOk)
   {
 
@@ -198,8 +198,8 @@ XMLscene.prototype.display = function () {
     if (this.graph.displayGraph())
       return;
   }
-  */
-  this.pushMatrix();
+
+/*  this.pushMatrix();
     var pos = this.anim.getCurrentPosition();
     var ang = this.anim.getCurrentAngle();
     this.translate(pos.x, pos.y, pos.z);
@@ -207,17 +207,21 @@ XMLscene.prototype.display = function () {
     this.rotate(ang.y, 0, 1, 0);
     this.rotate(ang.z, 0, 0, 1);
     this.obj.display();
-  this.popMatrix();
+  this.popMatrix();*/
 };
 
 
 
 XMLscene.prototype.update = function(currTime) {
+  this.blockade.update(currTime);
+
+
+
   if (this.graph.loadedOk){
     for(var id in this.graph.animations)
       this.graph.animations[id].update(currTime);
 
-    for(var id in this.graph.primitives)
+    for(id in this.graph.primitives)
       if(this.graph.primitives[id] instanceof Vehicle) {
          this.graph.primitives[id].update(currTime);
       }

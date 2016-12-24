@@ -52,24 +52,17 @@ Blockade.prototype.logPicking = function ()
 
 Blockade.prototype.display = function (){
 
-  this.scene.pushMatrix();
+  if(this.state !== null)
+    this.state.display();
 
-  this.board.display();
-
-  this.scene.pushMatrix();
-  this.scene.translate(0,0,2.5);
-  this.WallBoardOrange.display();
-  this.scene.popMatrix();
-
-  this.scene.pushMatrix();
-  this.scene.translate(10,0,-3);
-  this.scene.rotate(Math.PI,0,1,0);
-  this.WallBoardYellow.display();
-  this.scene.popMatrix();
-
-  this.scene.popMatrix();
 };
 
+Blockade.prototype.update = function (currtime){
+
+  if(this.state !== null)
+    this.state.update(currtime);
+
+};
 
 
 Blockade.prototype.updatePawnPosition = function(pawn){
