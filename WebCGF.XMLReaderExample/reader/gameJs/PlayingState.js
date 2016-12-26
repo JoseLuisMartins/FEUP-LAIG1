@@ -42,6 +42,7 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
   this.gameDifficulty=gameDifficulty;
   this.gameEnded=false;
 
+
   //pawns
   this.orange1=orange1;
   this.orange2=orange2;
@@ -80,20 +81,22 @@ PlayingState.prototype.display = function (){
   this.board.display();
 
   this.scene.pushMatrix();
-  this.scene.translate(0,0,2.5);
+  this.scene.translate(10,0,-4);
   this.wallBoardOrange.display();
   this.scene.popMatrix();
 
   this.scene.pushMatrix();
-  this.scene.translate(10,0,-3);
+  this.scene.translate(20,0,-11.8);
   this.scene.rotate(Math.PI,0,1,0);
   this.wallBoardYellow.display();
   this.scene.popMatrix();
 
   this.scene.pushMatrix();
   if(this.animating){
-    if(this.animation.finished)
+    if(this.animation.finished){
       this.animating=false;
+      this.setPawnPos(this.animationObject);
+    }
 
     var pos = this.animation.getCurrentPosition();
     var ang = this.animation.getCurrentAngle();
@@ -119,7 +122,7 @@ PlayingState.prototype.update = function (currtime){
 PlayingState.prototype.handleState = function (){
   switch (this.currentState) {
     case states.SELECT_PIECE:
-          //Initialize new play class
+
           this.plays[this.currentPlayId]= new Play(this.currentPlayId);
           this.handlePiecePicking(true);
       break;
@@ -186,24 +189,18 @@ PlayingState.prototype.undo = function (){
   console.log("-------------------------undo----------------------");
 
 
-    switch (this.mode) {
-      case mode.HUMAN_VS_HUMAN:
-        undoAux();
-        break;
-      case mode.HUMAN_VS_BOT:
-        if(this.currentPlayer == players.ORANGE)
-          undoAux();
-        break;
-      default:
-
-    }
 
 
-    function undoAux(){
-      var currentPlay =  this.plays[this.currentPlayId];
+    if((this.mode == mode.HUMAN_VS_HUMAN) || ((this.mode == mode.HUMAN_VS_BOT && this.currentPlayer == players.ORANGE))){
+
+      var currentPlay = this.plays[this.currentPlayId];
+      //alterar play atual para reverter peao
 
       if(currentPlay.wallCoords !== null){// já posicionou as paredes
-
+          this.undoWall(currentPlay.pawn.type,
+                        currentPlay.wallCoords.x,
+                        currentPlay.wallCoords.y,
+                        currentPlay.wallOrientation);
       }else if(currentPlay.start2 !== null) {//já fez o segundo movimento
 
       }else if(currentPlay.start1 !== null){//já fez o primeiro movimento
@@ -211,17 +208,25 @@ PlayingState.prototype.undo = function (){
       }
 
 
+      //currentPlay.reset();
 
+      //depois do prolog request
 
-
-      this.currentState=states.SELECT_PIECE;
-      this.handleState();
     }
 
 
 };
 
-PlayingState.prototype.prologUndo = function (){
+PlayingState.prototype.undoWall = function (player,wallX,wallY,orientation){
+  var state = this;
+
+  this.client.getPrologRequest("undoWall(" + player + "," + wallX + "," + wallY + "," + orientation + ")", function(data) {
+      console.log(data.target.responseText);
+
+      state.animateWall(false);//retirar parede javascript
+      state.checkHasWalls();
+
+    });
 
 };
 
@@ -261,11 +266,13 @@ PlayingState.prototype.handleMovement = function (){
 };
 
 PlayingState.prototype.checkEnd = function (){
+  var state = this;
   this.client.getPrologRequest("checkEnd", function(data) {
       var Resdata = JSON.parse(data.target.responseText);
       console.log("Jogo terminou: " + Resdata);
+
       if(Resdata == 1)
-        this.gameEnded=true;
+        state.gameEnded=true;
   });
 };
 
@@ -380,7 +387,7 @@ PlayingState.prototype.playBot = function (){
 };
 
 
-PlayingState.prototype.checkHasWalls = function (enable){
+PlayingState.prototype.checkHasWalls = function (){
     var state=this;
 
     this.client.getPrologRequest("hasWalls(" +   this.pawnPieceSelected.type + ")",handleCheckWallRequest);
@@ -458,15 +465,12 @@ PlayingState.prototype.animatePawn = function (){
     pawn.x = play.end2.x;
     pawn.y = play.end2.y;
   }
-  //este set depois deve ser uma animacao
-  this.setPawnPos(pawn);
 
-
-  //animacao
 
   var newx=pawn.x*0.6;
   var newy=pawn.y*0.6;
 
+  //animacao
   this.animating=true;
   this.animationObject=pawn;
 
@@ -482,7 +486,7 @@ PlayingState.prototype.animatePawn = function (){
   angles[1]= new Point3(0,0,0);
   angles[2]= new Point3(0,0,0);
 
-  this.animation= new KeyframeAnimation("boas", 1, controlPoints, slopes, angles);
+  this.animation= new KeyframeAnimation("boas", 0.5, controlPoints, slopes, angles);
   this.animation.render=true;
 
 };
@@ -501,6 +505,27 @@ PlayingState.prototype.animateWall = function (placeWall){
     piece=this.blueWall;
   else if(play.wallOrientation == "v")
     piece=this.greenWall;
+
+  //animation
+  /*
+  this.animating=true;
+  this.animationObject=piece;
+
+  var controlPoints= new Array(3);
+  controlPoints[0]= new Point3(oldx, 0 , oldy);
+  controlPoints[1]= new Point3(oldx + (newx-oldx)/2, 1, oldy + (-newy - oldy)/2);
+  controlPoints[2]= new Point3(newx , 0, - newy);
+
+  var slopes = [0,0,0];
+
+  var angles= new Array(3);
+  angles[0]= new Point3(0,0,0);
+  angles[1]= new Point3(0,0,0);
+  angles[2]= new Point3(0,0,0);
+
+  this.animation= new KeyframeAnimation("oi", 0.5, controlPoints, slopes, angles);
+  this.animation.render=true;*/
+
 
   //need to animate this
   if(play.wallOrientation == "h"){

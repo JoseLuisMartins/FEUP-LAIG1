@@ -156,4 +156,13 @@ class Play{
 		this.wallCoords=wallCoords;
 		this.wallOrientation=wallOrientation;
 	}
+
+	reset(){
+		this.end1=null;
+		this.pawn=null;
+		this.start2=null;
+		this.end2=null;
+		this.wallCoords=null;
+		this.wallOrientation=null;
+	}
 }

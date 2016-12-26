@@ -74,18 +74,35 @@ parse_input(changePlayer,"c"):-
 parse_input(hasWalls(P),[HorWalls,VerWalls]):-
   wallNumber(P,HorWalls,VerWalls).
 
-parse_input(undo(Identifier,PawnX,PawnY,WallX,WallY,v),Res):-
-  retract(position(Identifier, Oldx, Oldy)),
+
+
+
+parse_input(undoWall(Player,WallX,WallY,v),Res):-
   retract(board(Board)),
-  emptyPosition(Oldx,Oldy,Board,AuxBoard),
-	assert(position(Identifier, PawnX, PawnY)),
   retract(wallNumber(Player, H, V)),
-	Nw is V - 1,
+	Nv is V + 1,
 	assert(wallNumber(Player, H, Nv)),
-  setBoardCell(WallX, WallY, [vertical, empty], AuxBoard, AuxAuxBoard),
+  setBoardCell(WallX, WallY, [vertical, empty], Board, AuxBoard),
 	NWallY is Y + 2,
-	setBoardCell(WallX, NWallY, [vertical, empty], AuxAuxBoard, NewBoard),
-  assert(board(NewBoard)).
+	setBoardCell(WallX, NWallY, [vertical, empty], AuxBoard, NewBoard),
+  assert(board(NewBoard)),
+  displayBoard(NewBoard),
+  Res is 1.
+
+parse_input(undoWall(Player,WallX,WallY,h),Res):-
+  retract(board(Board)),
+  retract(wallNumber(Player, H, V)),
+	Nh is H + 1,
+	assert(wallNumber(Player, Nh, V)),
+	Nx is round(WallX/2),
+  setBoardCell(Nx, WallY, [horizontal, empty], Board, AuxBoard),
+	Nx2 is Nx + 1,
+	setBoardCell(Nx2, WallY, [horizontal, empty], AuxBoard, NewBoard),
+  assert(board(NewBoard)),
+  displayBoard(NewBoard),
+  Res is 1.
+
+
 
 
 parse_input(checkEnd,Res):-

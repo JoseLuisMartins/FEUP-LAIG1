@@ -48,14 +48,14 @@ BoardElement.prototype.display = function() {
 
 
 		if(this.isWall){
-			this.scene.translate(0,0, -0.15);
+
 			if(this.x % 2 == 1)
 				if(this.y % 2 == 1)
-					this.scene.scale(0.2,1,0.7);
+					this.scene.scale(0.2,1,1);
 				else
-					this.scene.scale(0.2,1,0.7);
+					this.scene.scale(0.2,1,1);
 			else
-				this.scene.scale(1,0.2,0.7);
+				this.scene.scale(1,0.2,1);
 		}
 
 		this.body.display();
