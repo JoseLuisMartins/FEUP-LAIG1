@@ -20,9 +20,8 @@ playHuman(Player, Board, NewBoard) :-
 
 %make a play bot side
 %playBot(+L,+Player, +Board, -NewBoard)
-playBot(L, Player,Board,NewBoard,Id,Px,Py,O,Wx,Wy):-
-	moveBot(L, Player, Board, AuxBoard,Id),
-	position([Player, Id], Px, Py),
+playBot(L, Player,Board,NewBoard,Id,PX1,PY1,PX2,PY2,O,Wx,Wy):-
+	moveBot(L, Player, Board, AuxBoard,Id,PX1,PY1,PX2,PY2),
 	handleWallBot(L, Player, AuxBoard, NewBoard,O,Wx,Wy).
 
 
@@ -60,20 +59,20 @@ moveOneSpaceHuman(Pawn,Board,NewBoard) :-
 
 %move (Pc calculates the coords)
 %moveBot(+L, +Player, +Board, -NewBoard)
-moveBot(1, Player, Board, NewBoard,N) :-
+moveBot(1, Player, Board, NewBoard,N,PX1,PY1,PX2,PY2) :-
 	evaluateBestPawn(Player,N),
-	auxMoveBot(Player,N,Board,AuxBoard),
+	auxMoveBot(Player,N,Board,AuxBoard,PX1,PY1),
 	(
-		(checkBotWin(Player, N), NewBoard = AuxBoard) ;
-		auxMoveBot(Player,N,AuxBoard,NewBoard)
+		(checkBotWin(Player, N), NewBoard = AuxBoard , PX2 is -1 , PY2 is -1) ;
+		 auxMoveBot(Player,N,AuxBoard,NewBoard,PX2,PY2)
 	).
 
 
-moveBot(2, Player, Board, NewBoard,N) :-
+moveBot(2, Player, Board, NewBoard,N,PX1,PY1,PX2,PY2) :-
 	random_member(N, [1, 2]),
 	Pawn = [Player, N],
-	moveOneSpaceRandom(Pawn, Board, AuxBoard),
-	moveOneSpaceRandom(Pawn, AuxBoard, NewBoard).
+	moveOneSpaceRandom(Pawn, Board, AuxBoard,PX1,PY1),
+	moveOneSpaceRandom(Pawn, AuxBoard, NewBoard,PX2,PY2).
 
 
 %handles the wall part of the play (PC calculating the coords)
@@ -96,7 +95,7 @@ handleWallBot(_, _, Board, Board,_,_,_) :-
 
 
 
-auxMoveBot(Player,N,Board,NewBoard) :-
+auxMoveBot(Player,N,Board,NewBoard,X,Y) :-
 	evaluateBestDirectionPro(Player, N, [X,Y]),
 	(
 		(validPosition([Player,N], Board, X, Y,Nx,Ny),
@@ -126,7 +125,7 @@ iterateWallList([[_,_,_] | Res], Player, Board, NewBoard,O,X,Y) :-
 
 %moves one space randomly
 %moveOneSpaceRandom(+Pawn,+Board,-NewBoard)
-moveOneSpaceRandom(Pawn, Board, NewBoard) :-
+moveOneSpaceRandom(Pawn, Board, NewBoard,X,Y) :-
 	repeat,
 		randomMove(X, Y),
 	validPosition(Pawn, Board, X, Y,Nx,Ny),

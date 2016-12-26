@@ -54,9 +54,9 @@ parse_input(placewall(Player,X, Y,O),Sucess):-
 parse_input(placewall(Player,X, Y,O),Sucess):-
   Sucess is 0.
 
-parse_input(botPlay(Player,Difficulty),[Id,Px,Py,O,Wx,Wy]):-
+parse_input(botPlay(Player,Difficulty),[Id,PX1,PY1,PX2,PY2,O,Wx,Wy]):-
   retract(board(Board)),
-  playBot(Difficulty,Player,Board,NewBoard,Id,Px,Py,Or,Wx,Wy),
+  playBot(Difficulty,Player,Board,NewBoard,Id,PX1,PY1,PX2,PY2,Or,Wx,Wy),
   getOrientationInteger(Or,O),
   assert(board(NewBoard)).
 

@@ -96,6 +96,13 @@ PlayingState.prototype.display = function (){
     if(this.animation.finished){
       this.animating=false;
       this.setPawnPos(this.animationObject);
+
+      if(this.mode == mode.HUMAN_VS_BOT && this.currentPlayer == players.YELLOW){// bot animation's
+        if(this.currentState == states.FIRST_MOVE)
+          this.botPlaySecondMove();
+        else
+          this.botPlayWall();
+      }
     }
 
     var pos = this.animation.getCurrentPosition();
@@ -351,8 +358,6 @@ PlayingState.prototype.playBot = function (){
 
       //pawn
       var pawnId = botPlay[0];
-      var pawnEndx = botPlay[1];
-      var pawnEndy = botPlay[2];
 
       var pawnIdentifier = "[" + pawnType + "," + pawnId + "]" ;
 
@@ -369,58 +374,80 @@ PlayingState.prototype.playBot = function (){
           currentPawn=state.yellow2;
       }
 
+      //postions
       var pawnStartX = currentPawn.x;
       var pawnStartY = currentPawn.y;
 
+      console.log(pawnStartX + "  -  " +  pawnStartY);
+
+      var pawnMidX = pawnStartX + botPlay[1]*2;
+      var pawnMidY = pawnStartY + botPlay[2]*2;
+
+      console.log(pawnMidX + "  -  " +  pawnMidY);
+
+      var pawnEndx = pawnMidX + botPlay[3]*2;
+      var pawnEndy = pawnMidY + botPlay[4]*2;
+
+
+      console.log(pawnEndx + "  -  " +  pawnEndy);
+
       //walls
       var wallOrientation;
-      if(botPlay[3] === 0)
+      if(botPlay[5] === 0)
         wallOrientation="h";
-      else if( botPlay[3] == 1)
+      else if( botPlay[5] == 1)
         wallOrientation="v";
       else //nao foi possivel posicionar parede
           wallOrientation="x";
 
 
-      var wallX = botPlay[4];
-      var wallY = botPlay[5];
+      var wallX = botPlay[6];
+      var wallY = botPlay[7];
 
       //build play
       var play=new Play(state.currentPlayId);
-      console.log(wallX);
-      console.log(wallY);
 
       play.setPlayerData1(new Point2(pawnStartX,pawnStartY),
-                          null,
+                          new Point2(pawnMidX,pawnMidY),
                           currentPawn);
 
-      play.setPlayerData2(null,
+      play.setPlayerData2(new Point2(pawnMidX,pawnMidY),
                           new Point2(pawnEndx,pawnEndy));
 
 
       state.plays[state.currentPlayId]=play;
 
-      //make the play
-      state.pawnPieceSelected=currentPawn;
-      state.animatePawn();
-
-      if(wallOrientation != "x")//se foi possivel posicionar uma parede
+      if(wallOrientation != "x"){//se foi possivel posicionar uma parede
         play.setWallData(new Point2(wallX,wallY),wallOrientation);
-
-
-      state.animateWall(true);
-
-      //next state
-      state.prepareForNextRound(state);
-
-      if(state.mode == mode.HUMAN_VS_BOT){// player vs bot, voltar á maquina de estados
-        state.currentState=states.SELECT_PIECE;
-        state.handleState();
+        console.log("oiiiiii");
       }
+      //make the play
+
+      state.currentState=states.FIRST_MOVE;
+      state.animatePawn();
 
 
     }
+};
 
+PlayingState.prototype.botPlaySecondMove = function (){
+
+  this.currentState=states.SECOND_MOVE;
+  this.animatePawn();
+
+};
+
+PlayingState.prototype.botPlayWall = function (){
+  var currentPlay=this.plays[this.currentPlayId];
+
+  if(currentPlay.wallCoords !== null)
+    this.animateWall(true);
+
+
+    //next state
+    this.prepareForNextRound(this);
+    this.currentState=states.SELECT_PIECE;
+    this.handleState();
 };
 
 
