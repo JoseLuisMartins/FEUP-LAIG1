@@ -243,6 +243,7 @@ PlayingState.prototype.undoMove = function (currentPlay,start,end,firstMove){
       }else{
         state.plays[state.currentPlayId].resetMove2();
         state.handleTilesPicking(true);
+        state.handleWallPicking(false);
         state.currentState=states.FIRST_MOVE;
       }
 
