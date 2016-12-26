@@ -133,6 +133,7 @@ class  LinearAnimationInfo {
 class Play{
 	constructor(id) {
 		this.id=id;
+		this.start1=null;
 		this.end1=null;
 		this.pawn=null;
 		this.start2=null;

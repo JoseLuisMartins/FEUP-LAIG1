@@ -186,36 +186,70 @@ PlayingState.prototype.handleNextButon = function (enable){
 };
 
 PlayingState.prototype.undo = function (){
+
   console.log("-------------------------undo----------------------");
 
 
+  if((this.mode == mode.HUMAN_VS_HUMAN) || ((this.mode == mode.HUMAN_VS_BOT && this.currentPlayer == players.ORANGE))){
 
+    var currentPlay = this.plays[this.currentPlayId];
 
-    if((this.mode == mode.HUMAN_VS_HUMAN) || ((this.mode == mode.HUMAN_VS_BOT && this.currentPlayer == players.ORANGE))){
+    if(currentPlay.wallCoords !== null)// já posicionou as paredes
+      this.undoWall(currentPlay.pawn.type,
+                    currentPlay.wallCoords.x,
+                    currentPlay.wallCoords.y,
+                    currentPlay.wallOrientation);
+    else if(currentPlay.start2 !== null) //já fez o segundo movimento
+      this.undoMove(currentPlay,currentPlay.start2,currentPlay.end2,false);
+    else if(currentPlay.start1 !== null)//já fez o primeiro movimento
+      this.undoMove(currentPlay,currentPlay.start1,currentPlay.end1,true);
 
-      var currentPlay = this.plays[this.currentPlayId];
-      //alterar play atual para reverter peao
-
-      if(currentPlay.wallCoords !== null){// já posicionou as paredes
-          this.undoWall(currentPlay.pawn.type,
-                        currentPlay.wallCoords.x,
-                        currentPlay.wallCoords.y,
-                        currentPlay.wallOrientation);
-      }else if(currentPlay.start2 !== null) {//já fez o segundo movimento
-
-      }else if(currentPlay.start1 !== null){//já fez o primeiro movimento
-
-      }
-
-
-      //currentPlay.reset();
-
-      //depois do prolog request
-
-    }
-
+  }
 
 };
+
+
+PlayingState.prototype.undoMove = function (currentPlay,start,end,firstMove){
+  var state = this;
+
+  var offsetX = (start.x - end.x)/2;
+  var offsetY = (start.y - end.y)/2;
+
+  //trocar inicio e fim para a animacao
+  var tmp=start;
+  if(firstMove){
+    currentPlay.start1=currentPlay.end1;
+    currentPlay.end1=tmp;
+  }else {
+    currentPlay.start2=currentPlay.end2;
+    currentPlay.end2=tmp;
+  }
+
+
+  this.client.getPrologRequest("move(" + currentPlay.pawn.identifier + "," + offsetX + "," + offsetY + ")",function(data) {
+
+      //tirar tiles selecionaveis da posicao atual e limpar a tile selecionada
+      state.pawnTileSelected.select();
+      state.handleTilesPicking(false);
+
+      //animar o peao
+      state.animatePawn();
+
+
+      if(firstMove){
+        state.plays[state.currentPlayId].resetMove1();
+        state.currentState=states.SELECT_PIECE;
+        state.handleState();
+      }else{
+        state.plays[state.currentPlayId].resetMove2();
+        state.handleTilesPicking(true);
+        state.currentState=states.FIRST_MOVE;
+      }
+
+    });
+};
+
+
 
 PlayingState.prototype.undoWall = function (player,wallX,wallY,orientation){
   var state = this;
@@ -227,10 +261,10 @@ PlayingState.prototype.undoWall = function (player,wallX,wallY,orientation){
       state.animateWall(false);//retirar parede javascript
       state.plays[state.currentPlayId].resetWall();
       state.checkHasWalls();
-
     });
-
 };
+
+
 
 
 PlayingState.prototype.prepareForNextRound = function (context){
