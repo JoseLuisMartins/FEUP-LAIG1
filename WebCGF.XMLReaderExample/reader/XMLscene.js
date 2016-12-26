@@ -179,20 +179,30 @@ XMLscene.prototype.display = function () {
   // only get executed after the graph has loaded correctly.
   // This is one possible way to do it
 
-  /*
+
   if (this.graph.loadedOk)
   {
 
     this.updateLights();
 
+    //marcador
+    this.pushMatrix();
+    this.translate(0,6,-8);
+    this.scale(3,3,3);
+    this.rotate(Math.PI/2,0,1,0);
+    this.obj.display();
+    this.popMatrix();
+    //jogo
+    this.pushMatrix();
     this.blockade.display();
+    this.popMatrix();
 
     if (this.graph.displayGraph())
       return;
   }
-  */
 
-  this.obj.display();
+
+
 };
 
 

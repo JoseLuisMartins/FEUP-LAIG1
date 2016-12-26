@@ -91,18 +91,34 @@ PlayingState.prototype.display = function (){
   this.wallBoardYellow.display();
   this.scene.popMatrix();
 
+  //animations's
   this.scene.pushMatrix();
+
   if(this.animating){
     if(this.animation.finished){
       this.animating=false;
-      this.setPawnPos(this.animationObject);
 
-      if(this.mode == mode.HUMAN_VS_BOT && this.currentPlayer == players.YELLOW){// bot animation's
-        if(this.currentState == states.FIRST_MOVE)
-          this.botPlaySecondMove();
-        else
-          this.botPlayWall();
+      if(this.animationObject instanceof Pawn){//pawn animation
+        this.setPawnPos(this.animationObject);
+
+        if(this.mode == mode.HUMAN_VS_BOT && this.currentPlayer == players.YELLOW){// bot pawn animation's
+          if(this.currentState == states.FIRST_MOVE)
+            this.botPlaySecondMove();
+          else
+            this.botPlayWall();
+        }
+      }else{//wall animation
+        var currentPlay = this.plays[this.currentPlayId];
+        var coords = currentPlay.wallCoords;
+
+        if(coords !== null)//quando nao esta a retirar a parede
+          this.placeWall(currentPlay.wallOrientation,this.animationObject,coords.x,coords.y);
+
+        if(this.mode == mode.HUMAN_VS_BOT && this.currentPlayer == players.YELLOW)
+          this.botPlayNextRound();
       }
+
+
     }
 
     var pos = this.animation.getCurrentPosition();
@@ -113,6 +129,7 @@ PlayingState.prototype.display = function (){
     this.scene.rotate(ang.z, 0, 0, 1);
     this.animationObject.display();
   }
+
   this.scene.popMatrix();
 
 
@@ -354,7 +371,7 @@ PlayingState.prototype.playBot = function (){
     function handleBotPlayRequest(data){
 
       var botPlay = JSON.parse(data.target.responseText);
-      console.log(botPlay);
+
 
       //pawn
       var pawnId = botPlay[0];
@@ -417,10 +434,9 @@ PlayingState.prototype.playBot = function (){
 
       state.plays[state.currentPlayId]=play;
 
-      if(wallOrientation != "x"){//se foi possivel posicionar uma parede
+      if(wallOrientation != "x")//se foi possivel posicionar uma parede
         play.setWallData(new Point2(wallX,wallY),wallOrientation);
-        console.log("oiiiiii");
-      }
+
       //make the play
 
       state.currentState=states.FIRST_MOVE;
@@ -443,13 +459,15 @@ PlayingState.prototype.botPlayWall = function (){
   if(currentPlay.wallCoords !== null)
     this.animateWall(true);
 
-
-    //next state
-    this.prepareForNextRound(this);
-    this.currentState=states.SELECT_PIECE;
-    this.handleState();
 };
 
+PlayingState.prototype.botPlayNextRound = function (){
+  //next state
+  this.prepareForNextRound(this);
+  this.currentState=states.SELECT_PIECE;
+  this.handleState();
+
+};
 
 PlayingState.prototype.checkHasWalls = function (){
     var state=this;
@@ -558,27 +576,44 @@ PlayingState.prototype.animatePawn = function (){
 PlayingState.prototype.animateWall = function (placeWall){
   var play = this.plays[this.currentPlayId];
 
-  var wallx=play.wallCoords.x;
-  var wally=play.wallCoords.y;
+  var startCoords = getBoardWallCoords(this.currentPlayer,play.wallOrientation);
+  var endCoords = new Point2(play.wallCoords.x * 0.6, - play.wallCoords.y * 0.6);
+
+  //array Coords
+  var arrayCoords = play.wallCoords;
+
 
   var piece;
 
-  if(!placeWall)
-    piece=null;
-  else if(play.wallOrientation == "h")
+  if(play.wallOrientation == "h")
     piece=this.blueWall;
   else if(play.wallOrientation == "v")
     piece=this.greenWall;
 
   //animation
-  /*
+
   this.animating=true;
   this.animationObject=piece;
 
+  var newx= arrayCoords.x * 0.6;
+  var newy= -arrayCoords.y * 0.6;
+
+
+
+  if(!placeWall){//remove wall
+    piece=null;
+    //retirar a parede
+    this.placeWall(play.wallOrientation,piece,arrayCoords.x,arrayCoords.y);
+    //swap end wtih start when removing a wall
+    var tmp=startCoords;
+    startCoords=endCoords;
+    endCoords=tmp;
+  }
+
   var controlPoints= new Array(3);
-  controlPoints[0]= new Point3(oldx, 0 , oldy);
-  controlPoints[1]= new Point3(oldx + (newx-oldx)/2, 1, oldy + (-newy - oldy)/2);
-  controlPoints[2]= new Point3(newx , 0, - newy);
+  controlPoints[0]= new Point3(startCoords.x, 0 , startCoords.y);
+  controlPoints[1]= new Point3(startCoords.x + (endCoords.x-startCoords.x)/2, 2, startCoords.y + (endCoords.y - startCoords.y)/2);
+  controlPoints[2]= new Point3(endCoords.x , 0, endCoords.y);
 
   var slopes = [0,0,0];
 
@@ -587,22 +622,51 @@ PlayingState.prototype.animateWall = function (placeWall){
   angles[1]= new Point3(0,0,0);
   angles[2]= new Point3(0,0,0);
 
-  this.animation= new KeyframeAnimation("oi", 0.5, controlPoints, slopes, angles);
-  this.animation.render=true;*/
+  this.animation= new KeyframeAnimation("oi", 1.5, controlPoints, slopes, angles);
+  this.animation.render=true;
 
 
-  //need to animate this
-  if(play.wallOrientation == "h"){
-    this.board.elements[wallx][wally].setPiece(piece);
-    this.board.elements[wallx+1][wally].setPiece(piece);
-    this.board.elements[wallx+2][wally].setPiece(piece);
-  }else if(play.wallOrientation == "v"){
-    this.board.elements[wallx][wally].setPiece(piece);
-    this.board.elements[wallx][wally+1].setPiece(piece);
-    this.board.elements[wallx][wally+2].setPiece(piece);
+
+
+};
+
+PlayingState.prototype.placeWall = function (orientation,piece,x,y){
+
+  if(orientation == "h"){
+    this.board.elements[x][y].setPiece(piece);
+    this.board.elements[x+1][y].setPiece(piece);
+    this.board.elements[x+2][y].setPiece(piece);
+  }else if(orientation == "v"){
+    this.board.elements[x][y].setPiece(piece);
+    this.board.elements[x][y+1].setPiece(piece);
+    this.board.elements[x][y+2].setPiece(piece);
   }
 
 };
+
+function getBoardWallCoords (currentPlayerPlayer,Orientation){
+  var x, y;
+
+  if(currentPlayerPlayer == players.ORANGE){
+    if(Orientation == "h"){
+      x= 15;
+      y= -5;
+    }else {
+      x= 15;
+      y= -3;
+    }
+  }else {
+    if(Orientation == "h"){
+      x= 15;
+      y= -11;
+    }else {
+      x= 15;
+      y= -13;
+    }
+  }
+
+  return new Point2(x,y);
+}
 
 
 PlayingState.prototype.handlePiecePicking = function (enable){
