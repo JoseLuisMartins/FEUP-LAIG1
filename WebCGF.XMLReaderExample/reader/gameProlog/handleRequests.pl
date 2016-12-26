@@ -58,8 +58,7 @@ parse_input(botPlay(Player,Difficulty),[Id,Px,Py,O,Wx,Wy]):-
   retract(board(Board)),
   playBot(Difficulty,Player,Board,NewBoard,Id,Px,Py,Or,Wx,Wy),
   getOrientationInteger(Or,O),
-  assert(board(NewBoard)),
-  displayBoard(NewBoard).
+  assert(board(NewBoard)).
 
 getOrientationInteger(h,0).
 getOrientationInteger(v,1).
@@ -80,18 +79,19 @@ parse_input(hasWalls(P),[HorWalls,VerWalls]):-
 parse_input(undoWall(Player,WallX,WallY,v),Res):-
   retract(board(Board)),
   retract(wallNumber(Player, H, V)),
+  manageEdges(add, WallX, WallY, 'v'),
 	Nv is V + 1,
 	assert(wallNumber(Player, H, Nv)),
   setBoardCell(WallX, WallY, [vertical, empty], Board, AuxBoard),
-	NWallY is Y + 2,
-	setBoardCell(WallX, NWallY, [vertical, empty], AuxBoard, NewBoard),
+	Ny is WallY + 2,
+	setBoardCell(WallX, Ny, [vertical, empty], AuxBoard, NewBoard),
   assert(board(NewBoard)),
-  displayBoard(NewBoard),
   Res is 1.
 
 parse_input(undoWall(Player,WallX,WallY,h),Res):-
   retract(board(Board)),
   retract(wallNumber(Player, H, V)),
+  manageEdges(add, WallX, WallY, 'h'),
 	Nh is H + 1,
 	assert(wallNumber(Player, Nh, V)),
 	Nx is round(WallX/2),
@@ -99,7 +99,6 @@ parse_input(undoWall(Player,WallX,WallY,h),Res):-
 	Nx2 is Nx + 1,
 	setBoardCell(Nx2, WallY, [horizontal, empty], AuxBoard, NewBoard),
   assert(board(NewBoard)),
-  displayBoard(NewBoard),
   Res is 1.
 
 

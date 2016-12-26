@@ -223,7 +223,9 @@ PlayingState.prototype.undoWall = function (player,wallX,wallY,orientation){
   this.client.getPrologRequest("undoWall(" + player + "," + wallX + "," + wallY + "," + orientation + ")", function(data) {
       console.log(data.target.responseText);
 
+
       state.animateWall(false);//retirar parede javascript
+      state.plays[state.currentPlayId].resetWall();
       state.checkHasWalls();
 
     });

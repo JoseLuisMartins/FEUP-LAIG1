@@ -157,11 +157,16 @@ class Play{
 		this.wallOrientation=wallOrientation;
 	}
 
-	reset(){
+	resetMove1(){
+		this.start1=null;
 		this.end1=null;
-		this.pawn=null;
+	}
+
+	resetMove2(){
 		this.start2=null;
 		this.end2=null;
+	}
+	resetWall(){
 		this.wallCoords=null;
 		this.wallOrientation=null;
 	}
