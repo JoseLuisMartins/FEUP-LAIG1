@@ -30,13 +30,17 @@ Button.prototype.display = function() {
 Button.prototype.update = function(currTime) {
     if (this.animation !== null) {
         this.animation.update(currTime);
+
+        if (this.animation.finished) {
+            this.animation = null;
+        }
     }
 };
 
 
 Button.prototype.click = function() {
-    this.animation = new KeyframeAnimation("w/e", 2,
-                        [new Point3(0, 0, 0), new Point3(0, 0, -5), new Point3(0, 0, 0)],
+    this.animation = new KeyframeAnimation("w/e", 0.2,
+                        [new Point3(0, 0, 0), new Point3(0, -0.05, -0.5), new Point3(0, 0, 0)],
                         [0, 0, 0], 
                         [new Point3(0, 0, 0), new Point3(0, 0, 0), new Point3(0, 0, 0)]);
     this.animation.render = true;

@@ -389,9 +389,9 @@ PlayingState.prototype.changePlayer = function (enable){
       //proximo estado
       state.scoreBoard.resetTimer();
 
-      if(state.mode == mode.HUMAN_VS_BOT){// player vs bot
+      if (state.mode == mode.HUMAN_VS_BOT) { // player vs bot
         state.playBot();
-      }else if(mode.HUMAN_VS_HUMAN){
+      } else if (mode.HUMAN_VS_HUMAN) {
         state.currentState=states.SELECT_PIECE;
         state.handleState();
       }

@@ -26,7 +26,7 @@
         <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
-        <perspective id="p1" near="0.1" far="1500" angle="22">
+        <perspective id="p1" near="0.1" far="500000" angle="22">
             <from x="30" y="25" z="10" />
             <to x="0" y="0" z="0" />
         </perspective>
@@ -357,6 +357,10 @@
             <sun_umbrella />
         </primitive>
 
+        <primitive id="universe">
+            <universe />
+        </primitive>
+
 
     </primitives>
 
@@ -377,7 +381,9 @@
                 <!-- limite nem ordem -->
                 <!-- ex: bloco transformation pode ficar sem conteudo -->
 
-                <scale x="1" y="1" z="1" />
+                <translate x="7" y="-66.5" z="-7" />
+                <scale x="15" y="15" z="15" />
+                <rotate axis="y" angle="90" />
             </transformation>
 
             <!-- declaracao obrigatoria de pelo menos um material; -->
@@ -409,6 +415,7 @@
                 <componentref id="universe" />
                 <componentref id="umbrella" />
                 <componentref id="buoy" />
+                <componentref id="ocean" />
             </children>
 
         </component>
@@ -772,8 +779,8 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-              <scale x="10" y="10" z="10" />
-              <translate x="0" y="25" z="0" />
+                <translate x="0" y="26" z="0" />
+                <scale x="50" y="50" z="50" />
             </transformation>
 
             <materials>
@@ -788,23 +795,18 @@
 
 
             <children>
-                <componentref id="bottom" />
-                <componentref id="top" />
-                <componentref id="side1" />
-                <componentref id="side2" />
-                <componentref id="side3" />
-                <componentref id="side4" />
+                <primitiveref id="universe" />
             </children>
 
         </component>
 
-        <component id="bottom">
+        <component id="ocean">
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-              <translate x="-25" y="-25" z="25" /> -->
-              <rotate axis="x" angle="-90" />
-              <scale x="50" y="50" z="50" />
+                <translate x="-25" y="1" z="25" />
+                <rotate axis="x" angle="-90" />
+                <scale x="50" y="50" z="1" />
             </transformation>
 
             <materials>
@@ -823,137 +825,6 @@
             </children>
 
         </component>
-
-        <component id="top">
-
-            <!-- bloco "transformation" obrigatorio -->
-            <transformation>
-              <translate x="25" y="25" z="25" />
-              <rotate axis="x" angle="-90" />
-              <scale x="-50" y="50" z="50" />
-            </transformation>
-
-            <materials>
-                <material id="inherit"  />
-                <material id="m2"/>
-                <material id="m1"/>
-                <material id="inherit"  />
-            </materials>
-
-
-            <texture id="inherit" />
-
-
-            <children>
-                <primitiveref id="rectangle" />
-            </children>
-
-        </component>
-
-        <component id="side1">
-
-            <!-- bloco "transformation" obrigatorio -->
-            <transformation>
-              <translate x="-25" y="25" z="-25" />
-              <rotate axis="z" angle="-90" />
-              <scale x="50" y="50" z="50" />
-            </transformation>
-
-            <materials>
-                <material id="inherit"  />
-                <material id="m2"/>
-                <material id="m1"/>
-                <material id="inherit"  />
-            </materials>
-
-
-            <texture id="inherit" />
-
-
-            <children>
-                <primitiveref id="rectangle" />
-            </children>
-
-        </component>
-
-        <component id="side2">
-
-            <!-- bloco "transformation" obrigatorio -->
-            <transformation>
-              <translate x="-25" y="-25" z="25" />
-              <rotate axis="y" angle="90" />
-              <scale x="50" y="50" z="50" />
-            </transformation>
-
-            <materials>
-                <material id="inherit"  />
-                <material id="m2"/>
-                <material id="m1"/>
-                <material id="inherit"  />
-            </materials>
-
-
-            <texture id="inherit" />
-
-
-            <children>
-                <primitiveref id="rectangle" />
-            </children>
-
-        </component>
-
-        <component id="side3">
-
-            <!-- bloco "transformation" obrigatorio -->
-            <transformation>
-              <translate x="25" y="-25" z="-25" />
-              <rotate axis="y" angle="-90" />
-              <scale x="50" y="50" z="50" />
-            </transformation>
-
-            <materials>
-                <material id="inherit"  />
-                <material id="m2"/>
-                <material id="m1"/>
-                <material id="inherit"  />
-            </materials>
-
-
-            <texture id="inherit" />
-
-
-            <children>
-                <primitiveref id="rectangle" />
-            </children>
-
-        </component>
-
-        <component id="side4">
-
-            <!-- bloco "transformation" obrigatorio -->
-            <transformation>
-              <translate x="-25" y="25" z="25" />
-              <rotate axis="x" angle="-180" />
-              <scale x="50" y="50" z="50" />
-            </transformation>
-
-            <materials>
-                <material id="inherit"  />
-                <material id="m2"/>
-                <material id="m1"/>
-                <material id="inherit"  />
-            </materials>
-
-
-            <texture id="inherit" />
-
-
-            <children>
-                <primitiveref id="rectangle" />
-            </children>
-
-        </component>
-
 </components>
 
 

@@ -24,22 +24,22 @@
         <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
-        <perspective id="p1" near="0.1" far="1500" angle="22">
+        <perspective id="p1" near="0.1" far="200000" angle="22">
             <from x="30" y="25" z="10" />
             <to x="0" y="0" z="0" />
         </perspective>
 
-        <perspective id="p2" near="0.1" far="1500" angle="40">
+        <perspective id="p2" near="0.1" far="200000" angle="40">
             <from x="80" y="25" z="75" />
             <to x="0" y="0" z="0" />
         </perspective>
 
-        <perspective id="p3" near="0.1" far="1500" angle="40">
+        <perspective id="p3" near="0.1" far="200000" angle="40">
             <from x="-499.5" y="0" z="3" />
             <to x="-499.5" y="0" z="0" />
         </perspective>
 
-        <perspective id="p4" near="0.1" far="1500" angle="25">
+        <perspective id="p4" near="0.1" far="200000" angle="25">
             <from x="300" y="0" z="1000" />
             <to x="3" y="0" z="0" />
         </perspective>
@@ -294,7 +294,9 @@
                 <!-- limite nem ordem -->
                 <!-- ex: bloco transformation pode ficar sem conteudo -->
 
-                <scale x="1" y="1" z="1" />
+                <translate x="-3" y="-108.5" z="-7.5" />
+                <scale x="6" y="6" z="6" />
+                <rotate axis="y" angle="-90" />
             </transformation>
 
             <!-- declaracao obrigatoria de pelo menos um material; -->

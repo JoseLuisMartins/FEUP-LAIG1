@@ -5,9 +5,8 @@
  function Cube(scene) {
  	CGFobject.call(this,scene);
 
-  this.quad= new Rectangle(scene, new Point3(-0.5,-0.5,0), new Point3(0.5,0.5,0));
-
- };
+  	this.quad = new Rectangle(scene, new Point3(-0.5,-0.5,0), new Point3(0.5,0.5,0));
+ }
 
  Cube.prototype = Object.create(CGFobject.prototype);
  Cube.prototype.constructor = Cube;

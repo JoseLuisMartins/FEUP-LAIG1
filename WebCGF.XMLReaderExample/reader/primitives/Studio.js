@@ -57,14 +57,14 @@ Studio.prototype.display = function() {
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-        this.scene.translate(-20, -20, 10);
+        this.scene.translate(-25, -25, 10);
         this.scene.rotate(Math.PI/1.2, 0, 0, 1);
         this.scene.scale(3, 3, 3);
         this.lamp.display();
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-        this.scene.translate(20, -20, 10);
+        this.scene.translate(25, -25, 10);
         this.scene.rotate(-Math.PI/1.2, 0, 0, 1);
         this.scene.scale(3, 3, 3);
         this.lamp.display();

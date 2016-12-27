@@ -19,6 +19,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js','utils.js', 'pr
     'gameJs/MenuState.js', 'primitives/SunUmbrella.js', 'primitives/Chair.js', 'gameJs/WallBoard.js','gameJs/Wall.js', 'primitives/SquareTable.js',
     'primitives/Studio.js', 'primitives/DebateTable.js', 'primitives/Lamp.js', 'primitives/CylinderTwoSidedSurface.js', 'primitives/CylinderTwoSided.js',
     'primitives/SpaceStation.js', 'animations/KeyframeAnimation.js', 'gameJs/Displayer.js', 'gameJs/ScoreBoard.js','primitives/Box.js', 'gameJs/Button.js',
+    'primitives/Universe.js',
 
 main=function()
 {
@@ -37,7 +38,7 @@ main=function()
 	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml
 	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor)
 
-	var filename=getUrlVars()['file'] || "spaceTraveller.dsx";
+	var filename=getUrlVars()['file'] || "Studio.dsx";
 
 	// create and load graph, and associate it to scene.
 	// Check console for loading errors

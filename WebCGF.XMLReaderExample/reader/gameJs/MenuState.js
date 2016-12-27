@@ -19,6 +19,7 @@ var difficulty={
 function MenuState(scene) {
     this.scene = scene;
     this.submenu = submenu.MAIN;
+    this.nextSubmenu = submenu.MAIN;
 
     this.ready = false;
     this.mode = -1;
@@ -86,18 +87,11 @@ MenuState.prototype.display = function () {
                 this.first.display();
             this.scene.popMatrix();
 
-            this.settingsAppearance.apply();
+            this.aboutAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(2, this.second);
                 this.scene.translate(0, -1, 0);
                 this.second.display();
-            this.scene.popMatrix();
-
-            this.aboutAppearance.apply();
-            this.scene.pushMatrix();
-                this.scene.registerForPick(3, this.third);
-                this.scene.translate(0, -4, 0);
-                this.third.display();
             this.scene.popMatrix();
         break;
 
@@ -171,6 +165,10 @@ MenuState.prototype.display = function () {
 
 MenuState.prototype.picking = function () {
 
+    if (this.animating) {
+        return;
+    }
+
     if (this.scene.pickMode === false) {
         if (this.scene.pickResults !== null && this.scene.pickResults.length > 0) {
             for (var i = 0; i < this.scene.pickResults.length; i++) {
@@ -179,25 +177,24 @@ MenuState.prototype.picking = function () {
                 switch (this.submenu) {
                     case submenu.MAIN:
                         if (objID == 1) {
-                            this.submenu = submenu.PLAY;
-                            this.first.click();
-                            this.animating = true;
+                            this.nextSubmenu = submenu.PLAY;
+                            this.click(this.first);
                         }
                         else if (objID == 2) {
-                            this.submenu = submenu.SETTINGS;
-                        }
-                        else if (objID == 3) {
-                            this.submenu = submenu.ABOUT;
+                            this.nextSubmenu = submenu.ABOUT;
+                            this.click(this.second);
                         }
                     break;
 
                     case submenu.PLAY:
                         if (objID == 4) {
-                            this.submenu = submenu.SINGLE_PLAYER;
+                            this.nextSubmenu = submenu.SINGLE_PLAYER;
                             this.mode = mode.HUMAN_VS_BOT;
+                            this.click(this.first);
                         } else if (objID == 5) {
                             this.mode = mode.HUMAN_VS_HUMAN;
-                            this.ready = true;
+                            this.nextSubmenu = submenu.SETTINGS;
+                            this.click(this.second);
                         }
                     break;
 
@@ -205,25 +202,30 @@ MenuState.prototype.picking = function () {
                         if (objID == 8 && this.selected != 8) {
                             this.selected = objID;
                             this.scene.setGraph("Island.dsx");
+                            this.ready = true;
                         }
                         else if (objID == 9 && this.selected != 9) {
                             this.selected = objID;
                             this.scene.setGraph("Space.dsx");
+                            this.ready = true;
                         }
                         else if (objID == 10 && this.selected != 10) {
                             this.selected = objID;
                             this.scene.setGraph("Studio.dsx");
+                            this.ready = true;
                         }
                     break;
 
                     case submenu.SINGLE_PLAYER:
                         if (objID == 6) {
                             this.difficulty = difficulty.EASY;
-                            this.ready = true;
+                            this.nextSubmenu = submenu.SETTINGS;
+                            this.click(this.first);
                         }
                         else if (objID == 7) {
                             this.difficulty = difficulty.HARD;
-                            this.ready = true;
+                            this.nextSubmenu = submenu.SETTINGS;
+                            this.click(this.second);
                         }
                     break;
                 }
@@ -241,7 +243,20 @@ MenuState.prototype.setAllColors = function(apperance, r, g, b, a) {
 
 
 MenuState.prototype.update = function (currTime) {
-    this.first.update(currTime);
-    this.second.update(currTime);
-    this.third.update(currTime);
+
+    if (this.first.animation === null && this.second.animation === null && this.third.animation === null) {
+        this.animating = false;
+        this.submenu = this.nextSubmenu;
+    }
+    else {
+        this.first.update(currTime);
+        this.second.update(currTime);
+        this.third.update(currTime);
+    }
+};
+
+
+MenuState.prototype.click = function (button) {
+    button.click();
+    this.animating = true;
 };

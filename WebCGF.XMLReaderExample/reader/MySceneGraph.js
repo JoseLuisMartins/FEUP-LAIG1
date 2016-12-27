@@ -633,6 +633,9 @@ MySceneGraph.prototype.createPrimitive = function(primitiveName, primitiveTag) {
             primitive = new Studio(this.scene);
         break;
 
+        case 'universe':
+            primitive = new Universe(this.scene);
+        break;
 
         default:
             this.onXMLError("Error loading primitives (invalid primitive tag).");
