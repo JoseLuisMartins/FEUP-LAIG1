@@ -9,7 +9,7 @@ var difficulty={
 };
 
 
-function Blockade(scene){
+function Blockade(scene) {
   this.scene=scene;
 
 

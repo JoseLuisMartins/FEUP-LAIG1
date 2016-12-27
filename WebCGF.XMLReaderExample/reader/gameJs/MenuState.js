@@ -23,11 +23,13 @@ function MenuState(scene) {
     this.ready = false;
     this.mode = -1;
     this.difficulty = -1;
+    this.selected = -1;
+    this.animating = false;
 
 
-    this.first = new Rectangle(scene, new Point3(-3, 2), new Point3(3, 4));
-    this.second = new Rectangle(scene, new Point3(-3, -1), new Point3(3, 1));
-    this.third = new Rectangle(scene, new Point3(-3, -4), new Point3(3, -2));
+    this.first = new Button(scene);
+    this.second = new Button(scene);
+    this.third = new Button(scene);
 
     this.playAppearance = new CGFappearance(scene);
     this.playAppearance.loadTexture("resources\\images\\menus\\new_game.png");
@@ -56,6 +58,18 @@ function MenuState(scene) {
     this.hardAppearance = new CGFappearance(scene);
     this.hardAppearance.loadTexture("resources\\images\\menus\\hard.png");
     this.setAllColors(this.hardAppearance, 1, 1, 1, 1);
+
+    this.lostIslandAppearance = new CGFappearance(scene);
+    this.lostIslandAppearance.loadTexture("resources\\images\\menus\\lost_island.png");
+    this.setAllColors(this.lostIslandAppearance, 1, 1, 1, 1);
+
+    this.outerSpaceAppearance = new CGFappearance(scene);
+    this.outerSpaceAppearance.loadTexture("resources\\images\\menus\\outer_space.png");
+    this.setAllColors(this.outerSpaceAppearance, 1, 1, 1, 1);
+
+    this.studioAppearance = new CGFappearance(scene);
+    this.studioAppearance.loadTexture("resources\\images\\menus\\studio.png");
+    this.setAllColors(this.studioAppearance, 1, 1, 1, 1);
 }
 
 MenuState.prototype.display = function () {
@@ -66,26 +80,66 @@ MenuState.prototype.display = function () {
         case submenu.MAIN:
 
             this.playAppearance.apply();
-            this.scene.registerForPick(1, this.first);
-            this.first.display();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(1, this.first);
+                this.scene.translate(0, 2, 0);
+                this.first.display();
+            this.scene.popMatrix();
 
             this.settingsAppearance.apply();
-            this.scene.registerForPick(2, this.second);
-            this.second.display();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(2, this.second);
+                this.scene.translate(0, -1, 0);
+                this.second.display();
+            this.scene.popMatrix();
 
             this.aboutAppearance.apply();
-            this.scene.registerForPick(3, this.third);
-            this.third.display();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(3, this.third);
+                this.scene.translate(0, -4, 0);
+                this.third.display();
+            this.scene.popMatrix();
         break;
 
         case submenu.PLAY:
             this.singlePlayerAppearance.apply();
-            this.scene.registerForPick(4, this.first);
-            this.first.display();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(4, this.first);
+                this.scene.translate(0, 2, 0);
+                this.first.display();
+            this.scene.popMatrix();
 
             this.multiPlayerAppearance.apply();
-            this.scene.registerForPick(5, this.second);
-            this.second.display();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(5, this.second);
+                this.scene.translate(0, -1, 0);
+                this.second.display();
+            this.scene.popMatrix();
+        break;
+
+        case submenu.SETTINGS:
+            this.lostIslandAppearance.apply();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(8, this.first);
+                this.scene.translate(-15, 0, 0);
+                this.scene.scale(2, 6, 1);
+                this.first.display();
+            this.scene.popMatrix();
+
+            this.outerSpaceAppearance.apply();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(9, this.second);
+                this.scene.scale(2, 6, 1);
+                this.second.display();
+            this.scene.popMatrix();
+
+            this.studioAppearance.apply();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(10, this.third);
+                this.scene.translate(15, 0, 0);
+                this.scene.scale(2, 6, 1);
+                this.third.display();
+            this.scene.popMatrix();
         break;
 
         case submenu.ABOUT:
@@ -94,12 +148,18 @@ MenuState.prototype.display = function () {
 
         case submenu.SINGLE_PLAYER:
             this.easyAppearance.apply();
-            this.scene.registerForPick(6, this.first);
-            this.first.display();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(6, this.first);
+                this.scene.translate(0, 2, 0);
+                this.first.display();
+            this.scene.popMatrix();
 
             this.hardAppearance.apply();
-            this.scene.registerForPick(7, this.second);
-            this.second.display();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(7, this.second);
+                this.scene.translate(0, -1, 0);
+                this.second.display();
+            this.scene.popMatrix();
         break;
     }
 
@@ -112,7 +172,7 @@ MenuState.prototype.display = function () {
 MenuState.prototype.picking = function () {
 
     if (this.scene.pickMode === false) {
-        if (this.scene.pickResults !== null && this.scene.pickResults.length > 0) {
+        if (this.scene.pickResults !== null && this.scene.pickResults.length > 0 && !this.animating) {
             for (var i = 0; i < this.scene.pickResults.length; i++) {
                 var objID = this.scene.pickResults[i][1];
 
@@ -120,6 +180,8 @@ MenuState.prototype.picking = function () {
                     case submenu.MAIN:
                         if (objID == 1) {
                             this.submenu = submenu.PLAY;
+                            this.first.click();
+                            this.animating = true;
                         }
                         else if (objID == 2) {
                             this.submenu = submenu.SETTINGS;
@@ -140,7 +202,18 @@ MenuState.prototype.picking = function () {
                     break;
 
                     case submenu.SETTINGS:
-
+                        if (objID == 8 && this.selected != 8) {
+                            this.selected = objID;
+                            this.scene.setGraph("Island.dsx");
+                        }
+                        else if (objID == 9 && this.selected != 9) {
+                            this.selected = objID;
+                            this.scene.setGraph("Space.dsx");
+                        }
+                        else if (objID == 10 && this.selected != 10) {
+                            this.selected = objID;
+                            this.scene.setGraph("Studio.dsx");
+                        }
                     break;
 
                     case submenu.SINGLE_PLAYER:
@@ -167,4 +240,8 @@ MenuState.prototype.setAllColors = function(apperance, r, g, b, a) {
 };
 
 
-MenuState.prototype.update = function (currtime) {};
+MenuState.prototype.update = function (currTime) {
+    this.first.update(currTime);
+    this.second.update(currTime);
+    this.third.update(currTime);
+};

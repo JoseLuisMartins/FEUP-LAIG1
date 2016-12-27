@@ -2,8 +2,8 @@
 function XMLscene(myInterface) {
   CGFscene.call(this);
 
-  this.interface=myInterface;
-
+  this.interface = myInterface;
+  this.graph = new MySceneGraph("spaceTraveller.dsx", this);
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -85,7 +85,6 @@ XMLscene.prototype.updateView = function () {
 XMLscene.prototype.initGraphLights = function () {
     var index = 0;
 
-
     this.lightsStatus= new Array( this.graph.omniLights.length + this.graph.spotLights.length);
 
     for (var i = 0; i < this.graph.omniLights.length; i++,index++) {
@@ -97,7 +96,6 @@ XMLscene.prototype.initGraphLights = function () {
       this.lights[index].setSpecular(omni.specular.r, omni.specular.g, omni.specular.b, omni.specular.a);
 
       this.lightsStatus[index] = omni.enabled;
-      this.interface.addLight("omni",index,omni.id);
 
       if (omni.enabled)
         this.lights[index].enable();
@@ -121,7 +119,6 @@ XMLscene.prototype.initGraphLights = function () {
       this.lights[index].setSpotDirection(spot.direction.x, spot.direction.y, spot.direction.z);
 
       this.lightsStatus[index] = spot.enabled;
-      this.interface.addLight("spot",index,spot.id);
 
       if (spot.enabled)
         this.lights[index].enable();
@@ -214,4 +211,10 @@ XMLscene.prototype.update = function(currTime) {
       }
   }
 
+};
+
+
+
+XMLscene.prototype.setGraph = function(filename) {
+  this.graph = new MySceneGraph(filename, this);
 };
