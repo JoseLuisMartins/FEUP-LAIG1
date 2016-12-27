@@ -81,12 +81,12 @@ PlayingState.prototype.display = function (){
   this.board.display();
 
   this.scene.pushMatrix();
-  this.scene.translate(10,0,-4);
+  this.scene.translate(15,0,-5);
   this.wallBoardOrange.display();
   this.scene.popMatrix();
 
   this.scene.pushMatrix();
-  this.scene.translate(20,0,-11.8);
+  this.scene.translate(15,0,-11);
   this.scene.rotate(Math.PI,0,1,0);
   this.wallBoardYellow.display();
   this.scene.popMatrix();

@@ -30,7 +30,7 @@ Displayer.prototype.constructor = Displayer;
 Displayer.prototype.display = function() {
 
     this.leftAppearance.apply();
-	this.left.display();
+		this.left.display();
 
     this.rightAppearance.apply();
     this.right.display();

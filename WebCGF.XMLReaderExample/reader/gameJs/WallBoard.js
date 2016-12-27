@@ -6,8 +6,7 @@ function WallBoard(scene,texture) {
 	CGFobject.call(this,scene);
   this.scene=scene;
 
-  this.material = new CGFappearance(scene);
-  this.material.setTexture(texture);
+	this.box = new Box(scene, texture, new CGFtexture(scene, "resources\\images\\wood.jpg"));
 
   var greenTex=new CGFtexture(scene, "resources\\images\\green.png");
   var blueTex=new CGFtexture(scene, "resources\\images\\blue.png");
@@ -17,7 +16,7 @@ function WallBoard(scene,texture) {
   var elementSelectedTex=new CGFtexture(scene, "resources\\images\\rocket_top.jpg");
   var elementSelectableTex=new CGFtexture(scene, "resources\\images\\neptune.jpg");
 
-  this.base = new Cube(scene);
+  
 
 	//button
 	this.button = new  BoardElement(scene,10000,elementNormalTex,elementSelectedTex,buttonTex,0,0);
@@ -38,26 +37,15 @@ WallBoard.prototype.constructor = WallBoard;
 
 WallBoard.prototype.display = function() {
 
-//body
-  this.scene.pushMatrix();
-
-  this.scene.translate(5,0,0);
-  this.scene.scale(2,0.2,4);
-  this.material.apply();
-  this.base.display();
-
-	this.scene.popMatrix();
-
+	this.box.display();
 //walls
   this.scene.pushMatrix();
 
-  this.scene.translate(5,0,0);
   this.scene.scale(1,0.5,1);
 //green
   this.scene.pushMatrix();
   this.scene.translate(0,0.4,1);
 	this.scene.rotate(-Math.PI/2,1,0,0);
-
   this.greenWall.display();
   this.scene.popMatrix();
 //blue
@@ -69,7 +57,8 @@ WallBoard.prototype.display = function() {
 
 //button
 	this.scene.pushMatrix();
-	this.scene.scale(0.5,0.5,0.5);
+	this.scene.translate(0,0,3.5);
+	this.scene.scale(2,0.2,1.5);
 	this.button.display();
 	this.scene.popMatrix();
 

@@ -40,7 +40,7 @@ Blockade.prototype.init = function (){
 
   this.waiting=0;
 
- // this.initPrologGraph();
+  this.initPrologGraph();
 
 };
 

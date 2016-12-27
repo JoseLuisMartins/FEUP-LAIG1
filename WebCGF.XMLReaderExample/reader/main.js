@@ -12,13 +12,13 @@ function getUrlVars() {
 }
 
 serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js','utils.js', 'primitives/Sphere.js', 'primitives/Rectangle.js', 'primitives/Triangle.js',
-    'primitives/Cylinder.js', 'primitives/CylinderSurface.js', 'primitives/CylinderBase.js', 'primitives/Torus.js', 'primitives/RoundTable.js', 
-    'DataStructures.js','MyInterface.js', 'animations/Animation.js','animations/LinearAnimation.js', 'animations/CircularAnimation.js', 
+    'primitives/Cylinder.js', 'primitives/CylinderSurface.js', 'primitives/CylinderBase.js', 'primitives/Torus.js', 'primitives/RoundTable.js',
+    'DataStructures.js','MyInterface.js', 'animations/Animation.js','animations/LinearAnimation.js', 'animations/CircularAnimation.js',
     'animations/Animated.js','primitives/Patch.js','primitives/Plane.js', 'primitives/Vehicle.js','primitives/Chessboard.js','primitives/Propellant.js',
     'gameJs/Pawn.js','gameJs/BoardElement.js', 'primitives/Cube.js','gameJs/Board.js','network/client.js','gameJs/Blockade.js','gameJs/PlayingState.js',
     'gameJs/MenuState.js', 'primitives/SunUmbrella.js', 'primitives/Chair.js', 'gameJs/WallBoard.js','gameJs/Wall.js', 'primitives/SquareTable.js',
     'primitives/Studio.js', 'primitives/DebateTable.js', 'primitives/Lamp.js', 'primitives/CylinderTwoSidedSurface.js', 'primitives/CylinderTwoSided.js',
-    'primitives/SpaceStation.js', 'animations/KeyframeAnimation.js', 'gameJs/Displayer.js', 'gameJs/ScoreBoard.js',
+    'primitives/SpaceStation.js', 'animations/KeyframeAnimation.js', 'gameJs/Displayer.js', 'gameJs/ScoreBoard.js','primitives/Box.js',
 
 main=function()
 {
