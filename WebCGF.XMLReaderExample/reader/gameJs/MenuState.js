@@ -31,6 +31,7 @@ function MenuState(scene) {
     this.first = new Button(scene);
     this.second = new Button(scene);
     this.third = new Button(scene);
+    this.back = new Button(scene);
 
     this.playAppearance = new CGFappearance(scene);
     this.playAppearance.loadTexture("resources\\images\\menus\\new_game.png");
@@ -71,6 +72,10 @@ function MenuState(scene) {
     this.studioAppearance = new CGFappearance(scene);
     this.studioAppearance.loadTexture("resources\\images\\menus\\studio.png");
     this.setAllColors(this.studioAppearance, 1, 1, 1, 1);
+
+    this.backAppearance = new CGFappearance(scene);
+    this.backAppearance.loadTexture("resources\\images\\menus\\back.png");
+    this.setAllColors(this.backAppearance, 1, 1, 1, 1);
 }
 
 MenuState.prototype.display = function () {
@@ -109,6 +114,14 @@ MenuState.prototype.display = function () {
                 this.scene.translate(0, -1, 0);
                 this.second.display();
             this.scene.popMatrix();
+
+            this.backAppearance.apply();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(3, this.back);
+                this.scene.translate(0, -3, 0);
+                this.scene.scale(0.5, 0.5, 0.5);
+                this.back.display();
+            this.scene.popMatrix();
         break;
 
         case submenu.SETTINGS:
@@ -134,10 +147,25 @@ MenuState.prototype.display = function () {
                 this.scene.scale(2, 6, 1);
                 this.third.display();
             this.scene.popMatrix();
+
+            this.backAppearance.apply();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(11, this.back);
+                this.scene.translate(0, -3, 0);
+                this.scene.scale(0.5, 0.5, 0.5);
+                this.back.display();
+            this.scene.popMatrix();
         break;
 
         case submenu.ABOUT:
 
+            this.backAppearance.apply();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(12, this.back);
+                this.scene.translate(0, -3, 0);
+                this.scene.scale(0.5, 0.5, 0.5);
+                this.back.display();
+            this.scene.popMatrix();
         break;
 
         case submenu.SINGLE_PLAYER:
@@ -153,6 +181,14 @@ MenuState.prototype.display = function () {
                 this.scene.registerForPick(7, this.second);
                 this.scene.translate(0, -1, 0);
                 this.second.display();
+            this.scene.popMatrix();
+
+            this.backAppearance.apply();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(13, this.back);
+                this.scene.translate(0, -3, 0);
+                this.scene.scale(0.5, 0.5, 0.5);
+                this.back.display();
             this.scene.popMatrix();
         break;
     }
@@ -178,11 +214,11 @@ MenuState.prototype.picking = function () {
                     case submenu.MAIN:
                         if (objID == 1) {
                             this.nextSubmenu = submenu.PLAY;
-                            this.click(this.first);
+                            this.click(this.first, objID);
                         }
                         else if (objID == 2) {
                             this.nextSubmenu = submenu.ABOUT;
-                            this.click(this.second);
+                            this.click(this.second, objID);
                         }
                     break;
 
@@ -190,11 +226,15 @@ MenuState.prototype.picking = function () {
                         if (objID == 4) {
                             this.nextSubmenu = submenu.SINGLE_PLAYER;
                             this.mode = mode.HUMAN_VS_BOT;
-                            this.click(this.first);
+                            this.click(this.first, objID);
                         } else if (objID == 5) {
                             this.mode = mode.HUMAN_VS_HUMAN;
                             this.nextSubmenu = submenu.SETTINGS;
-                            this.click(this.second);
+                            this.click(this.second, objID);
+                        }
+                        else if (objID == 3) {
+                            this.nextSubmenu = submenu.MAIN;
+                            this.click(this.back, objID);
                         }
                     break;
 
@@ -214,20 +254,34 @@ MenuState.prototype.picking = function () {
                             this.scene.setGraph("Studio.dsx");
                             this.ready = true;
                         }
+                        else if (objID == 11) {
+                            this.nextSubmenu = submenu.PLAY;
+                            this.click(this.back, objID);
+                        }
                     break;
 
                     case submenu.SINGLE_PLAYER:
                         if (objID == 6) {
                             this.difficulty = difficulty.EASY;
                             this.nextSubmenu = submenu.SETTINGS;
-                            this.click(this.first);
+                            this.click(this.first, objID);
                         }
                         else if (objID == 7) {
                             this.difficulty = difficulty.HARD;
                             this.nextSubmenu = submenu.SETTINGS;
-                            this.click(this.second);
+                            this.click(this.second, objID);
+                        }
+                        else if (objID == 13) {
+                            this.nextSubmenu = submenu.PLAY;
+                            this.click(this.back, objID);
                         }
                     break;
+
+                    case submenu.ABOUT:
+                        if (objID == 12) {
+                            this.nextSubmenu = submenu.MAIN;
+                            this.click(this.back, objID);
+                        }
                 }
             }
         }
@@ -244,7 +298,7 @@ MenuState.prototype.setAllColors = function(apperance, r, g, b, a) {
 
 MenuState.prototype.update = function (currTime) {
 
-    if (this.first.animation === null && this.second.animation === null && this.third.animation === null) {
+    if (this.first.animation === null && this.second.animation === null && this.third.animation === null && this.back.animation === null) {
         this.animating = false;
         this.submenu = this.nextSubmenu;
     }
@@ -252,11 +306,13 @@ MenuState.prototype.update = function (currTime) {
         this.first.update(currTime);
         this.second.update(currTime);
         this.third.update(currTime);
+        this.back.update(currTime);
     }
 };
 
 
-MenuState.prototype.click = function (button) {
+MenuState.prototype.click = function (button, objID) {
     button.click();
+    this.selected = objID;
     this.animating = true;
 };

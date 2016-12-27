@@ -15,7 +15,7 @@ function Blockade(scene) {
 
   this.client = new Client();
   this.board = new Board(scene);
-  this.state = null;
+  this.state = new MenuState(scene);
 
   var WallBoardTex=new CGFtexture(scene, "resources\\images\\boardTex2.jpg");
   this.WallBoardOrange = new WallBoard(scene,WallBoardTex);
@@ -41,8 +41,6 @@ Blockade.prototype.init = function (){
   this.yellow2 = new Pawn(this.scene,"resources\\images\\boardTex.png","[yellow,2]","yellow");
 
   this.waiting = 0;
-
-  this.initPrologGraph();
 };
 
 Blockade.prototype.logPicking = function ()

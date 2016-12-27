@@ -25,32 +25,25 @@
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="p1" near="0.1" far="200000" angle="22">
-            <from x="30" y="25" z="10" />
-            <to x="0" y="0" z="0" />
+            <from x="20" y="20" z="30" />
+            <to x="7.2" y="2" z="-10" />
         </perspective>
 
-        <perspective id="p2" near="0.1" far="200000" angle="40">
-            <from x="80" y="25" z="75" />
-            <to x="0" y="0" z="0" />
+        <perspective id="p2" near="0.1" far="200000" angle="22">
+            <from x="25" y="25" z="-45" />
+            <to x="7.2" y="3" z="-10" />
         </perspective>
 
-        <perspective id="p3" near="0.1" far="200000" angle="40">
-            <from x="-499.5" y="0" z="3" />
-            <to x="-499.5" y="0" z="0" />
-        </perspective>
-
-        <perspective id="p4" near="0.1" far="200000" angle="25">
-            <from x="300" y="0" z="1000" />
-            <to x="3" y="0" z="0" />
+        <perspective id="top" near="0.1" far="200000" angle="40">
+            <from x="20" y="30" z="-8" />
+            <to x="7.2" y="2" z="-8" />
         </perspective>
     </views>
 
 
     <illumination doublesided="1" local="1" >
-
         <ambient r="0.5" g="0.5" b="0.5" a="0.8" />
         <background r="0.1" g="0.1" b="0.2" a="1" />
-
     </illumination>
 
 
