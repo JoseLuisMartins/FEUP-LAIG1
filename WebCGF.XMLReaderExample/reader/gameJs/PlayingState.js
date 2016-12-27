@@ -75,7 +75,7 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
 PlayingState.prototype.constructor=PlayingState;
 
 
-PlayingState.prototype.display = function (){
+PlayingState.prototype.display = function () {
   this.scene.pushMatrix();
 
   this.board.display();
@@ -688,7 +688,7 @@ PlayingState.prototype.deselectPlayElements = function (enable){
   this.board.elements[tile.x][tile.y].select();
 };
 
-PlayingState.prototype.picking = function (){
+PlayingState.prototype.picking = function () {
 
   if (this.scene.pickMode === false) {
     if (this.scene.pickResults !== null && this.scene.pickResults.length > 0) {

@@ -38,20 +38,25 @@ Blockade.prototype.init = function (){
   this.yellow1 = new Pawn(this.scene,"resources\\images\\boardTex.png","[yellow,1]","yellow");
   this.yellow2 = new Pawn(this.scene,"resources\\images\\boardTex.png","[yellow,2]","yellow");
 
-  this.waiting=0;
+  this.waiting = 0;
 
-  this.initPrologGraph();
+ // this.initPrologGraph();
 
 };
 
 Blockade.prototype.logPicking = function ()
 {
-	 if(this.state !== null)
-    this.state.picking();
+	 if (this.state !== null) {
+      this.state.picking();
+
+      if (this.state instanceof MenuState && this.state.ready) {
+        this.initPrologGraph();
+      }
+   }
 };
 
 Blockade.prototype.display = function () {
-  if(this.state !== null)
+  if (this.state !== null)
     this.state.display();
 };
 
@@ -59,7 +64,6 @@ Blockade.prototype.update = function (currtime){
 
   if(this.state !== null)
     this.state.update(currtime);
-
 };
 
 
@@ -107,9 +111,10 @@ Blockade.prototype.updateAllPawnPositions = function ()
 };
 
 Blockade.prototype.goToPlaystate = function (){
-  if(this.waiting == 5)
+  if(this.waiting == 5) {
     this.state=new PlayingState(this.scene,this.client,this.board,this.WallBoardOrange,this.WallBoardYellow,
       this.orange1,this.orange2,this.yellow1,this.yellow2,this.gameMode,this.gameDifficulty);
+  }
 
 };
 
@@ -117,9 +122,6 @@ Blockade.prototype.undo = function (){
 
     if(this.state instanceof PlayingState)
       this.state.undo();
-
-
-
 };
 
 Blockade.prototype.setPawnPos = function (pawn){

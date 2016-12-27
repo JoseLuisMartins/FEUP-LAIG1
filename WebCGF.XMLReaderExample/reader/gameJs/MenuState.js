@@ -6,9 +6,23 @@ var submenu = {
     SINGLE_PLAYER : 4,
 };
 
+var mode = {
+  HUMAN_VS_HUMAN: 1,
+  HUMAN_VS_BOT: 2,
+};
+
+var difficulty={
+  HARD: 1,
+  EASY: 2,
+};
+
 function MenuState(scene) {
     this.scene = scene;
     this.submenu = submenu.MAIN;
+
+    this.ready = false;
+    this.mode = -1;
+    this.difficulty = -1;
 
 
     this.first = new Rectangle(scene, new Point3(-3, 2), new Point3(3, 4));
@@ -114,11 +128,26 @@ MenuState.prototype.picking = function () {
                     case submenu.PLAY:
                         if (objID == 4) {
                             this.submenu = submenu.SINGLE_PLAYER;
+                            this.mode = mode.HUMAN_VS_BOT;
+                        } else if (objID == 5) {
+                            this.mode = mode.HUMAN_VS_HUMAN;
+                            this.ready = true;
                         }
                     break;
 
                     case submenu.SETTINGS:
 
+                    break;
+
+                    case submenu.SINGLE_PLAYER:
+                        if (objID == 6) {
+                            this.difficulty = difficulty.EASY;
+                            this.ready = true;
+                        }
+                        else if (objID == 7) {
+                            this.difficulty = difficulty.HARD;
+                            this.ready = true;
+                        }
                     break;
                 }
             }
