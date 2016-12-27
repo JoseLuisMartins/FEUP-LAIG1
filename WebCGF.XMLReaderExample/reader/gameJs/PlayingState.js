@@ -488,6 +488,7 @@ PlayingState.prototype.handleMovement = function (){
   this.animatePawn();
   //verificar se ganhou
   this.checkEnd();
+
 };
 
 PlayingState.prototype.checkEnd = function (){
@@ -505,7 +506,7 @@ PlayingState.prototype.checkEnd = function (){
           state.scoreBoard.yellowWin();
 
         state.gameEnded = true;
-
+        state.handleState();
 
       }
   });
@@ -957,6 +958,9 @@ PlayingState.prototype.picking = function () {
 
               break;
             case states.CHANGE_PLAYER:
+                if(this.animating)//para acabar animação caso ainda esteja a animar
+                  this.endAnimation();
+
                 this.handleNextButon(false);
                 obj.select();
                 this.prepareForNextRound(this);
