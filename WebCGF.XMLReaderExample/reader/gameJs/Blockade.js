@@ -26,6 +26,8 @@ function Blockade(scene){
   this.gameMode=mode.HUMAN_VS_BOT;
   this.gameDifficulty=difficulty.HARD;
 
+  this.changingState=false;
+
   this.init();
 }
 
@@ -40,7 +42,6 @@ Blockade.prototype.init = function (){
 
   this.waiting = 0;
 
- // this.initPrologGraph();
 
 };
 
@@ -49,7 +50,10 @@ Blockade.prototype.logPicking = function ()
 	 if (this.state !== null) {
       this.state.picking();
 
-      if (this.state instanceof MenuState && this.state.ready) {
+      if (this.state instanceof MenuState && this.state.ready && this.changingState === false) {//passar para o jogo
+        this.changingState = true;
+        this.gameMode=this.state.mode;
+        this.gameDifficulty=this.state.difficulty;
         this.initPrologGraph();
       }
    }

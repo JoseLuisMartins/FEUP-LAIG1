@@ -59,14 +59,16 @@ function MenuState(scene) {
 }
 
 MenuState.prototype.display = function () {
-    
+    this.scene.pushMatrix();
+    this.scene.rotate(Math.PI/2,0,1,0);
+
     switch (this.submenu) {
         case submenu.MAIN:
-            
+
             this.playAppearance.apply();
             this.scene.registerForPick(1, this.first);
             this.first.display();
-            
+
             this.settingsAppearance.apply();
             this.scene.registerForPick(2, this.second);
             this.second.display();
@@ -80,14 +82,14 @@ MenuState.prototype.display = function () {
             this.singlePlayerAppearance.apply();
             this.scene.registerForPick(4, this.first);
             this.first.display();
-            
+
             this.multiPlayerAppearance.apply();
             this.scene.registerForPick(5, this.second);
             this.second.display();
         break;
 
         case submenu.ABOUT:
-            
+
         break;
 
         case submenu.SINGLE_PLAYER:
@@ -102,6 +104,8 @@ MenuState.prototype.display = function () {
     }
 
     this.scene.clearPickRegistration();
+
+    this.scene.popMatrix();
 };
 
 
