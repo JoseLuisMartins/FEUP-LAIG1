@@ -37,7 +37,7 @@ XMLscene.prototype.init = function (application) {
 
   this.blockade= new Blockade(this);
 
-  this.obj = new ScoreBoard(this);
+
 };
 
 XMLscene.prototype.initLights = function () {
@@ -185,13 +185,7 @@ XMLscene.prototype.display = function () {
 
     this.updateLights();
 
-    //marcador
-    this.pushMatrix();
-    this.translate(0,6,-8);
-    this.scale(3,3,3);
-    this.rotate(Math.PI/2,0,1,0);
-    this.obj.display();
-    this.popMatrix();
+  
     //jogo
     this.pushMatrix();
     this.blockade.display();
@@ -220,5 +214,4 @@ XMLscene.prototype.update = function(currTime) {
       }
   }
 
-  this.obj.update(currTime);
 };

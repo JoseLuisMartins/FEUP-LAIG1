@@ -41,7 +41,7 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
   this.mode = gameMode;
   this.gameDifficulty=gameDifficulty;
   this.gameEnded=false;
-
+  this.scoreBoard = new ScoreBoard(this.scene);
 
   //pawns
   this.orange1=orange1;
@@ -77,6 +77,14 @@ PlayingState.prototype.constructor=PlayingState;
 
 PlayingState.prototype.display = function () {
   this.scene.pushMatrix();
+
+  //scoreBoard
+  this.scene.pushMatrix();
+  this.scene.translate(0,6,-8);
+  this.scene.scale(3,3,3);
+  this.scene.rotate(Math.PI/2,0,1,0);
+  this.scoreBoard.display();
+  this.scene.popMatrix();
 
   this.board.display();
 
@@ -140,6 +148,8 @@ PlayingState.prototype.display = function () {
 PlayingState.prototype.update = function (currtime){
     if(this.animation !== null)
       this.animation.update(currtime);
+
+    this.scoreBoard.update(currtime);
 };
 
 
