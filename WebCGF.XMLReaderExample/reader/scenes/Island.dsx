@@ -19,13 +19,18 @@
 
 
 
-    <views default="p1" >
+    <views default="menu" >
 
         <!-- declaracao obrigatoria de pelo menos uma vista; -->
         <!-- se varias vistas declaradas, o default e' a -->
         <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
+        <perspective id="menu" near="0.1" far="200000" angle="40">
+            <from x="500" y="200" z="0" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+
         <perspective id="p1" near="0.1" far="200000" angle="22">
             <from x="20" y="20" z="30" />
             <to x="7.2" y="2" z="-10" />

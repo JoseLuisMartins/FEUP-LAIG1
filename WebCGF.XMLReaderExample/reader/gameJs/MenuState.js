@@ -88,14 +88,14 @@ MenuState.prototype.display = function () {
             this.playAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(1, this.first);
-                this.scene.translate(0, 2, 0);
+                this.scene.translate(0, 195, 470);
                 this.first.display();
             this.scene.popMatrix();
 
             this.aboutAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(2, this.second);
-                this.scene.translate(0, -1, 0);
+                this.scene.translate(0, 192, 470);
                 this.second.display();
             this.scene.popMatrix();
         break;
@@ -104,21 +104,21 @@ MenuState.prototype.display = function () {
             this.singlePlayerAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(4, this.first);
-                this.scene.translate(0, 2, 0);
+                this.scene.translate(0, 195, 470);
                 this.first.display();
             this.scene.popMatrix();
 
             this.multiPlayerAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(5, this.second);
-                this.scene.translate(0, -1, 0);
+                this.scene.translate(0, 192, 470);
                 this.second.display();
             this.scene.popMatrix();
 
             this.backAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(3, this.back);
-                this.scene.translate(0, -3, 0);
+                this.scene.translate(0, 190.5, 470);
                 this.scene.scale(0.5, 0.5, 0.5);
                 this.back.display();
             this.scene.popMatrix();
@@ -128,7 +128,7 @@ MenuState.prototype.display = function () {
             this.lostIslandAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(8, this.first);
-                this.scene.translate(-15, 0, 0);
+                this.scene.translate(-15, 183, 460);
                 this.scene.scale(2, 6, 1);
                 this.first.display();
             this.scene.popMatrix();
@@ -136,6 +136,7 @@ MenuState.prototype.display = function () {
             this.outerSpaceAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(9, this.second);
+                this.scene.translate(0, 183, 460);
                 this.scene.scale(2, 6, 1);
                 this.second.display();
             this.scene.popMatrix();
@@ -143,7 +144,7 @@ MenuState.prototype.display = function () {
             this.studioAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(10, this.third);
-                this.scene.translate(15, 0, 0);
+                this.scene.translate(15, 183, 460);
                 this.scene.scale(2, 6, 1);
                 this.third.display();
             this.scene.popMatrix();
@@ -151,7 +152,7 @@ MenuState.prototype.display = function () {
             this.backAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(11, this.back);
-                this.scene.translate(0, -3, 0);
+                this.scene.translate(0, 185.5, 470);
                 this.scene.scale(0.5, 0.5, 0.5);
                 this.back.display();
             this.scene.popMatrix();
@@ -162,7 +163,7 @@ MenuState.prototype.display = function () {
             this.backAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(12, this.back);
-                this.scene.translate(0, -3, 0);
+                this.scene.translate(0, 190.5, 470);
                 this.scene.scale(0.5, 0.5, 0.5);
                 this.back.display();
             this.scene.popMatrix();
@@ -172,21 +173,21 @@ MenuState.prototype.display = function () {
             this.easyAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(6, this.first);
-                this.scene.translate(0, 2, 0);
+                this.scene.translate(0, 195, 470);
                 this.first.display();
             this.scene.popMatrix();
 
             this.hardAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(7, this.second);
-                this.scene.translate(0, -1, 0);
+                this.scene.translate(0, 192, 470);
                 this.second.display();
             this.scene.popMatrix();
 
             this.backAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(13, this.back);
-                this.scene.translate(0, -3, 0);
+                this.scene.translate(0, 190.5, 470);
                 this.scene.scale(0.5, 0.5, 0.5);
                 this.back.display();
             this.scene.popMatrix();
