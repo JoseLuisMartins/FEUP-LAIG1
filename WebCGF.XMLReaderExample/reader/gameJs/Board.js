@@ -61,3 +61,11 @@ Board.prototype.display = function() {
 Board.prototype.getWallTiles = function() {
 	return this.wallTiles;
 };
+
+Board.prototype.clearAllTiles = function() {
+	for (var i = 0; i < 27; i++) {
+		for (var j = 0; j < 21; j++) {
+			this.elements[j][i].resetElement();
+		}
+	}
+};

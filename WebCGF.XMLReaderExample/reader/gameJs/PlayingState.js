@@ -40,8 +40,8 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
   this.wallTileSelected= null;
   this.mode = gameMode;
   this.gameDifficulty=gameDifficulty;
-  this.gameEnded=false;
   this.scoreBoard = new ScoreBoard(this.scene);
+  this.timeout = false;
 
   //pawns
   this.orange1=orange1;
@@ -103,31 +103,8 @@ PlayingState.prototype.display = function () {
   this.scene.pushMatrix();
 
   if(this.animating){
-    if(this.animation.finished){
-      this.animating=false;
-
-      if(this.animationObject instanceof Pawn){//pawn animation
-        this.setPawnPos(this.animationObject);
-
-        if(this.mode == mode.HUMAN_VS_BOT && this.currentPlayer == players.YELLOW){// bot pawn animation's
-          if(this.currentState == states.FIRST_MOVE)
-            this.botPlaySecondMove();
-          else
-            this.botPlayWall();
-        }
-      }else{//wall animation
-        var currentPlay = this.plays[this.currentPlayId];
-        var coords = currentPlay.wallCoords;
-
-        if(coords !== null)//quando nao esta a retirar a parede
-          this.placeWall(currentPlay.wallOrientation,this.animationObject,coords.x,coords.y);
-
-        if(this.mode == mode.HUMAN_VS_BOT && this.currentPlayer == players.YELLOW)
-          this.botPlayNextRound();
-      }
-
-
-    }
+    if(this.animation.finished)
+      this.endAnimation();
 
     var pos = this.animation.getCurrentPosition();
     var ang = this.animation.getCurrentAngle();
@@ -145,18 +122,62 @@ PlayingState.prototype.display = function () {
 
 };
 
+PlayingState.prototype.endAnimation = function (){
+  this.animating=false;
+
+  if(this.animationObject instanceof Pawn){//pawn animation
+    this.setPawnPos(this.animationObject);
+
+    if(this.mode == mode.HUMAN_VS_BOT && this.currentPlayer == players.YELLOW){// bot pawn animation's
+      if(this.currentState == states.FIRST_MOVE)
+        this.botPlaySecondMove();
+      else
+        this.botPlayWall();
+    }
+  }else{//wall animation
+    var currentPlay = this.plays[this.currentPlayId];
+    var coords = currentPlay.wallCoords;
+
+    if(coords !== null)//quando nao esta a retirar a parede
+      this.placeWall(currentPlay.wallOrientation,this.animationObject,coords.x,coords.y);
+
+    if(this.mode == mode.HUMAN_VS_BOT && this.currentPlayer == players.YELLOW)
+      this.botPlayNextRound();
+  }
+
+
+};
+
+
 PlayingState.prototype.update = function (currtime){
     if(this.animation !== null)
       this.animation.update(currtime);
 
     this.scoreBoard.update(currtime);
+
+    if(this.scoreBoard.getTime() < 0 && this.timeout === false){
+      console.log(this.scoreBoard.getTime());
+      //timeout - passar para o proximo jogador
+
+      this.timeout=true;
+
+      if(this.animating)
+        this.endAnimation();
+
+      this.board.clearAllTiles();
+      this.wallBoardOrange.clearAllTiles();
+      this.wallBoardYellow.clearAllTiles();
+      this.prepareForNextRound(this);
+      this.changePlayer();
+
+    }
 };
 
 
 PlayingState.prototype.handleState = function (){
   switch (this.currentState) {
     case states.SELECT_PIECE:
-
+          this.timeout=false;
           this.plays[this.currentPlayId]= new Play(this.currentPlayId);
           this.handlePiecePicking(true);
       break;
@@ -278,6 +299,12 @@ PlayingState.prototype.undoMove = function (currentPlay,start,end,firstMove){
         state.plays[state.currentPlayId].resetMove2();
         state.handleTilesPicking(true);
         state.handleWallPicking(false);
+
+        var wallSel = state.wallSelected;
+        if(wallSel!== null)
+          wallSel.select();
+
+        state.handleWallTilesPicking(false);
         state.currentState=states.FIRST_MOVE;
       }
 
@@ -342,8 +369,13 @@ PlayingState.prototype.checkEnd = function (){
       var Resdata = JSON.parse(data.target.responseText);
       console.log("Jogo terminou: " + Resdata);
 
-      if(Resdata == 1)
-        state.gameEnded=true;
+      if(Resdata == 1){
+        if(state.currentPlayer === players.ORANGE)
+          state.scoreBoard.orangeWin();
+        else
+          state.scoreBoard.yellowWin();
+
+      }
   });
 };
 
@@ -355,6 +387,8 @@ PlayingState.prototype.changePlayer = function (enable){
 
     function handleChangePlayerRequest(data) {
       //proximo estado
+      state.scoreBoard.resetTimer();
+
       if(state.mode == mode.HUMAN_VS_BOT){// player vs bot
         state.playBot();
       }else if(mode.HUMAN_VS_HUMAN){
@@ -405,18 +439,23 @@ PlayingState.prototype.playBot = function (){
       var pawnStartX = currentPawn.x;
       var pawnStartY = currentPawn.y;
 
-      console.log(pawnStartX + "  -  " +  pawnStartY);
 
       var pawnMidX = pawnStartX + botPlay[1]*2;
       var pawnMidY = pawnStartY + botPlay[2]*2;
 
-      console.log(pawnMidX + "  -  " +  pawnMidY);
 
-      var pawnEndx = pawnMidX + botPlay[3]*2;
-      var pawnEndy = pawnMidY + botPlay[4]*2;
+      var px2=botPlay[3];
+      var py2=botPlay[4];
+
+      var pawnEndx = pawnMidX + px2*2;
+      var pawnEndy = pawnMidY + py2*2;
+
+      if(px2 == -1 && py2 == -1){//bot ganhou
+        pawnEndx = -1;
+        pawnEndy = -1;
+      }
 
 
-      console.log(pawnEndx + "  -  " +  pawnEndy);
 
       //walls
       var wallOrientation;
@@ -457,23 +496,34 @@ PlayingState.prototype.playBot = function (){
 };
 
 PlayingState.prototype.botPlaySecondMove = function (){
+  var newPos = this.plays[this.currentPlayId].end2;
 
-  this.currentState=states.SECOND_MOVE;
-  this.animatePawn();
+  if(newPos.x == -1 && newPos.y == -1){
+    this.scoreBoard.yellowWin();
+    this.botPlayWall();
+  }else {
+    this.currentState=states.SECOND_MOVE;
+    this.animatePawn();
+  }
 
 };
 
 PlayingState.prototype.botPlayWall = function (){
   var currentPlay=this.plays[this.currentPlayId];
+  this.checkEnd();
 
   if(currentPlay.wallCoords !== null)
     this.animateWall(true);
+  else
+    this.botPlayNextRound();
+
 
 };
 
 PlayingState.prototype.botPlayNextRound = function (){
   //next state
   this.prepareForNextRound(this);
+  this.scoreBoard.resetTimer();
   this.currentState=states.SELECT_PIECE;
   this.handleState();
 

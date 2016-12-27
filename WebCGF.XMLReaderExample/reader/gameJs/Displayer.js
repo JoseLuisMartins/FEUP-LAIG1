@@ -72,16 +72,18 @@ Displayer.prototype.increment = function() {
 
 
 Displayer.prototype.update = function(currTime) {
-    if (this.lastCurrTime == -1) {
-        delta = 0;
-    }
-    else {
-        delta = (currTime - this.lastCurrTime) / 1000;
-    }
-    this.lastCurrTime = currTime;
+		if(this.displayNumber >= -0.1){
+			if (this.lastCurrTime == -1) {
+	        delta = 0;
+	    }
+	    else {
+	        delta = (currTime - this.lastCurrTime) / 1000;
+	    }
+	    this.lastCurrTime = currTime;
 
-    this.displayNumber -= delta;
-    this.setNumber(this.displayNumber);
+	    this.displayNumber -= delta;
+	    this.setNumber(this.displayNumber);
+		}
 };
 
 

@@ -95,7 +95,7 @@ handleWallBot(_, _, Board, Board,_,_,_) :-
 
 
 
-auxMoveBot(Player,N,Board,NewBoard,X,Y) :-
+auxMoveBot(Player,N,Board,NewBoard,Nx,Ny) :-
 	evaluateBestDirectionPro(Player, N, [X,Y]),
 	(
 		(validPosition([Player,N], Board, X, Y,Nx,Ny),

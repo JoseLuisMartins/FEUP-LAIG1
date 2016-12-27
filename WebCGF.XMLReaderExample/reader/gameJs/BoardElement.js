@@ -83,3 +83,8 @@ BoardElement.prototype.handleSelection = function(enable) {
 BoardElement.prototype.setWall = function(enable) {
 	this.isWall = enable;
 };
+
+BoardElement.prototype.resetElement = function(enable) {
+	this.selectable = false;
+	this.selected = false;
+};

@@ -16,7 +16,7 @@ function WallBoard(scene,texture) {
   var elementSelectedTex=new CGFtexture(scene, "resources\\images\\rocket_top.jpg");
   var elementSelectableTex=new CGFtexture(scene, "resources\\images\\neptune.jpg");
 
-  
+
 
 	//button
 	this.button = new  BoardElement(scene,10000,elementNormalTex,elementSelectedTex,buttonTex,0,0);
@@ -87,4 +87,10 @@ WallBoard.prototype.handleSelection= function(enable) {
 	this.greenWall.handleSelection(enable);
   this.blueWall.handleSelection(enable);
 	this.button.handleSelection(enable);
+};
+
+WallBoard.prototype.clearAllTiles = function() {
+	this.greenWall.resetElement();
+  this.blueWall.resetElement();
+	this.button.resetElement();
 };
