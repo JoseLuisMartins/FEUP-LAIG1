@@ -9,13 +9,13 @@ var difficulty={
 };
 
 
-function Blockade(scene,gameMode){
+function Blockade(scene){
   this.scene=scene;
 
 
   this.client = new Client();
   this.board = new Board(scene);
-  this.state=null;
+  this.state = new MenuState(scene);
 
   var WallBoardTex=new CGFtexture(scene, "resources\\images\\boardTex2.jpg");
   this.WallBoardOrange = new WallBoard(scene,WallBoardTex);
@@ -40,7 +40,7 @@ Blockade.prototype.init = function (){
 
   this.waiting=0;
 
-  this.initPrologGraph();
+ // this.initPrologGraph();
 
 };
 
@@ -50,11 +50,9 @@ Blockade.prototype.logPicking = function ()
     this.state.picking();
 };
 
-Blockade.prototype.display = function (){
-
+Blockade.prototype.display = function () {
   if(this.state !== null)
     this.state.display();
-
 };
 
 Blockade.prototype.update = function (currtime){
