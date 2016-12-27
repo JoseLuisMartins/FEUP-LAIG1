@@ -90,7 +90,7 @@ WallBoard.prototype.handleSelection= function(enable) {
 };
 
 WallBoard.prototype.clearAllTiles = function() {
-	this.greenWall.resetElement();
-  this.blueWall.resetElement();
-	this.button.resetElement();
+	this.greenWall.resetSelect();
+  this.blueWall.resetSelect();
+	this.button.resetSelect();
 };

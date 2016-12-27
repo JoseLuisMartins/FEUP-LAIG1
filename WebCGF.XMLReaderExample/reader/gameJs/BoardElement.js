@@ -84,7 +84,13 @@ BoardElement.prototype.setWall = function(enable) {
 	this.isWall = enable;
 };
 
-BoardElement.prototype.resetElement = function(enable) {
+BoardElement.prototype.resetSelect = function() {
 	this.selectable = false;
 	this.selected = false;
+};
+
+BoardElement.prototype.resetElement = function() {
+	this.selectable = false;
+	this.selected = false;
+	this.piece = null;
 };

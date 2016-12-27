@@ -65,6 +65,14 @@ Board.prototype.getWallTiles = function() {
 Board.prototype.clearAllTiles = function() {
 	for (var i = 0; i < 27; i++) {
 		for (var j = 0; j < 21; j++) {
+			this.elements[j][i].resetSelect();
+		}
+	}
+};
+
+Board.prototype.resetAllTiles = function() {
+	for (var i = 0; i < 27; i++) {
+		for (var j = 0; j < 21; j++) {
 			this.elements[j][i].resetElement();
 		}
 	}

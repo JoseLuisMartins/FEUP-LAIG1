@@ -7,6 +7,8 @@ var states={
   SELECT_WALL_TILE: 6,
   ANIMATE_WALL: 7,
   CHANGE_PLAYER: 8,
+  GAME_ENDED: 9,
+  GAME_MOVIE: 10,
 };
 
 var players={
@@ -17,6 +19,13 @@ var players={
 var mode={
   HUMAN_VS_HUMAN: 1,
   HUMAN_VS_BOT: 2,
+};
+
+var gameMovie={
+  FIRST_MOVE: 1,
+  SECOND_MOVE: 2,
+  WALL: 3,
+  NEXT_PLAY: 4,
 };
 
 
@@ -42,6 +51,7 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
   this.gameDifficulty=gameDifficulty;
   this.scoreBoard = new ScoreBoard(this.scene);
   this.timeout = false;
+  this.gameEnded = false;
 
   //pawns
   this.orange1=orange1;
@@ -61,7 +71,9 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
 
   //game story
   this.currentPlayId=0;
+  this.numberPlays=0;
   this.plays={};
+  this.movieState=gameMovie.FIRST_MOVE;
 
   //animations
   this.animating=false;
@@ -73,6 +85,96 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
 
 
 PlayingState.prototype.constructor=PlayingState;
+
+PlayingState.prototype.resetPawnPos = function (){
+  this.orange1.x=6;
+  this.orange1.y=6;
+
+  this.orange2.x=14;
+  this.orange2.y=6;
+
+  this.yellow1.x=6;
+  this.yellow1.y=20;
+
+  this.yellow2.x=14;
+  this.yellow2.y=20;
+
+  this.setPawnPos(this.orange1);
+  this.setPawnPos(this.orange2);
+  this.setPawnPos(this.yellow1);
+  this.setPawnPos(this.yellow2);
+
+};
+
+PlayingState.prototype.game_movie = function (){
+  console.log("-------------GAME MOVIE-------------");
+
+
+  if(this.currentPlayId <= this.numberPlays){
+    var currentPlay = this.plays[this.currentPlayId];
+
+    if(!currentPlay)
+      return;
+
+    switch (this.movieState) {
+      case gameMovie.FIRST_MOVE:
+        if(currentPlay.start1 !== null){
+          this.currentState=states.FIRST_MOVE;
+          this.animatePawn();
+          this.currentState=states.GAME_MOVIE;
+          this.movieState=gameMovie.SECOND_MOVE;
+        }else {
+          this.movieState=gameMovie.SECOND_MOVE;
+          this.game_movie();
+        }
+        break;
+      case gameMovie.SECOND_MOVE:
+      if(currentPlay.start2 !== null && !(currentPlay.end2.x == -1 && currentPlay.end2.y == -1)){
+        this.currentState=states.SECOND_MOVE;
+        this.animatePawn();
+        this.currentState=states.GAME_MOVIE;
+        this.movieState=gameMovie.WALL;
+      }else {
+        this.movieState=gameMovie.WALL;
+        this.game_movie();
+      }
+        break;
+      case gameMovie.WALL:
+        if(currentPlay.wallCoords !== null){
+          this.animateWall(true);
+          this.movieState=gameMovie.NEXT_PLAY;
+        }else {
+          this.movieState=gameMovie.NEXT_PLAY;
+          this.game_movie();
+        }
+        break;
+      case gameMovie.NEXT_PLAY:
+        this.currentPlayId++;
+        this.movieState=gameMovie.FIRST_MOVE;
+        this.game_movie();
+        break;
+
+      default:
+    }
+  }
+};
+
+
+PlayingState.prototype.endAnimationGameMovie = function (){
+  this.animating=false;
+  console.log("endAnimationGameMovie");
+  if(this.animationObject instanceof Pawn){//pawn animation
+    this.setPawnPos(this.animationObject);
+  }else{//wall animation
+    var currentPlay = this.plays[this.currentPlayId];
+    var coords = currentPlay.wallCoords;
+
+    this.placeWall(currentPlay.wallOrientation,this.animationObject,coords.x,coords.y);
+  }
+
+  this.game_movie();
+
+};
 
 
 PlayingState.prototype.display = function () {
@@ -103,8 +205,12 @@ PlayingState.prototype.display = function () {
   this.scene.pushMatrix();
 
   if(this.animating){
-    if(this.animation.finished)
-      this.endAnimation();
+    if(this.animation.finished){
+      if(this.currentState == states.GAME_MOVIE)
+        this.endAnimationGameMovie();
+      else
+        this.endAnimation();
+    }
 
     var pos = this.animation.getCurrentPosition();
     var ang = this.animation.getCurrentAngle();
@@ -150,13 +256,15 @@ PlayingState.prototype.endAnimation = function (){
 
 
 PlayingState.prototype.update = function (currtime){
+
+
     if(this.animation !== null)
       this.animation.update(currtime);
 
+  if(this.gameEnded === false){
     this.scoreBoard.update(currtime);
 
     if(this.scoreBoard.getTime() < 0 && this.timeout === false){
-      console.log(this.scoreBoard.getTime());
       //timeout - passar para o proximo jogador
 
       this.timeout=true;
@@ -164,17 +272,25 @@ PlayingState.prototype.update = function (currtime){
       if(this.animating)
         this.endAnimation();
 
-      this.board.clearAllTiles();
-      this.wallBoardOrange.clearAllTiles();
-      this.wallBoardYellow.clearAllTiles();
+      this.resetAllPieces();
       this.prepareForNextRound(this);
       this.changePlayer();
-
     }
+  }
 };
 
+PlayingState.prototype.resetAllPieces = function (){
+  this.board.clearAllTiles();
+  this.wallBoardOrange.clearAllTiles();
+  this.wallBoardYellow.clearAllTiles();
+};
 
 PlayingState.prototype.handleState = function (){
+
+  if(this.gameEnded && this.currentState !== states.GAME_MOVIE)
+    this.currentState=states.GAME_ENDED;
+
+
   switch (this.currentState) {
     case states.SELECT_PIECE:
           this.timeout=false;
@@ -225,8 +341,19 @@ PlayingState.prototype.handleState = function (){
             this.changePlayer();
           }else
             this.handleNextButon(true);
-
-
+      break;
+    case states.GAME_ENDED:
+          console.log('------------GAME_ENDED-----------------');
+          this.numberPlays=this.currentPlayId;
+          this.currentPlayId=0;
+          this.resetAllPieces();
+          this.board.resetAllTiles();
+          this.resetPawnPos();
+          this.currentState=states.GAME_MOVIE;
+          this.handleState();
+      break;
+    case states.GAME_MOVIE:
+      this.game_movie();
       break;
     default:
 
@@ -370,10 +497,15 @@ PlayingState.prototype.checkEnd = function (){
       console.log("Jogo terminou: " + Resdata);
 
       if(Resdata == 1){
+
+
         if(state.currentPlayer === players.ORANGE)
           state.scoreBoard.orangeWin();
         else
           state.scoreBoard.yellowWin();
+
+        state.gameEnded = true;
+
 
       }
   });
@@ -500,6 +632,7 @@ PlayingState.prototype.botPlaySecondMove = function (){
 
   if(newPos.x == -1 && newPos.y == -1){
     this.scoreBoard.yellowWin();
+    this.gameEnded=true;
     this.botPlayWall();
   }else {
     this.currentState=states.SECOND_MOVE;
@@ -596,6 +729,8 @@ PlayingState.prototype.animatePawn = function (){
   //limpar posicao atual do peao
   this.clearPawnPos(pawn);
 
+
+
   var oldx=pawn.x*0.6;
   var oldy=-pawn.y*0.6;
 
@@ -607,6 +742,7 @@ PlayingState.prototype.animatePawn = function (){
     pawn.x = play.end2.x;
     pawn.y = play.end2.y;
   }
+
 
 
   var newx=pawn.x*0.6;
@@ -635,8 +771,14 @@ PlayingState.prototype.animatePawn = function (){
 
 PlayingState.prototype.animateWall = function (placeWall){
   var play = this.plays[this.currentPlayId];
+  var currentPlayer;
 
-  var startCoords = getBoardWallCoords(this.currentPlayer,play.wallOrientation);
+  if(play.pawn.type == "orange")
+    currentPlayer=players.ORANGE;
+  else
+    currentPlayer=players.YELLOW;
+
+  var startCoords = getBoardWallCoords(currentPlayer,play.wallOrientation);
   var endCoords = new Point2(play.wallCoords.x * 0.6, - play.wallCoords.y * 0.6);
 
   //array Coords
@@ -704,10 +846,10 @@ PlayingState.prototype.placeWall = function (orientation,piece,x,y){
 
 };
 
-function getBoardWallCoords (currentPlayerPlayer,Orientation){
+function getBoardWallCoords (currentPlayer,Orientation){
   var x, y;
 
-  if(currentPlayerPlayer == players.ORANGE){
+  if(currentPlayer == players.ORANGE){
     if(Orientation == "h"){
       x= 15;
       y= -5;
