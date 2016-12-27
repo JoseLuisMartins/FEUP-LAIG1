@@ -3,7 +3,6 @@ function XMLscene(myInterface) {
   CGFscene.call(this);
 
   this.interface = myInterface;
-  this.graph = new MySceneGraph("spaceTraveller.dsx", this);
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);

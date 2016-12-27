@@ -172,7 +172,7 @@ MenuState.prototype.display = function () {
 MenuState.prototype.picking = function () {
 
     if (this.scene.pickMode === false) {
-        if (this.scene.pickResults !== null && this.scene.pickResults.length > 0 && !this.animating) {
+        if (this.scene.pickResults !== null && this.scene.pickResults.length > 0) {
             for (var i = 0; i < this.scene.pickResults.length; i++) {
                 var objID = this.scene.pickResults[i][1];
 
