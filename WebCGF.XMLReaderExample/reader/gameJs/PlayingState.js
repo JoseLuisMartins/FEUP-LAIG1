@@ -344,11 +344,17 @@ PlayingState.prototype.handleState = function (){
       break;
     case states.GAME_ENDED:
           console.log('------------GAME_ENDED-----------------');
+          if(this.currentPlayer === players.ORANGE)
+            this.scoreBoard.orangeWin();
+          else
+            this.scoreBoard.yellowWin();
+
           this.numberPlays=this.currentPlayId;
           this.currentPlayId=0;
           this.resetAllPieces();
           this.board.resetAllTiles();
           this.resetPawnPos();
+          this.scoreBoard.setTimer(30);
           this.currentState=states.GAME_MOVIE;
           this.handleState();
       break;
@@ -499,12 +505,6 @@ PlayingState.prototype.checkEnd = function (){
 
       if(Resdata == 1){
 
-
-        if(state.currentPlayer === players.ORANGE)
-          state.scoreBoard.orangeWin();
-        else
-          state.scoreBoard.yellowWin();
-
         state.gameEnded = true;
         state.handleState();
 
@@ -631,10 +631,9 @@ PlayingState.prototype.playBot = function (){
 PlayingState.prototype.botPlaySecondMove = function (){
   var newPos = this.plays[this.currentPlayId].end2;
 
-  if(newPos.x == -1 && newPos.y == -1){
-    this.scoreBoard.yellowWin();
+  if(newPos.x == -1 && newPos.y == -1){//bot ganhou
     this.gameEnded=true;
-    this.botPlayWall();
+    this.handleState();
   }else {
     this.currentState=states.SECOND_MOVE;
     this.animatePawn();

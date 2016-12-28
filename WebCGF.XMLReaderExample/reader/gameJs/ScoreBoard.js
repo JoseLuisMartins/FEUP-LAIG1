@@ -55,6 +55,10 @@ ScoreBoard.prototype.resetTimer = function() {
     this.timer.setNumber(31);
 };
 
+ScoreBoard.prototype.setTimer = function(number) {
+    this.timer.setNumber(number);
+};
+
 ScoreBoard.prototype.getTime = function() {
     return this.timer.displayNumber;
 };
