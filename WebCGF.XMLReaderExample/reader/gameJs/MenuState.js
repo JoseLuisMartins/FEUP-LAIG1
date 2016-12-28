@@ -93,6 +93,10 @@ function MenuState(scene) {
     this.restart = new CGFappearance(scene);
     this.restart.loadTexture("resources\\images\\menus\\restart.png");
     this.setAllColors(this.restart, 1, 1, 1, 1);
+
+    this.about = new CGFappearance(scene);
+    this.about.loadTexture("resources\\images\\menus\\about_text.png");
+    this.setAllColors(this.about, 1, 1, 1, 1);
 }
 
 MenuState.prototype.display = function () {
@@ -197,10 +201,17 @@ MenuState.prototype.display = function () {
 
         case submenu.ABOUT:
 
+            this.about.apply();
+            this.scene.pushMatrix();
+                this.scene.translate(0, y-5, z+15);
+                this.scene.scale(2, 3, 1);
+                this.second.display();
+            this.scene.popMatrix();
+
             this.backAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(12, this.back);
-                this.scene.translate(0, y-7.5, z);
+                this.scene.translate(0, y-12, z+8);
                 this.scene.scale(0.5, 0.5, 0.5);
                 this.back.display();
             this.scene.popMatrix();
@@ -362,8 +373,8 @@ MenuState.prototype.update = function (currTime) {
 
     if (this.first.animation === null && this.second.animation === null && this.third.animation === null && this.back.animation === null) {
         this.animating = false;
-        
-        if ((this.submenu == submenu.SETTINGS && this.selected != 11 && (this.selected == 8 || this.selected == 9 || this.selected == 10)) || 
+
+        if ((this.submenu == submenu.SETTINGS && this.selected != 11 && (this.selected == 8 || this.selected == 9 || this.selected == 10)) ||
             (this.submenu == submenu.AFTER_GAME && (this.selected == 14 || this.selected == 15 || this.selected == 16))) {
                 this.ready = true;
         }
