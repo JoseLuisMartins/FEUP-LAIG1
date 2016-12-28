@@ -82,9 +82,9 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
   //rotate camera
 
   this.cameraRotating=false;
-  this.inc=0;
+  this.inc = 0;
   this.ang = 0;
-  this.finalAng=0;
+  this.finalAng = 0;
 
 
 
@@ -249,6 +249,10 @@ PlayingState.prototype.display = function () {
 PlayingState.prototype.cameraAnimation = function (){
   this.cameraRotating=true;
   this.ang=-0;
+
+  //garantir que a camera da cena é a correta
+  this.scene.viewIndex=2;
+  this.scene.updateView();
 
   if(this.currentPlayer == players.ORANGE){
     this.scene.camera.setPosition(vec3.fromValues(25, 25, -45));
