@@ -79,6 +79,15 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
   this.animating=false;
   this.animation=null;
   this.animationObject=null;
+  //rotate camera
+
+  this.cameraRotating=false;
+  this.inc=0;
+  this.ang = 0;
+  this.finalAng=0;
+  this.cameraAnimation();
+
+
 
   this.handleState();
 }
@@ -180,6 +189,7 @@ PlayingState.prototype.endAnimationGameMovie = function (){
 PlayingState.prototype.display = function () {
   this.scene.pushMatrix();
 
+
   //scoreBoard
   this.scene.pushMatrix();
   this.scene.translate(-2,5.8,-8);
@@ -223,8 +233,32 @@ PlayingState.prototype.display = function () {
 
   this.scene.popMatrix();
 
+  //camera rotation
+  if(this.cameraRotating){
+    if(Math.abs(this.ang) > Math.abs(this.finalAng))
+      this.cameraRotating=false;
+
+    this.scene.camera.orbit(this.scene.axis,this.ang);
+    this.ang += this.inc;
+  }
 
   this.scene.popMatrix();
+
+};
+
+PlayingState.prototype.cameraAnimation = function (){
+  this.cameraRotating=true;
+  this.ang=-0;
+
+  if(this.currentPlayer == players.ORANGE){
+    this.scene.camera.setPosition(vec3.fromValues(25, 25, -45));
+    this.inc= 0.01;
+    this.finalAng= 0.05;
+  }else{
+    this.scene.camera.setPosition(vec3.fromValues(20, 20, 30));
+    this.inc= -0.01;
+    this.finalAng= -0.05;
+  }
 
 };
 
@@ -337,6 +371,7 @@ PlayingState.prototype.handleState = function (){
           this.handleState();
       break;
     case states.CHANGE_PLAYER://animaçao da camera
+          this.cameraAnimation();
           if(this.plays[this.currentPlayId].wallCoords === null){
             this.prepareForNextRound(this);
             this.changePlayer();
@@ -658,6 +693,7 @@ PlayingState.prototype.botPlayWall = function (){
 
 PlayingState.prototype.botPlayNextRound = function (){
   //next state
+  this.cameraAnimation();
   this.prepareForNextRound(this);
   this.scoreBoard.resetTimer();
   this.currentState=states.SELECT_PIECE;
@@ -785,7 +821,7 @@ PlayingState.prototype.animatePawn = function (){
 
   var controlPoints= new Array(3);
   controlPoints[0]= new Point3(oldx, 0 , oldy);
-  controlPoints[1]= new Point3(oldx + (newx-oldx)/2, 1, oldy + (-newy - oldy)/2);
+  controlPoints[1]= new Point3(oldx + (newx-oldx)/2, 2, oldy + (-newy - oldy)/2);
   controlPoints[2]= new Point3(newx , 0, - newy);
 
   var slopes = [0,0,0];
