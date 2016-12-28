@@ -819,16 +819,16 @@ PlayingState.prototype.animatePawn = function (){
   var controlPoints= new Array(3);
   controlPoints[0]= new Point3(oldx, 0 , oldy);
   controlPoints[1]= new Point3(oldx + (newx-oldx)/2, 2, oldy + (-newy - oldy)/2);
-  controlPoints[2]= new Point3(newx , 0, - newy);
+  controlPoints[2]= new Point3(newx , 0, -newy);
 
-  var slopes = [0,0,0];
+  var slopes = [0,4,0];
 
   var angles= new Array(3);
   angles[0]= new Point3(0,0,0);
   angles[1]= new Point3(0,0,0);
   angles[2]= new Point3(0,0,0);
 
-  this.animation= new KeyframeAnimation("boas", 0.5, controlPoints, slopes, angles);
+  this.animation= new KeyframeAnimation("boas", 0.8, controlPoints, slopes, angles);
   this.animation.render=true;
 
 };
