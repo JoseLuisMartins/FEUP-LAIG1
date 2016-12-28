@@ -41,7 +41,8 @@ XMLscene.prototype.init = function (application) {
   this.audio.controls=true;
   this.audio.loop=true;
   this.audio.autoplay=true;
-  this.audioSrc = 'pina_colada';
+
+  this.currentScene = "Island";
 };
 
 XMLscene.prototype.initLights = function () {
@@ -230,16 +231,16 @@ XMLscene.prototype.handleAudio = function() {
 XMLscene.prototype.setGraph = function(filename) {
   this.graph = new MySceneGraph(filename, this);
 
-  if (filename == "Island.dsx" && this.audioSrc != 'pina_colada') {
+  if (filename == "Island.dsx" && this.currentScene != 'Island') {
     this.audio.src = 'resources\\sound\\pina_colada.mp3';
-    this.audioSrc = 'pina_colada';
+    this.currentScene = 'Island';
   }
-  else if (filename == "Space.dsx" && this.audioSrc != 'space') {
+  else if (filename == "Space.dsx" && this.currentScene != 'Space') {
     this.audio.src = 'resources\\sound\\space.mp3';
-    this.audioSrc = 'space';
+    tthis.currentScene = 'Space';
   }
-  else if (filename == "Studio.dsx" && this.audioSrc != 'sotor') {
+  else if (filename == "Studio.dsx" && this.currentScene != 'Studio') {
     this.audio.src = 'resources\\sound\\sotor.mp3';
-    this.audioSrc = 'sotor';
+    this.currentScene = 'Studio';
   }
 };

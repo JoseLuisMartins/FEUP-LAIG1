@@ -24,6 +24,11 @@
         <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
+        <perspective id="menu" near="0.1" far="200000" angle="40">
+            <from x="1100" y="898" z="0" />
+            <to x="0" y="250" z="0" />
+        </perspective>
+
         <perspective id="p1" near="0.1" far="200000" angle="22">
             <from x="20" y="20" z="30" />
             <to x="7.2" y="2" z="-10" />
@@ -42,7 +47,7 @@
 
 
     <illumination doublesided="1" local="1" >
-        <ambient r="0.5" g="0.5" b="0.5" a="0.1" />
+        <ambient r="1" g="1" b="1" a="1" />
         <background r="0.1" g="0.1" b="0.2" a="1" />
     </illumination>
 
@@ -54,9 +59,9 @@
             <!-- atencao, "target" e' diferente de "direction" -->
             <target x="7.2" y="2" z="-10" />
             <location x="-140" y="20" z="140" w="1" />
-            <ambient r="1" g="1" b="1" a="1" />
-            <diffuse r="1" g="1" b="1" a="0.5" />
-            <specular r="1" g="1" b="1" a="0.5" />
+            <ambient r="0" g="1" b="1" a="1" />
+            <diffuse r="0" g="1" b="1" a="0.5" />
+            <specular r="0" g="1" b="1" a="0.5" />
         </spot>
 
         <spot id="lamp2" enabled="1" angle="5" exponent="1">
@@ -252,9 +257,9 @@
                 <!-- limite nem ordem -->
                 <!-- ex: bloco transformation pode ficar sem conteudo -->
 
-                <translate x="-3" y="-108.5" z="-7.5" />
-                <scale x="6" y="6" z="6" />
-                <rotate axis="y" angle="-90" />
+                <translate x="20" y="-270.5" z="-7.5" />
+                <scale x="15" y="15" z="15" />
+                <rotate axis="y" angle="90" />
             </transformation>
 
             <!-- declaracao obrigatoria de pelo menos um material; -->

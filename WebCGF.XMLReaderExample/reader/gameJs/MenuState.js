@@ -34,7 +34,7 @@ function MenuState(scene) {
     this.back = new Button(scene);
 
     this.titleAppearance = new CGFappearance(scene);
-    this.titleAppearance.loadTexture("resources\\images\\blockade.png");
+    this.titleAppearance.loadTexture("resources\\images\\menus\\blockade.png");
     this.setAllColors(this.titleAppearance, 1, 1, 1, 1);
 
     this.playAppearance = new CGFappearance(scene);
@@ -86,27 +86,40 @@ MenuState.prototype.display = function () {
     this.scene.pushMatrix();
     this.scene.rotate(Math.PI/2,0,1,0);
 
-    this.scene.pushMatrix();
-    this.titleAppearance.apply();
-    this.scene.translate(0, 198, 470);
-    this.scene.scale(15, 1.5, 0.2);
-    this.title.display();
-    this.scene.popMatrix();
+    var y,z;
+    if (this.scene.currentScene == 'Island') {
+        y = 198;
+        z = 470;
+    }
+    else if (this.scene.currentScene == 'Space') {
+        y = 197;
+        z = 470;
+    }
+    else if (this.scene.currentScene == 'Studio') {
+        y = 893;
+        z = 1080;
+    }
 
     switch (this.submenu) {
         case submenu.MAIN:
+            this.scene.pushMatrix();
+                this.titleAppearance.apply();
+                this.scene.translate(0, y, z);
+                this.scene.scale(15, 1.5, 0.2);
+                this.title.display();
+            this.scene.popMatrix();
 
             this.playAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(1, this.first);
-                this.scene.translate(0, 195, 470);
+                this.scene.translate(0, y-3, z);
                 this.first.display();
             this.scene.popMatrix();
 
             this.aboutAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(2, this.second);
-                this.scene.translate(0, 192, 470);
+                this.scene.translate(0, y-6, z);
                 this.second.display();
             this.scene.popMatrix();
         break;
@@ -115,21 +128,21 @@ MenuState.prototype.display = function () {
             this.singlePlayerAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(4, this.first);
-                this.scene.translate(0, 195, 470);
+                this.scene.translate(0, y-3, z);
                 this.first.display();
             this.scene.popMatrix();
 
             this.multiPlayerAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(5, this.second);
-                this.scene.translate(0, 192, 470);
+                this.scene.translate(0, y-6, z);
                 this.second.display();
             this.scene.popMatrix();
 
             this.backAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(3, this.back);
-                this.scene.translate(0, 190.5, 470);
+                this.scene.translate(0, y-7.5, z);
                 this.scene.scale(0.5, 0.5, 0.5);
                 this.back.display();
             this.scene.popMatrix();
@@ -139,7 +152,7 @@ MenuState.prototype.display = function () {
             this.lostIslandAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(8, this.first);
-                this.scene.translate(-15, 183, 460);
+                this.scene.translate(-15, y-15, z-10);
                 this.scene.scale(2, 6, 1);
                 this.first.display();
             this.scene.popMatrix();
@@ -147,7 +160,7 @@ MenuState.prototype.display = function () {
             this.outerSpaceAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(9, this.second);
-                this.scene.translate(0, 183, 460);
+                this.scene.translate(0, y-15, z-10);
                 this.scene.scale(2, 6, 1);
                 this.second.display();
             this.scene.popMatrix();
@@ -155,7 +168,7 @@ MenuState.prototype.display = function () {
             this.studioAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(10, this.third);
-                this.scene.translate(15, 183, 460);
+                this.scene.translate(15, y-15, z-10);
                 this.scene.scale(2, 6, 1);
                 this.third.display();
             this.scene.popMatrix();
@@ -163,7 +176,7 @@ MenuState.prototype.display = function () {
             this.backAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(11, this.back);
-                this.scene.translate(0, 185.5, 470);
+                this.scene.translate(0, y-12.5, z);
                 this.scene.scale(0.5, 0.5, 0.5);
                 this.back.display();
             this.scene.popMatrix();
@@ -174,7 +187,7 @@ MenuState.prototype.display = function () {
             this.backAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(12, this.back);
-                this.scene.translate(0, 190.5, 470);
+                this.scene.translate(0, y-7.5, z);
                 this.scene.scale(0.5, 0.5, 0.5);
                 this.back.display();
             this.scene.popMatrix();
@@ -184,21 +197,21 @@ MenuState.prototype.display = function () {
             this.easyAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(6, this.first);
-                this.scene.translate(0, 195, 470);
+                this.scene.translate(0, y-3, z);
                 this.first.display();
             this.scene.popMatrix();
 
             this.hardAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(7, this.second);
-                this.scene.translate(0, 192, 470);
+                this.scene.translate(0, y-6, z);
                 this.second.display();
             this.scene.popMatrix();
 
             this.backAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(13, this.back);
-                this.scene.translate(0, 190.5, 470);
+                this.scene.translate(0, y-7.5, z);
                 this.scene.scale(0.5, 0.5, 0.5);
                 this.back.display();
             this.scene.popMatrix();

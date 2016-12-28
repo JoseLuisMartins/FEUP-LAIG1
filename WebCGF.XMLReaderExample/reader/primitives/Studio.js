@@ -13,9 +13,10 @@ function Studio(scene) {
 
     this.floor = new Cylinder(scene, 80, 60, 10, 40, 40);
     this.floorApperance = new CGFappearance(scene);
-    this.floorApperance.setAmbient(0, 0, 0, 1);
-    this.floorApperance.setDiffuse(0, 0, 0.7, 1);
-    this.floorApperance.setSpecular(1, 1, 1, 0.4);
+    this.floorApperance.loadTexture("resources\\images\\floor.jpg");
+    this.floorApperance.setAmbient(1, 1, 1, 0.5);
+    this.floorApperance.setDiffuse(1, 1, 1, 0.5);
+    this.floorApperance.setSpecular(1, 1, 1, 1);
 
 
     this.table = new DebateTable(scene);

@@ -8,7 +8,7 @@ function SpaceStation(scene) {
     this.torus = new Torus(scene, 13, 15, 40, 40);
     this.cylinder = new Cylinder(scene, 0.1, 0.1, 13, 40, 40);
     this.holder = new Cylinder(scene, 0.5, 0.5, 2, 40, 40);
-    this.platform = new Cylinder(scene, 4, 4, 1, 5, 5);
+    this.platform = new Cylinder(scene, 4, 4, 1, 40, 40);
 
     this.torusAppearance = new CGFappearance(scene);
     this.torusAppearance.setAmbient(1, 1, 1, 1);
