@@ -21,6 +21,8 @@ function Displayer(scene, initialNumber) {
 
     this.displayNumber = initialNumber;
     this.setNumber(initialNumber);
+
+		this.displayOneDigit=false;
 }
 
 Displayer.prototype = Object.create(CGFobject.prototype);
@@ -28,9 +30,10 @@ Displayer.prototype.constructor = Displayer;
 
 
 Displayer.prototype.display = function() {
-
-    this.leftAppearance.apply();
-		this.left.display();
+		if(!this.displayOneDigit){
+	    this.leftAppearance.apply();
+			this.left.display();
+		}
 
     this.rightAppearance.apply();
     this.right.display();
@@ -95,4 +98,8 @@ Displayer.prototype.setAllColors = function(r, g, b, a) {
     this.rightAppearance.setAmbient(r, g, b, a);
 	this.rightAppearance.setDiffuse(r, g, b, a);
 	this.rightAppearance.setSpecular(r, g, b, a);
+};
+
+Displayer.prototype.setDisplayOneDigit = function(value) {
+    this.displayOneDigit=value;
 };

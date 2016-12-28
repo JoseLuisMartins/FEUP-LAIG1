@@ -18,8 +18,12 @@ function WallBoard(scene) {
   var elementSelectedTex=new CGFtexture(scene, "resources\\images\\rocket_top.jpg");
   var elementSelectableTex=new CGFtexture(scene, "resources\\images\\neptune.jpg");
 
+	//wall counters
+	this.blueWallsNumber = new Displayer(scene, 9);
+  this.greenWallsNumber = new Displayer(scene, 9);
 
-
+	this.blueWallsNumber.setDisplayOneDigit(true);
+	this.greenWallsNumber.setDisplayOneDigit(true);
 
 
 	//button
@@ -42,13 +46,29 @@ WallBoard.prototype.constructor = WallBoard;
 WallBoard.prototype.display = function() {
 //box
 	this.scene.pushMatrix();
+	this.scene.translate(0.5,0,0);
+	this.scene.scale(1.5,1,1);
 	this.box.display();
+	this.scene.popMatrix();
+
+//counters
+	//blue
+	this.scene.pushMatrix();
+	this.scene.translate(0.6,0.1,-0.6);
+	this.scene.rotate(-Math.PI/2,1,0,0);
+	this.blueWallsNumber.display();
+	this.scene.popMatrix();
+
+	//green
+	this.scene.pushMatrix();
+	this.scene.translate(0.6,0.1,1.4);
+	this.scene.rotate(-Math.PI/2,1,0,0);
+	this.greenWallsNumber.display();
 	this.scene.popMatrix();
 
 
 //walls
   this.scene.pushMatrix();
-
   this.scene.scale(1,0.5,1);
 //green
   this.scene.pushMatrix();
@@ -65,7 +85,7 @@ WallBoard.prototype.display = function() {
 
 //button
 	this.scene.pushMatrix();
-	this.scene.translate(0,0,3.5);
+	this.scene.translate(0.5,0,3.5);
 	this.scene.scale(2,0.05,1.5);
 	this.scene.rotate(-Math.PI/2,0,1,0);
 	this.button.display();
@@ -73,6 +93,18 @@ WallBoard.prototype.display = function() {
 
   this.scene.popMatrix();
 
+};
+
+WallBoard.prototype.setBlueNumber = function(val) {
+  this.blueWallsNumber.setNumber(val);
+};
+
+WallBoard.prototype.setGreenNumber = function(val) {
+  this.greenWallsNumber.setNumber(val);
+};
+
+WallBoard.prototype.handleSelectionButton = function(enable) {
+  this.button.handleSelection(enable);
 };
 
 

@@ -191,12 +191,12 @@ PlayingState.prototype.display = function () {
   this.board.display();
 
   this.scene.pushMatrix();
-  this.scene.translate(15,-0.3,-5);
+  this.scene.translate(14.65,-0.3,-5);
   this.wallBoardOrange.display();
   this.scene.popMatrix();
 
   this.scene.pushMatrix();
-  this.scene.translate(15,-0.3,-11);
+  this.scene.translate(15.5,-0.3,-11);
   this.scene.rotate(Math.PI,0,1,0);
   this.wallBoardYellow.display();
   this.scene.popMatrix();
@@ -314,7 +314,7 @@ PlayingState.prototype.handleState = function (){
     case states.SECOND_MOVE:
           this.handleMovement();
           //se ouver parede posicionar uma senão passar para o proximo jogador
-          this.checkHasWalls();
+          this.checkHasWalls(false);
       break;
     case states.SELECT_WALL:
 
@@ -323,6 +323,7 @@ PlayingState.prototype.handleState = function (){
           this.handleWallTilesPicking(true);
       break;
     case states.ANIMATE_WALL:
+          this.checkHasWalls(true);
           //tornar as paredes nao selicionaveis novamente
           this.handleWallTilesPicking(false);
           //tornar o tabuleiro auxiliar nao selicionavel novamente
@@ -455,7 +456,7 @@ PlayingState.prototype.undoWall = function (player,wallX,wallY,orientation){
 
       state.animateWall(false);//retirar parede javascript
       state.plays[state.currentPlayId].resetWall();
-      state.checkHasWalls();
+      state.checkHasWalls(false);
     });
 };
 
@@ -644,12 +645,14 @@ PlayingState.prototype.botPlaySecondMove = function (){
 PlayingState.prototype.botPlayWall = function (){
   var currentPlay=this.plays[this.currentPlayId];
   this.checkEnd();
+  //atualizar o numero de paredes
+  this.checkHasWalls(true);
+
 
   if(currentPlay.wallCoords !== null)
     this.animateWall(true);
   else
     this.botPlayNextRound();
-
 
 };
 
@@ -662,11 +665,30 @@ PlayingState.prototype.botPlayNextRound = function (){
 
 };
 
-PlayingState.prototype.checkHasWalls = function (){
+
+
+PlayingState.prototype.checkHasWalls = function (update){
     var state=this;
+    var pawn = this.plays[this.currentPlayId].pawn;
 
-    this.client.getPrologRequest("hasWalls(" +   this.pawnPieceSelected.type + ")",handleCheckWallRequest);
 
+    if(update)
+      this.client.getPrologRequest("hasWalls(" +   pawn.type + ")",handleUpdateWallRequest);
+    else
+      this.client.getPrologRequest("hasWalls(" +   pawn.type + ")",handleCheckWallRequest);
+
+    function handleUpdateWallRequest(data){
+      var numberWalls = JSON.parse(data.target.responseText);
+
+      var blueWallsNumber = numberWalls[0];
+      var greenWallsNumber = numberWalls[1];
+
+      if(state.currentPlayer == players.ORANGE)
+        updateWallNumber(blueWallsNumber,greenWallsNumber,state.wallBoardOrange);
+      else
+        updateWallNumber(blueWallsNumber,greenWallsNumber,state.wallBoardYellow);
+
+    }
 
     function handleCheckWallRequest(data){
       console.log(data.target.responseText);
@@ -686,10 +708,19 @@ PlayingState.prototype.checkHasWalls = function (){
           enableWallPick(blueWallsNumber,greenWallsNumber,state.wallBoardOrange);
         else
           enableWallPick(blueWallsNumber,greenWallsNumber,state.wallBoardYellow);
-      }
+
 
       state.handleState();
+      }
     }
+
+
+
+    function updateWallNumber(blueWallsNumber,greenWallsNumber,board){
+      board.setBlueNumber(blueWallsNumber);
+      board.setGreenNumber(greenWallsNumber);
+    }
+
 
     function enableWallPick(blueWallsNumber,greenWallsNumber,board){
       board.handleSelectionButton(true);
@@ -852,18 +883,18 @@ function getBoardWallCoords (currentPlayer,Orientation){
   if(currentPlayer == players.ORANGE){
     if(Orientation == "h"){
       x= 15;
-      y= -5;
+      y= -6;
     }else {
-      x= 15;
-      y= -3;
+      x= 14.5;
+      y= -4;
     }
   }else {
     if(Orientation == "h"){
       x= 15;
-      y= -11;
+      y= -10;
     }else {
       x= 15;
-      y= -13;
+      y= -12;
     }
   }
 
