@@ -11,23 +11,23 @@ function DebateTable(scene) {
 
     this.whiteAppearance = new CGFappearance(scene);
 	this.whiteAppearance.loadTexture("resources\\images\\marble.jpg");
-    this.whiteAppearance.setAmbient(1, 1, 1, 1);
+    this.whiteAppearance.setAmbient(0.3, 0.3, 0.3, 0.5);
     this.whiteAppearance.setDiffuse(0, 1, 1, 0.5);
 
     this.beigeAppearance = new CGFappearance(scene);
 	this.beigeAppearance.loadTexture("resources\\images\\beige_marble.jpg");
-    this.beigeAppearance.setAmbient(1, 1, 1, 1);
+    this.beigeAppearance.setAmbient(0.3, 0.3, 0.3, 0.5);
     this.beigeAppearance.setDiffuse(0, 1, 1, 0.5);
 
     this.blackAppearance = new CGFappearance(scene);
 	this.blackAppearance.loadTexture("resources\\images\\black.jpg");
-    this.blackAppearance.setAmbient(1, 1, 1, 1);
+    this.blackAppearance.setAmbient(1, 1, 1, 0.5);
     this.blackAppearance.setDiffuse(1, 1, 1, 0.5);
     this.blackAppearance.setSpecular(1, 1, 1, 0.5);
 
     this.boardAppearance = new CGFappearance(scene);
 	this.boardAppearance.loadTexture("resources\\images\\blockade.jpg");
-    this.boardAppearance.setAmbient(1, 1, 1, 1);
+    this.boardAppearance.setAmbient(1, 1, 1, 0.5);
     this.boardAppearance.setDiffuse(1, 1, 1, 0.5);
     this.boardAppearance.setSpecular(1, 1, 1, 0.5);
 }
