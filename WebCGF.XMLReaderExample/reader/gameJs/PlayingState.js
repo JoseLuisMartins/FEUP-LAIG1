@@ -8,7 +8,8 @@ var states={
   ANIMATE_WALL: 7,
   CHANGE_PLAYER: 8,
   GAME_ENDED: 9,
-  GAME_MOVIE: 10,
+  GAME_WAITING: 10,
+  GAME_MOVIE: 11,
 };
 
 var players={
@@ -30,7 +31,7 @@ var gameMovie={
 
 
 
-function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1,orange2,yellow1,yellow2,gameMode,gameDifficulty){
+function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1,orange2,yellow1,yellow2,gameMode,gameDifficulty,scoreBoard){
 
   this.scene=scene;
   //game
@@ -49,7 +50,8 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
   this.wallTileSelected= null;
   this.mode = gameMode;
   this.gameDifficulty=gameDifficulty;
-  this.scoreBoard = new ScoreBoard(this.scene);
+  this.scoreBoard = scoreBoard;
+  this.scoreBoard.resetTimer();
   this.timeout = false;
   this.gameEnded = false;
 
@@ -86,6 +88,8 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
   this.ang = 0;
   this.finalAng = 0;
 
+  this.scene.viewIndex=2;
+  this.scene.updateView();
 
 
 
@@ -117,7 +121,8 @@ PlayingState.prototype.resetPawnPos = function (){
 
 PlayingState.prototype.game_movie = function (){
   console.log("-------------GAME MOVIE-------------");
-
+  console.log(this.currentPlayId);
+  console.log(this.numberPlays);
 
   if(this.currentPlayId <= this.numberPlays){
     var currentPlay = this.plays[this.currentPlayId];
@@ -165,7 +170,12 @@ PlayingState.prototype.game_movie = function (){
 
       default:
     }
+  }else{
+    this.handleState();
+    this.currentPlayId=0;
+    this.resetPawnPos();
   }
+
 };
 
 
@@ -349,6 +359,8 @@ PlayingState.prototype.handleState = function (){
           this.pawnTileSelected.select();
           //dar enable das tiles
           this.handleTilesPicking(true);
+
+
       break;
     case states.SECOND_MOVE:
           this.handleMovement();
@@ -397,11 +409,12 @@ PlayingState.prototype.handleState = function (){
           this.board.resetAllTiles();
           this.resetPawnPos();
           this.scoreBoard.setTimer(30);
-          this.currentState=states.GAME_MOVIE;
-          this.handleState();
+          this.currentState=states.GAME_WAITING;
+      break;
+    case states.GAME_WAITING:
       break;
     case states.GAME_MOVIE:
-      this.game_movie();
+        this.currentState=states.GAME_WAITING;
       break;
     default:
 

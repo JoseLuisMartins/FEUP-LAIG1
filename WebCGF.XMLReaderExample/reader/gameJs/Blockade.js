@@ -15,7 +15,11 @@ function Blockade(scene) {
 
   this.client = new Client();
   this.board = new Board(scene);
-  this.state = new MenuState(scene);
+
+  //states
+  this.menuState = new MenuState(scene);
+  this.playState;
+  this.state = this.menuState;
 
   var WallBoardTex=new CGFtexture(scene, "resources\\images\\boardTex2.jpg");
   this.WallBoardOrange = new WallBoard(scene,WallBoardTex);
@@ -39,6 +43,7 @@ Blockade.prototype.init = function (){
   this.orange2 = new Pawn(this.scene,"resources\\images\\abstractorange.jpg","[orange,2]","orange");
   this.yellow1 = new Pawn(this.scene,"resources\\images\\boardTex.png","[yellow,1]","yellow");
   this.yellow2 = new Pawn(this.scene,"resources\\images\\boardTex.png","[yellow,2]","yellow");
+  this.scoreBoard = new ScoreBoard(this.scene);
 
   this.waiting = 0;
 };
@@ -49,10 +54,31 @@ Blockade.prototype.logPicking = function ()
       this.state.picking();
 
       if (this.state instanceof MenuState && this.state.ready && this.changingState === false) {//passar para o jogo
-        this.changingState = true;
-        this.gameMode=this.state.mode;
-        this.gameDifficulty=this.state.difficulty;
-        this.initPrologGraph();
+
+        if(this.state.submenu == 5 && this.state.selected == 14){//game movie
+          this.scene.viewIndex=3;
+          this.scene.updateView();
+          this.playState.currentState = 11;
+          this.state=this.playState;
+          this.playState.game_movie();
+        }else if (this.state.submenu == 5 && this.state.selected == 16) {//main menu
+          this.menuState.ready = false;
+          this.menuState.submenu = 0;
+          this.menuState.nextSubmenu = 0;
+        }else {
+          this.changingState = true;
+          this.gameMode=this.state.mode;
+          this.gameDifficulty=this.state.difficulty;
+          this.initPrologGraph();
+        }
+      }else if(this.state instanceof PlayingState && this.state.currentState == 10){
+        this.scene.viewIndex=0;
+        this.scene.updateView();
+        this.changingState = false;
+        this.menuState.ready = false;
+        this.menuState.submenu = 5;
+        this.menuState.nextSubmenu = 5;
+        this.state=this.menuState;
       }
    }
 };
@@ -114,8 +140,10 @@ Blockade.prototype.updateAllPawnPositions = function ()
 
 Blockade.prototype.goToPlaystate = function (){
   if(this.waiting == 5) {
-    this.state=new PlayingState(this.scene,this.client,this.board,this.WallBoardOrange,this.WallBoardYellow,
-      this.orange1,this.orange2,this.yellow1,this.yellow2,this.gameMode,this.gameDifficulty);
+    this.playState=new PlayingState(this.scene,this.client,this.board,this.WallBoardOrange,this.WallBoardYellow,
+      this.orange1,this.orange2,this.yellow1,this.yellow2,this.gameMode,this.gameDifficulty,  this.scoreBoard);
+    this.state=this.playState;
+    this.waiting=0;
   }
 
 };

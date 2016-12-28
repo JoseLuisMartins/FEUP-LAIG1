@@ -3,7 +3,8 @@ var submenu = {
     PLAY: 1,
     SETTINGS: 2,
     ABOUT: 3,
-    SINGLE_PLAYER : 4,
+    DIFFICULTY : 4,
+    AFTER_GAME : 5,
 };
 
 var mode = {
@@ -80,6 +81,18 @@ function MenuState(scene) {
     this.backAppearance = new CGFappearance(scene);
     this.backAppearance.loadTexture("resources\\images\\menus\\back.png");
     this.setAllColors(this.backAppearance, 1, 1, 1, 1);
+
+    this.goToMenu = new CGFappearance(scene);
+    this.goToMenu.loadTexture("resources\\images\\menus\\go_to_menu.png");
+    this.setAllColors(this.goToMenu, 1, 1, 1, 1);
+
+    this.gameMovie = new CGFappearance(scene);
+    this.gameMovie.loadTexture("resources\\images\\menus\\game_movie.png");
+    this.setAllColors(this.gameMovie, 1, 1, 1, 1);
+
+    this.restart = new CGFappearance(scene);
+    this.restart.loadTexture("resources\\images\\menus\\restart.png");
+    this.setAllColors(this.restart, 1, 1, 1, 1);
 }
 
 MenuState.prototype.display = function () {
@@ -193,7 +206,7 @@ MenuState.prototype.display = function () {
             this.scene.popMatrix();
         break;
 
-        case submenu.SINGLE_PLAYER:
+        case submenu.DIFFICULTY:
             this.easyAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(6, this.first);
@@ -214,6 +227,29 @@ MenuState.prototype.display = function () {
                 this.scene.translate(0, y-7.5, z);
                 this.scene.scale(0.5, 0.5, 0.5);
                 this.back.display();
+            this.scene.popMatrix();
+        break;
+
+        case submenu.AFTER_GAME:
+            this.gameMovie.apply();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(14, this.first);
+                this.scene.translate(0, y-3, z);
+                this.first.display();
+            this.scene.popMatrix();
+
+            this.restart.apply();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(15, this.second);
+                this.scene.translate(0, y-6, z);
+                this.second.display();
+            this.scene.popMatrix();
+
+            this.goToMenu.apply();
+            this.scene.pushMatrix();
+                this.scene.registerForPick(16, this.third);
+                this.scene.translate(0, y-9, z);
+                this.third.display();
             this.scene.popMatrix();
         break;
     }
@@ -249,7 +285,7 @@ MenuState.prototype.picking = function () {
 
                     case submenu.PLAY:
                         if (objID == 4) {
-                            this.nextSubmenu = submenu.SINGLE_PLAYER;
+                            this.nextSubmenu = submenu.DIFFICULTY;
                             this.mode = mode.HUMAN_VS_BOT;
                             this.click(this.first, objID);
                         } else if (objID == 5) {
@@ -285,7 +321,7 @@ MenuState.prototype.picking = function () {
                         }
                     break;
 
-                    case submenu.SINGLE_PLAYER:
+                    case submenu.DIFFICULTY:
                         if (objID == 6) {
                             this.difficulty = difficulty.EASY;
                             this.nextSubmenu = submenu.SETTINGS;
@@ -307,6 +343,12 @@ MenuState.prototype.picking = function () {
                             this.nextSubmenu = submenu.MAIN;
                             this.click(this.back, objID);
                         }
+                    break;
+                    case submenu.AFTER_GAME:
+                      this.selected = objID;
+                      this.ready=true;
+
+                    break;
                 }
             }
         }
