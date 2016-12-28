@@ -88,10 +88,8 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
   this.ang = 0;
   this.finalAng = 0;
 
-  this.scene.viewIndex=2;
+  this.scene.viewIndex=1;
   this.scene.updateView();
-
-
 
   this.handleState();
 }
@@ -173,6 +171,7 @@ PlayingState.prototype.game_movie = function (){
   }else{
     this.handleState();
     this.currentPlayId=0;
+    this.board.resetAllTiles();
     this.resetPawnPos();
   }
 
@@ -248,7 +247,7 @@ PlayingState.prototype.display = function () {
     if(Math.abs(this.ang) > Math.abs(this.finalAng))
       this.cameraRotating=false;
 
-    this.scene.camera.orbit(this.scene.axis,this.ang);
+    this.scene.camera.orbit(this.scene.axis, this.ang);
     this.ang += this.inc;
   }
 
@@ -256,9 +255,9 @@ PlayingState.prototype.display = function () {
 
 };
 
-PlayingState.prototype.cameraAnimation = function (){
+PlayingState.prototype.cameraAnimation = function () {
   this.cameraRotating=true;
-  this.ang=-0;
+  this.ang=0;
 
   //garantir que a camera da cena é a correta
   this.scene.viewIndex=2;
@@ -266,12 +265,12 @@ PlayingState.prototype.cameraAnimation = function (){
 
   if(this.currentPlayer == players.ORANGE){
     this.scene.camera.setPosition(vec3.fromValues(25, 25, -45));
-    this.inc= 0.01;
-    this.finalAng= 0.05;
+    this.inc= 0.005;
+    this.finalAng= 0.04;
   }else{
     this.scene.camera.setPosition(vec3.fromValues(20, 20, 30));
-    this.inc= -0.01;
-    this.finalAng= -0.05;
+    this.inc= -0.005;
+    this.finalAng= -0.02;
   }
 
 };
@@ -840,15 +839,15 @@ PlayingState.prototype.animatePawn = function (){
 
   var controlPoints= new Array(3);
   controlPoints[0]= new Point3(oldx, 0 , oldy);
-  controlPoints[1]= new Point3(oldx + (newx-oldx)/2, 2, oldy + (-newy - oldy)/2);
+  controlPoints[1]= new Point3(oldx + (newx-oldx)/2, 3, oldy + (-newy - oldy)/2);
   controlPoints[2]= new Point3(newx , 0, -newy);
 
-  var slopes = [0,4,0];
+  var slopes = [0,0,0];
 
   var angles= new Array(3);
   angles[0]= new Point3(0,0,0);
-  angles[1]= new Point3(0,0,0);
-  angles[2]= new Point3(0,0,0);
+  angles[1]= new Point3(Math.PI, 0, 0);
+  angles[2]= new Point3(2*Math.PI, 0, 0);
 
   this.animation= new KeyframeAnimation("boas", 0.8, controlPoints, slopes, angles);
   this.animation.render=true;

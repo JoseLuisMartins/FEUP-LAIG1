@@ -56,20 +56,22 @@ Blockade.prototype.logPicking = function ()
       if (this.state instanceof MenuState && this.state.ready && this.changingState === false) {//passar para o jogo
 
         if(this.state.submenu == 5 && this.state.selected == 14){//game movie
-          this.scene.viewIndex=3;
-          this.scene.updateView();
-          this.playState.currentState = 11;
-          this.state=this.playState;
-          this.playState.game_movie();
+            this.state.selected = 0;
+            this.scene.viewIndex=3;
+            this.scene.updateView();
+            this.playState.currentState = 11;
+            this.state=this.playState;
+            this.playState.game_movie();
         }else if (this.state.submenu == 5 && this.state.selected == 16) {//main menu
-          this.menuState.ready = false;
-          this.menuState.submenu = 0;
-          this.menuState.nextSubmenu = 0;
+            this.menuState.ready = false;
+            this.menuState.submenu = 0;
+            this.menuState.nextSubmenu = 0;
         }else {
-          this.changingState = true;
-          this.gameMode=this.state.mode;
-          this.gameDifficulty=this.state.difficulty;
-          this.initPrologGraph();
+            this.state.selected = 0;
+            this.changingState = true;
+            this.gameMode=this.state.mode;
+            this.gameDifficulty=this.state.difficulty;
+            this.initPrologGraph();
         }
       }else if(this.state instanceof PlayingState && this.state.currentState == 10){
         this.scene.viewIndex=0;

@@ -82,7 +82,9 @@ XMLscene.prototype.onGraphLoaded = function () {
 
 XMLscene.prototype.updateView = function () {
     this.camera = this.graph.perspectives[this.viewIndex];
-    this.interface.setActiveCamera(this.graph.perspectives[this.viewIndex]);
+    
+    if (this.viewIndex !== 0)
+      this.interface.setActiveCamera(this.graph.perspectives[this.viewIndex]);
 
     this.viewIndex = (++this.viewIndex) % this.graph.perspectives.length;
 };
@@ -229,6 +231,7 @@ XMLscene.prototype.handleAudio = function() {
 
 
 XMLscene.prototype.setGraph = function(filename) {
+  this.viewIndex = 0;
   this.graph = new MySceneGraph(filename, this);
 
   if (filename == "Island.dsx" && this.currentScene != 'Island') {

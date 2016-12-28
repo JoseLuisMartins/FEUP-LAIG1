@@ -300,20 +300,17 @@ MenuState.prototype.picking = function () {
                     break;
 
                     case submenu.SETTINGS:
-                        if (objID == 8 && this.selected != 8) {
-                            this.selected = objID;
+                        if (objID == 8 && this.selected !== 0 && this.selected != 8) {
+                            this.click(this.first, objID);
                             this.scene.setGraph("Island.dsx");
-                            this.ready = true;
                         }
-                        else if (objID == 9 && this.selected != 9) {
-                            this.selected = objID;
+                        else if (objID == 9 && this.selected !== 0 && this.selected != 9) {
+                            this.click(this.second, objID);
                             this.scene.setGraph("Space.dsx");
-                            this.ready = true;
                         }
-                        else if (objID == 10 && this.selected != 10) {
-                            this.selected = objID;
+                        else if (objID == 10 && this.selected !== 0 && this.selected != 10) {
+                            this.click(this.third, objID);
                             this.scene.setGraph("Studio.dsx");
-                            this.ready = true;
                         }
                         else if (objID == 11) {
                             this.nextSubmenu = submenu.PLAY;
@@ -345,9 +342,7 @@ MenuState.prototype.picking = function () {
                         }
                     break;
                     case submenu.AFTER_GAME:
-                      this.selected = objID;
-                      this.ready=true;
-
+                        this.click(this.scene.pickResults[i][0], objID);
                     break;
                 }
             }
@@ -367,6 +362,12 @@ MenuState.prototype.update = function (currTime) {
 
     if (this.first.animation === null && this.second.animation === null && this.third.animation === null && this.back.animation === null) {
         this.animating = false;
+        
+        if ((this.submenu == submenu.SETTINGS && this.selected != 11 && (this.selected == 8 || this.selected == 9 || this.selected == 10)) || 
+            (this.submenu == submenu.AFTER_GAME && (this.selected == 14 || this.selected == 15 || this.selected == 16))) {
+                this.ready = true;
+        }
+
         this.submenu = this.nextSubmenu;
     }
     else {
@@ -379,7 +380,7 @@ MenuState.prototype.update = function (currTime) {
 
 
 MenuState.prototype.click = function (button, objID) {
-    button.click();
-    this.selected = objID;
     this.animating = true;
+    this.selected = objID;
+    button.click();
 };
