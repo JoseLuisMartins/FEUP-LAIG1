@@ -86,6 +86,9 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
   this.ang = 0;
   this.finalAng=0;
 
+
+
+
   this.handleState();
 }
 
@@ -303,6 +306,7 @@ PlayingState.prototype.update = function (currtime){
       if(this.animating)
         this.endAnimation();
 
+      this.cameraAnimation();
       this.resetAllPieces();
       this.prepareForNextRound(this);
       this.changePlayer();
@@ -368,8 +372,9 @@ PlayingState.prototype.handleState = function (){
           this.handleState();
       break;
     case states.CHANGE_PLAYER://animaçao da camera
-          this.cameraAnimation();
+
           if(this.plays[this.currentPlayId].wallCoords === null){
+            this.cameraAnimation();
             this.prepareForNextRound(this);
             this.changePlayer();
           }else
@@ -1023,7 +1028,7 @@ PlayingState.prototype.picking = function () {
             case states.CHANGE_PLAYER:
                 if(this.animating)//para acabar animação caso ainda esteja a animar
                   this.endAnimation();
-
+                this.cameraAnimation();
                 this.handleNextButon(false);
                 obj.select();
                 this.prepareForNextRound(this);
