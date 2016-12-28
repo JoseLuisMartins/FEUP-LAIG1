@@ -5,7 +5,7 @@
 function Button(scene) {
 	CGFobject.call(this,scene);
 
-	this.body = new Cube(scene);
+	this.body = new Cube(scene,true);
     this.animation = null;
 }
 
@@ -41,7 +41,7 @@ Button.prototype.update = function(currTime) {
 Button.prototype.click = function() {
     this.animation = new KeyframeAnimation("w/e", 0.2,
                         [new Point3(0, 0, 0), new Point3(0, -0.05, -0.5), new Point3(0, 0, 0)],
-                        [0, 0, 0], 
+                        [0, 0, 0],
                         [new Point3(0, 0, 0), new Point3(0, 0, 0), new Point3(0, 0, 0)]);
     this.animation.render = true;
 };

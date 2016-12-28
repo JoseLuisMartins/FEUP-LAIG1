@@ -6,7 +6,7 @@
 function BoardElement(scene,id, textureNormal,textureSelected,textureSelectable,x,y) {
 	CGFobject.call(this,scene);
 	this.id=id;
-	this.body = new Cube(scene);
+	this.body = new Cube(scene,false);
 	this.piece = null;
 	this.selected=false;
 	this.selectable=false;

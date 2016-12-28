@@ -27,7 +27,7 @@ function MenuState(scene) {
     this.selected = -1;
     this.animating = false;
 
-    this.title = new Cube(scene);
+    this.title = new Cube(scene,true);
     this.first = new Button(scene);
     this.second = new Button(scene);
     this.third = new Button(scene);
