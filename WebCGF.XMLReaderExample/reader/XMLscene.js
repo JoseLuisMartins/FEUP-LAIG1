@@ -237,7 +237,7 @@ XMLscene.prototype.setGraph = function(filename) {
   }
   else if (filename == "Space.dsx" && this.currentScene != 'Space') {
     this.audio.src = 'resources\\sound\\space.mp3';
-    tthis.currentScene = 'Space';
+    this.currentScene = 'Space';
   }
   else if (filename == "Studio.dsx" && this.currentScene != 'Studio') {
     this.audio.src = 'resources\\sound\\sotor.mp3';

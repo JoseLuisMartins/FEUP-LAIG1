@@ -85,9 +85,6 @@ function PlayingState(scene,client,board,wallBoardOrange,wallBoardYellow,orange1
   this.inc=0;
   this.ang = 0;
   this.finalAng=0;
-  this.cameraAnimation();
-
-
 
   this.handleState();
 }
