@@ -16,7 +16,11 @@ MyInterface.prototype.constructor = MyInterface;
 MyInterface.prototype.init = function(application) {
 
     CGFinterface.prototype.init.call(this, application);
+    this.gui = new dat.GUI();
+    this.gui.add(this.scene, 'handleAudio').name("Play/Pause");
     return true;
+
+
 };
 
 MyInterface.prototype.addLight = function(type, i, name) {};

@@ -186,7 +186,7 @@ XMLscene.prototype.display = function () {
 
     this.updateLights();
 
-  
+
     //jogo
     this.pushMatrix();
     this.blockade.display();
@@ -217,10 +217,18 @@ XMLscene.prototype.update = function(currTime) {
 
 };
 
+XMLscene.prototype.handleAudio = function() {
+  if(this.audio.paused)
+    this.audio.play();
+  else
+    this.audio.pause();
+};
+
+
 
 
 XMLscene.prototype.setGraph = function(filename) {
-  this.graph = new MySceneGraph(filename, this);  
+  this.graph = new MySceneGraph(filename, this);
 
   if (filename == "Island.dsx" && this.audioSrc != 'pina_colada') {
     this.audio.src = 'resources\\sound\\pina_colada.mp3';
