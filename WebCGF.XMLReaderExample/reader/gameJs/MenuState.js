@@ -27,11 +27,15 @@ function MenuState(scene) {
     this.selected = -1;
     this.animating = false;
 
-
+    this.title = new Cube(scene);
     this.first = new Button(scene);
     this.second = new Button(scene);
     this.third = new Button(scene);
     this.back = new Button(scene);
+
+    this.titleAppearance = new CGFappearance(scene);
+    this.titleAppearance.loadTexture("resources\\images\\blockade.png");
+    this.setAllColors(this.titleAppearance, 1, 1, 1, 1);
 
     this.playAppearance = new CGFappearance(scene);
     this.playAppearance.loadTexture("resources\\images\\menus\\new_game.png");
@@ -81,6 +85,13 @@ function MenuState(scene) {
 MenuState.prototype.display = function () {
     this.scene.pushMatrix();
     this.scene.rotate(Math.PI/2,0,1,0);
+
+    this.scene.pushMatrix();
+    this.titleAppearance.apply();
+    this.scene.translate(0, 198, 470);
+    this.scene.scale(15, 1.5, 0.2);
+    this.title.display();
+    this.scene.popMatrix();
 
     switch (this.submenu) {
         case submenu.MAIN:
