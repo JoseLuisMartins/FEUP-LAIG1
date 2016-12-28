@@ -6,11 +6,11 @@ function ScoreBoard(scene) {
 	CGFobject.call(this,scene);
 
 	this.body = new Cube(scene,true);
-  this.timer = new Displayer(scene, 30);
-  this.orangeScore = new Displayer(scene, 0);
-  this.yellowScore = new Displayer(scene, 0);
+	this.timer = new Displayer(scene, 30);
+	this.orangeScore = new Displayer(scene, 0);
+	this.yellowScore = new Displayer(scene, 0);
 
-  this.bodyAppearance = new CGFappearance(scene);
+  	this.bodyAppearance = new CGFappearance(scene);
 	this.bodyAppearance.loadTexture("resources\\images\\scoreBoard.png");
 
 	this.holderAppearance = new CGFappearance(scene);

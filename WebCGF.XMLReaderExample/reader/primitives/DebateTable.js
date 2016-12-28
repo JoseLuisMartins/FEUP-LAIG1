@@ -14,6 +14,11 @@ function DebateTable(scene) {
     this.whiteAppearance.setAmbient(1, 1, 1, 1);
     this.whiteAppearance.setDiffuse(0, 1, 1, 0.5);
 
+    this.beigeAppearance = new CGFappearance(scene);
+	this.beigeAppearance.loadTexture("resources\\images\\beige_marble.jpg");
+    this.beigeAppearance.setAmbient(1, 1, 1, 1);
+    this.beigeAppearance.setDiffuse(0, 1, 1, 0.5);
+
     this.blackAppearance = new CGFappearance(scene);
 	this.blackAppearance.loadTexture("resources\\images\\black.jpg");
     this.blackAppearance.setAmbient(1, 1, 1, 1);
@@ -42,15 +47,16 @@ DebateTable.prototype.display = function() {
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-        this.scene.scale(2, 2, 2);
-        this.scene.translate(0, 0, 0.5);
-        this.cube.display();
-    this.scene.popMatrix();
-
-    this.scene.pushMatrix();
         this.scene.translate(3, 0, 2);
         this.scene.rotate(Math.PI/4, 0, 1, 0);
         this.scene.scale(1, 2, 4);
+        this.cube.display();
+    this.scene.popMatrix();
+
+    this.beigeAppearance.apply();
+    this.scene.pushMatrix();
+        this.scene.scale(2, 2, 2);
+        this.scene.translate(0, 0, 0.5);
         this.cube.display();
     this.scene.popMatrix();
 
