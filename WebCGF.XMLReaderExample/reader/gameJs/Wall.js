@@ -8,6 +8,9 @@ function Wall(scene,texture,type) {
 
   this.material = new CGFappearance(scene);
   this.material.setTexture(texture);
+  this.material.setAmbient(1, 1, 1, 1.0);
+  this.material.setDiffuse(1, 1, 1, 1.0);
+  this.material.setSpecular(1, 1, 1, 1.0);
 
   this.type=type;
   if(this.type == "h")
