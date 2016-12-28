@@ -2,15 +2,17 @@
 * WallBoard
 * @constructor
 */
-function WallBoard(scene,texture) {
+function WallBoard(scene) {
 	CGFobject.call(this,scene);
   this.scene=scene;
 
-	this.box = new Box(scene, texture, new CGFtexture(scene, "resources\\images\\wood.jpg"));
+	this.box = new Box(scene);
 
   var greenTex=new CGFtexture(scene, "resources\\images\\green.png");
   var blueTex=new CGFtexture(scene, "resources\\images\\blue.png");
+
 	var buttonTex=new CGFtexture(scene, "resources\\images\\skipButton.png");
+	var buttonNormal=new CGFtexture(scene, "resources\\images\\skipButtonDefault.png");
 
   var elementNormalTex=new CGFtexture(scene, "resources\\images\\rocket_body.jpg");
   var elementSelectedTex=new CGFtexture(scene, "resources\\images\\rocket_top.jpg");
@@ -18,8 +20,10 @@ function WallBoard(scene,texture) {
 
 
 
+
+
 	//button
-	this.button = new  BoardElement(scene,10000,elementNormalTex,elementSelectedTex,buttonTex,0,0);
+	this.button = new  BoardElement(scene,10000,buttonNormal,elementSelectedTex,buttonTex,0,0);
   //green Walls - Vertically
   this.greenWall =  new  BoardElement(scene,10001,elementNormalTex,elementSelectedTex,elementSelectableTex,1,0);
 	this.greenWall.setWall(true);
@@ -36,8 +40,12 @@ WallBoard.prototype.constructor = WallBoard;
 
 
 WallBoard.prototype.display = function() {
-
+//box
+	this.scene.pushMatrix();
 	this.box.display();
+	this.scene.popMatrix();
+
+
 //walls
   this.scene.pushMatrix();
 
@@ -58,7 +66,8 @@ WallBoard.prototype.display = function() {
 //button
 	this.scene.pushMatrix();
 	this.scene.translate(0,0,3.5);
-	this.scene.scale(2,0.2,1.5);
+	this.scene.scale(2,0.05,1.5);
+	this.scene.rotate(-Math.PI/2,0,1,0);
 	this.button.display();
 	this.scene.popMatrix();
 

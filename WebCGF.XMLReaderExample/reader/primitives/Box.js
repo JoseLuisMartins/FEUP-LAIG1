@@ -2,15 +2,15 @@
 * Box
 * @constructor
 */
-function Box(scene, texture1, texture2) {
+function Box(scene) {
   CGFobject.call(this,scene);
   this.scene=scene;
 
   this.material = new CGFappearance(scene);
-  this.material.setTexture(texture1);
+  this.material.setTexture(new CGFtexture(scene, "resources\\images\\chair.jpg"));
 
 	this.material2 = new CGFappearance(scene);
-	this.material2.setTexture(texture2);
+	this.material2.setTexture(new CGFtexture(scene, "resources\\images\\wood.jpg"));
 
   this.cube = new Cube(scene);
 }

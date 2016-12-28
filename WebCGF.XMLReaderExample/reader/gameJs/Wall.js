@@ -28,7 +28,7 @@ Wall.prototype.display = function() {
 
   this.scene.pushMatrix();
   this.material.apply();
-	this.scene.translate(0, 0, 0.7);
+	this.scene.translate(0, 0, 1);
 	this.scene.rotate(-Math.PI/2,1,0,0);
   this.scene.scale(this.scaleParam.x,this.scaleParam.y,this.scaleParam.z);
   this.body.display();

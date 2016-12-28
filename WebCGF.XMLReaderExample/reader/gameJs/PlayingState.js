@@ -182,7 +182,7 @@ PlayingState.prototype.display = function () {
 
   //scoreBoard
   this.scene.pushMatrix();
-  this.scene.translate(-2,6,-8);
+  this.scene.translate(-2,5.8,-8);
   this.scene.scale(3,3,3);
   this.scene.rotate(Math.PI/2,0,1,0);
   this.scoreBoard.display();
@@ -191,12 +191,12 @@ PlayingState.prototype.display = function () {
   this.board.display();
 
   this.scene.pushMatrix();
-  this.scene.translate(15,0,-5);
+  this.scene.translate(15,-0.3,-5);
   this.wallBoardOrange.display();
   this.scene.popMatrix();
 
   this.scene.pushMatrix();
-  this.scene.translate(15,0,-11);
+  this.scene.translate(15,-0.3,-11);
   this.scene.rotate(Math.PI,0,1,0);
   this.wallBoardYellow.display();
   this.scene.popMatrix();
