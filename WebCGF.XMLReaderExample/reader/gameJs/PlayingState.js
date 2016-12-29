@@ -601,85 +601,89 @@ PlayingState.prototype.playBot = function (){
 
 
     function handleBotPlayRequest(data){
+      var dataStr=data.target.responseText;
+      console.log(dataStr);
+      if(dataStr[3] == "_")//error on botplay
+        state.botPlayNextRound();
+      else{
+        var botPlay = JSON.parse(dataStr);
 
-      var botPlay = JSON.parse(data.target.responseText);
+
+        //pawn
+        var pawnId = botPlay[0];
+
+        var pawnIdentifier = "[" + pawnType + "," + pawnId + "]" ;
+
+        var currentPawn;
+        if(pawnType == "orange"){
+          if(pawnId == 1)
+            currentPawn=state.orange1;
+          else
+            currentPawn=state.orange2;
+        }else {
+          if(pawnId == 1)
+            currentPawn=state.yellow1;
+          else
+            currentPawn=state.yellow2;
+        }
+
+        //postions
+        var pawnStartX = currentPawn.x;
+        var pawnStartY = currentPawn.y;
 
 
-      //pawn
-      var pawnId = botPlay[0];
+        var pawnMidX = pawnStartX + botPlay[1]*2;
+        var pawnMidY = pawnStartY + botPlay[2]*2;
 
-      var pawnIdentifier = "[" + pawnType + "," + pawnId + "]" ;
 
-      var currentPawn;
-      if(pawnType == "orange"){
-        if(pawnId == 1)
-          currentPawn=state.orange1;
-        else
-          currentPawn=state.orange2;
-      }else {
-        if(pawnId == 1)
-          currentPawn=state.yellow1;
-        else
-          currentPawn=state.yellow2;
+        var px2=botPlay[3];
+        var py2=botPlay[4];
+
+        var pawnEndx = pawnMidX + px2*2;
+        var pawnEndy = pawnMidY + py2*2;
+
+        if(px2 == -1 && py2 == -1){//bot ganhou
+          pawnEndx = -1;
+          pawnEndy = -1;
+        }
+
+
+
+        //walls
+        var wallOrientation;
+        if(botPlay[5] === 0)
+          wallOrientation="h";
+        else if( botPlay[5] == 1)
+          wallOrientation="v";
+        else //nao foi possivel posicionar parede
+            wallOrientation="x";
+
+
+        var wallX = botPlay[6];
+        var wallY = botPlay[7];
+
+        //build play
+        var play=new Play(state.currentPlayId);
+
+        play.setPlayerData1(new Point2(pawnStartX,pawnStartY),
+                            new Point2(pawnMidX,pawnMidY),
+                            currentPawn);
+
+        play.setPlayerData2(new Point2(pawnMidX,pawnMidY),
+                            new Point2(pawnEndx,pawnEndy));
+
+
+        state.plays[state.currentPlayId]=play;
+
+        if(wallOrientation != "x")//se foi possivel posicionar uma parede
+          play.setWallData(new Point2(wallX,wallY),wallOrientation);
+
+        //make the play
+
+        state.currentState=states.FIRST_MOVE;
+        state.animatePawn();
+
       }
-
-      //postions
-      var pawnStartX = currentPawn.x;
-      var pawnStartY = currentPawn.y;
-
-
-      var pawnMidX = pawnStartX + botPlay[1]*2;
-      var pawnMidY = pawnStartY + botPlay[2]*2;
-
-
-      var px2=botPlay[3];
-      var py2=botPlay[4];
-
-      var pawnEndx = pawnMidX + px2*2;
-      var pawnEndy = pawnMidY + py2*2;
-
-      if(px2 == -1 && py2 == -1){//bot ganhou
-        pawnEndx = -1;
-        pawnEndy = -1;
-      }
-
-
-
-      //walls
-      var wallOrientation;
-      if(botPlay[5] === 0)
-        wallOrientation="h";
-      else if( botPlay[5] == 1)
-        wallOrientation="v";
-      else //nao foi possivel posicionar parede
-          wallOrientation="x";
-
-
-      var wallX = botPlay[6];
-      var wallY = botPlay[7];
-
-      //build play
-      var play=new Play(state.currentPlayId);
-
-      play.setPlayerData1(new Point2(pawnStartX,pawnStartY),
-                          new Point2(pawnMidX,pawnMidY),
-                          currentPawn);
-
-      play.setPlayerData2(new Point2(pawnMidX,pawnMidY),
-                          new Point2(pawnEndx,pawnEndy));
-
-
-      state.plays[state.currentPlayId]=play;
-
-      if(wallOrientation != "x")//se foi possivel posicionar uma parede
-        play.setWallData(new Point2(wallX,wallY),wallOrientation);
-
-      //make the play
-
-      state.currentState=states.FIRST_MOVE;
-      state.animatePawn();
-
-
     }
 };
 
