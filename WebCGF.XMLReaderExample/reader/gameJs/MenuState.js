@@ -113,8 +113,8 @@ MenuState.prototype.display = function () {
         z = 470;
     }
     else if (this.scene.currentScene == 'Studio') {
-        y = 893;
-        z = 1080;
+        y = 890;
+        z = 1070;
     }
 
     switch (this.submenu) {
@@ -203,7 +203,7 @@ MenuState.prototype.display = function () {
 
             this.about.apply();
             this.scene.pushMatrix();
-                this.scene.translate(0, y-5, z+15);
+                this.scene.translate(0, y-5, z+12);
                 this.scene.scale(2, 3, 1);
                 this.second.display();
             this.scene.popMatrix();
@@ -211,7 +211,7 @@ MenuState.prototype.display = function () {
             this.backAppearance.apply();
             this.scene.pushMatrix();
                 this.scene.registerForPick(12, this.back);
-                this.scene.translate(0, y-12, z+8);
+                this.scene.translate(0, y-10, z+8);
                 this.scene.scale(0.5, 0.5, 0.5);
                 this.back.display();
             this.scene.popMatrix();
@@ -353,7 +353,8 @@ MenuState.prototype.picking = function () {
                         }
                     break;
                     case submenu.AFTER_GAME:
-                        this.click(this.scene.pickResults[i][0], objID);
+                        if ( !(this.selected == 14 || this.selected == 15 || this.selected == 16) && !this.ready )
+                            this.click(this.scene.pickResults[i][0], objID);
                     break;
                 }
             }

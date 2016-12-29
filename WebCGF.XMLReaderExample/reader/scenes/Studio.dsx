@@ -25,7 +25,7 @@
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="menu" near="0.1" far="200000" angle="40">
-            <from x="1100" y="898" z="0" />
+            <from x="1100" y="897" z="0" />
             <to x="0" y="250" z="0" />
         </perspective>
 
