@@ -6,7 +6,7 @@ function ScoreBoard(scene) {
 	CGFobject.call(this,scene);
 
 	this.body = new Cube(scene,true);
-	this.timer = new Displayer(scene, 5);
+	this.timer = new Displayer(scene, 30);
 	this.orangeScore = new Displayer(scene, 0);
 	this.yellowScore = new Displayer(scene, 0);
 
@@ -72,7 +72,7 @@ ScoreBoard.prototype.update = function(currTime) {
 };
 
 ScoreBoard.prototype.resetTimer = function() {
-    this.timer.setNumber(5);
+    this.timer.setNumber(31);
 };
 
 ScoreBoard.prototype.setTimer = function(number) {
