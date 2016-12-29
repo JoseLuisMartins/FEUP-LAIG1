@@ -38,16 +38,16 @@ DebateTable.prototype.constructor = DebateTable;
 
 DebateTable.prototype.display = function() {
 
-    this.whiteAppearance.apply();    
+    this.whiteAppearance.apply();
     this.scene.pushMatrix();
-        this.scene.translate(-3, 0, 2);
+        this.scene.translate(-2.5, 0, 2);
         this.scene.rotate(-Math.PI/4, 0, 1, 0);
         this.scene.scale(1, 2, 4);
         this.cube.display();
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-        this.scene.translate(3, 0, 2);
+        this.scene.translate(2.5, 0, 2);
         this.scene.rotate(Math.PI/4, 0, 1, 0);
         this.scene.scale(1, 2, 4);
         this.cube.display();
@@ -55,8 +55,8 @@ DebateTable.prototype.display = function() {
 
     this.beigeAppearance.apply();
     this.scene.pushMatrix();
-        this.scene.scale(2, 2, 2);
-        this.scene.translate(0, 0, 0.5);
+        this.scene.scale(1, 2, 1);
+        this.scene.translate(0, 0, 1.2);
         this.cube.display();
     this.scene.popMatrix();
 
@@ -74,14 +74,14 @@ DebateTable.prototype.display = function() {
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-        this.scene.translate(-3, 1, 2);
+        this.scene.translate(-2.5, 1, 2);
         this.scene.rotate(-Math.PI/4, 0, 1, 0);
         this.scene.scale(0.8, 0.1, 3.8);
         this.cube.display();
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-        this.scene.translate(3, 1, 2);
+        this.scene.translate(2.5, 1, 2);
         this.scene.rotate(Math.PI/4, 0, 1, 0);
         this.scene.scale(0.8, 0.1, 3.8);
         this.cube.display();

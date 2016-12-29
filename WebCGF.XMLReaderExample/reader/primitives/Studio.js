@@ -52,7 +52,7 @@ Studio.prototype.display = function() {
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-        this.scene.translate(0, 8, 10);
+        this.scene.translate(0, 6, 10);
         this.scene.scale(3, 3, 3);
         this.chair.display();
     this.scene.popMatrix();
