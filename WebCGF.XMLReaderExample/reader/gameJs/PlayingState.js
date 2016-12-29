@@ -119,8 +119,7 @@ PlayingState.prototype.resetPawnPos = function (){
 
 PlayingState.prototype.game_movie = function (){
   console.log("-------------GAME MOVIE-------------");
-  console.log(this.currentPlayId);
-  console.log(this.numberPlays);
+
 
   if(this.currentPlayId <= this.numberPlays){
     var currentPlay = this.plays[this.currentPlayId];
@@ -180,7 +179,7 @@ PlayingState.prototype.game_movie = function (){
 
 PlayingState.prototype.endAnimationGameMovie = function (){
   this.animating=false;
-  console.log("endAnimationGameMovie");
+
   if(this.animationObject instanceof Pawn){//pawn animation
     this.setPawnPos(this.animationObject);
   }else{//wall animation
@@ -335,13 +334,15 @@ PlayingState.prototype.resetAllPieces = function (){
 
 PlayingState.prototype.handleState = function (){
 
-  if(this.gameEnded && this.currentState !== states.GAME_MOVIE)
+  if(this.gameEnded && this.numberPlays == 0)
     this.currentState=states.GAME_ENDED;
 
 
   switch (this.currentState) {
     case states.SELECT_PIECE:
           this.timeout=false;
+          console.log('SELECT_PIECE');
+          console.log("current: " + this.currentPlayId);
           this.plays[this.currentPlayId]= new Play(this.currentPlayId);
           this.handlePiecePicking(true);
       break;
