@@ -16,7 +16,8 @@ function MySceneGraph(filename, scene) {
     this.transformations = {};
     this.primitives = {};
     this.components = {};
-
+    this.animations = {};
+    this.animationsInfo = {}; // necessário devido de modo a permitir criar animações diferentes com as mesmas carateristicas para permitir que duas componentes possam fazer a mesma animação ao simultaneamente mas começada em tempos diferentes
     this.textureStack;
     this.materialStack;
 
@@ -42,7 +43,7 @@ function MySceneGraph(filename, scene) {
  * Callback to be executed after successful reading
  */
 MySceneGraph.prototype.onXMLReady = function() {
-    console.log("XML Loading finished.");
+
     var rootElement = this.reader.xmlDoc.documentElement;
 
     // Here should go the calls for different functions to parse the various blocks
@@ -68,7 +69,10 @@ MySceneGraph.prototype.onXMLReady = function() {
     if (this.loadMaterials(rootElement))
         return;
 
-    if (this.loadTranformations(rootElement))
+    if (this.loadTransformations(rootElement))
+        return;
+
+    if (this.loadAnimations(rootElement))
         return;
 
     if (this.loadPrimitives(rootElement))
@@ -80,14 +84,15 @@ MySceneGraph.prototype.onXMLReady = function() {
 
 
     // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
+    console.log("XML Loading finished.");
     this.scene.onGraphLoaded();
     this.loadedOk = true;
 };
 
 MySceneGraph.prototype.chekDSXOrder = function(rootElement) {
     var childs = rootElement.children;
-    if (childs.length != 9) {
-        console.error("Number of tagson dsx incorrect");
+    if (childs.length != 10) {
+        console.error("Number of tags on dsx incorrect");
         return 1;
     }
 
@@ -112,11 +117,14 @@ MySceneGraph.prototype.chekDSXOrder = function(rootElement) {
     if (childs[6].tagName != "transformations")
         console.warn("transformations is not the seventh element on the DSX Tag");
 
-    if (childs[7].tagName != "primitives")
-        console.warn("primitives is not the oith element on the DSX Tag");
+    if (childs[7].tagName != "animations")
+        console.warn("animations is not the eigth element on the DSX Tag");
 
-    if (childs[8].tagName != "components")
-        console.warn("components is not the ninth element on the DSX Tag");
+    if (childs[8].tagName != "primitives")
+        console.warn("primitives is not the ninth element on the DSX Tag");
+
+    if (childs[9].tagName != "components")
+        console.warn("components is not the tenth element on the DSX Tag");
 
     return 0;
 }
@@ -325,7 +333,7 @@ MySceneGraph.prototype.loadMaterials = function(rootElement) {
 }
 
 
-MySceneGraph.prototype.loadTranformations = function(rootElement) {
+MySceneGraph.prototype.loadTransformations = function(rootElement) {
     var transformationsElement, transformationElements, id;
 
     transformationsElement = rootElement.getElementsByTagName('transformations')[0];
@@ -397,6 +405,69 @@ MySceneGraph.prototype.getTranformationMatrix = function(transformationElement) 
 }
 
 
+
+
+MySceneGraph.prototype.loadAnimations = function(rootElement) {
+  var animationsElement, animationElements;
+
+  var animationsElement = rootElement.getElementsByTagName('animations')[0];
+  if (animationsElement == null) {
+    this.onXMLError("Error loading animations. No animations Tag");
+    return 1;
+  }
+
+
+  animationElements = animationsElement.getElementsByTagName('animation');
+  for (var animationElement of animationElements) {
+    var id, span, type;
+
+    id = this.reader.getString(animationElement, 'id');
+    span = this.reader.getFloat(animationElement, 'span');
+    type = this.reader.getString(animationElement, 'type');
+
+    if (this.animationsInfo[id] != null) {
+        console.error("Already exists a animation with id:" + id);
+        return 1;
+    }
+
+    if (type == "linear") {
+      var controlPointsElements = animationElement.getElementsByTagName('controlpoint');
+      var controlPoints = [];
+
+      for (var controlPointElement of controlPointsElements) {
+        var x, y, z;
+
+        x = this.reader.getFloat(controlPointElement, 'xx');
+        y = this.reader.getFloat(controlPointElement, 'yy');
+        z = this.reader.getFloat(controlPointElement, 'zz');
+
+        controlPoints.push(new Point3(x, y, z));
+      }
+      this.animationsInfo[id]=new LinearAnimationInfo(id, controlPoints, span)
+
+    }
+    else if (type == "circular") {
+      var cx, cy, cz, radius, startang, rotang;
+
+      cx = this.reader.getFloat(animationElement, 'centerx');
+      cy = this.reader.getFloat(animationElement, 'centery');
+      cz = this.reader.getFloat(animationElement, 'centerz');
+      radius = this.reader.getFloat(animationElement, 'radius');
+      startang = this.reader.getFloat(animationElement, 'startang');
+      rotang = this.reader.getFloat(animationElement, 'rotang');
+
+      this.animationsInfo[id]=new CircularAnimationInfo(id, new Point3(cx, cy, cz), radius, startang, rotang, span);
+
+    }
+    else {
+      this.onXMLError("Error loading animations. Animation type must be either 'linear' or 'circular'");
+      return 1;
+    }
+  }
+}
+
+
+
 MySceneGraph.prototype.loadPrimitives = function(rootElement) {
     var primitivesElement, primitiveElements, id, primitiveTag, primitiveName;
 
@@ -465,10 +536,11 @@ MySceneGraph.prototype.createPrimitive = function(primitiveName, primitiveTag) {
 
         case 'sphere':
             var radius = this.reader.getFloat(primitiveTag, 'radius');
+            var coverage = this.reader.getFloat(primitiveTag, 'coverage');
             var slices = this.reader.getInteger(primitiveTag, 'slices');
             var stacks = this.reader.getInteger(primitiveTag, 'stacks');
 
-            primitive = new Sphere(this.scene, radius, slices, stacks);
+            primitive = new Sphere(this.scene, radius, coverage, slices, stacks);
             break;
 
         case 'torus':
@@ -479,6 +551,91 @@ MySceneGraph.prototype.createPrimitive = function(primitiveName, primitiveTag) {
 
             primitive = new Torus(this.scene, inner, outer, slices, loops);
             break;
+        case 'plane':
+              var dimX = this.reader.getFloat(primitiveTag, 'dimX');
+              var dimY = this.reader.getFloat(primitiveTag, 'dimY');
+              var partsX = this.reader.getInteger(primitiveTag, 'partsX');
+              var partsY = this.reader.getInteger(primitiveTag, 'partsY');
+
+              primitive = new Plane(this.scene, dimX, dimY, partsX, partsY);
+        break;
+        case 'patch':
+              var orderU = this.reader.getFloat(primitiveTag, 'orderU');
+              var orderV = this.reader.getFloat(primitiveTag, 'orderV');
+              var partsU = this.reader.getInteger(primitiveTag, 'partsU');
+              var partsV = this.reader.getInteger(primitiveTag, 'partsV');
+
+              if(((orderU+1)*(orderV+1)) != primitiveTag.children.length){
+                this.onXMLError("Wrong number of control points.");
+                return null;
+              }else{
+                var controlPoints = [];
+                for (var i = 0; i < primitiveTag.children.length; i++) {
+                    controlPoints.push(this.getPoint3Element(primitiveTag.children[i]));
+                }
+
+                primitive = new Patch(this.scene, orderU, orderV, partsU, partsV,controlPoints);
+              }
+        break;
+
+        case 'vehicle':
+              primitive=new Vehicle(this.scene);
+        break;
+
+        case 'chessboard':
+              var du = this.reader.getFloat(primitiveTag, 'du');
+              var dv = this.reader.getFloat(primitiveTag, 'dv');
+              var textureref = this.reader.getString(primitiveTag, 'textureref');
+              var su = this.reader.getFloat(primitiveTag, 'su');
+              var sv = this.reader.getFloat(primitiveTag, 'sv');
+
+              if(primitiveTag.children.length != 3){
+                this.onXMLError("Wrong number of colors.");
+                return null;
+              }
+
+              var c1 = this.getRGBAElement(primitiveTag.children[0]);
+              var c2 = this.getRGBAElement(primitiveTag.children[1]);
+              var cs = this.getRGBAElement(primitiveTag.children[2]);
+
+              primitive = new Chessboard(this.scene,du,dv,textureref,su,sv,c1,c2,cs);
+        break;
+
+        case 'board':
+              primitive = new Board(this.scene);
+        break;
+
+        case 'cube':
+             primitive = new Cube(this.scene);
+        break;
+
+        case 'round_table':
+             primitive = new RoundTable(this.scene);
+        break;
+
+        case 'square_table':
+             primitive = new SquareTable(this.scene);
+        break;
+
+        case 'sun_umbrella':
+             primitive = new SunUmbrella(this.scene);
+        break;
+
+        case 'chair':
+            primitive = new Chair(this.scene);
+        break;
+        
+        case 'space_station':
+            primitive = new SpaceStation(this.scene);
+        break;
+
+        case 'studio':
+            primitive = new Studio(this.scene);
+        break;
+
+        case 'universe':
+            primitive = new Universe(this.scene);
+        break;
 
         default:
             this.onXMLError("Error loading primitives (invalid primitive tag).");
@@ -506,7 +663,7 @@ MySceneGraph.prototype.loadComponents = function(rootElement) {
     }
 
 
-    var id, tranformation, materials, texture, componentIDs, primitiveIDs;
+    var id, tranformation,animated, materials, texture, componentIDs, primitiveIDs;
 
     for (var i = 0; i < componentTmp.length; i++) {
         //load  component id
@@ -540,11 +697,44 @@ MySceneGraph.prototype.loadComponents = function(rootElement) {
                 }
             } else { //a transformação tem que ser criada
                 //guarda o id da transformação
-                tranformation = id + "texture";
+                tranformation = id + "transformation";
                 //guarda tranformação no array de tranformações
                 this.transformations[tranformation] = this.getTranformationMatrix(transformationTmp[0]);
             }
 
+            //load animations
+            var animationTmp = componentTmp[i].getElementsByTagName('animation');
+
+            if (animationTmp.length == 0) {
+                animated = null;
+            }else{
+
+                var animationrefs = animationTmp[0].getElementsByTagName('animationref');
+
+                if(animationrefs.length == 0){
+                    animated = null;
+                }else{
+                    var animations = new Array(animationrefs.length);
+                    for (var j = 0; j < animationrefs.length; j++) {
+                        var animationId = this.reader.getString(animationrefs[j], 'id');
+                        var animInf =this.animationsInfo[animationId];
+                        var currAnim;
+
+                        if(animInf instanceof CircularAnimationInfo)
+                            currAnim = new  CircularAnimation(animInf.id, animInf.center, animInf.radius, animInf.phiDeg, animInf.thetaDeg, animInf.span);
+                        else
+                            currAnim = new  LinearAnimation(animInf.id, animInf.controlPoints, animInf.span);
+
+                        this.animations[animationId + id] =currAnim;
+
+                        animations[j]=currAnim;
+
+                    }
+
+                    animated = new Animated(animations);
+
+                }
+            }
 
             //load  material id's for the component
             var materialsTmp = componentTmp[i].getElementsByTagName('materials');
@@ -605,7 +795,8 @@ MySceneGraph.prototype.loadComponents = function(rootElement) {
                 primitiveIDs[j] = this.reader.getString(primitiveTag[j], 'id');
             }
 
-            this.components[id] = new Component(id, tranformation, materials, texture, componentIDs, primitiveIDs);
+            this.components[id] = new Component(id, tranformation, materials, texture, componentIDs, primitiveIDs, animated);
+
         }
     }
 
@@ -669,7 +860,14 @@ MySceneGraph.prototype.visitGraph = function(root) {
 
     //Tranformations--------------------------
     this.scene.pushMatrix();
+
+
+    if (component.animated != null)
+        this.scene.multMatrix(component.animated.getAnimationMatrix());
+
+
     this.scene.multMatrix(this.transformations[component.transformationID]);
+
 
 
     //Materials--------------------------------
@@ -714,9 +912,9 @@ MySceneGraph.prototype.visitGraph = function(root) {
     }
 
 
-    this.scene.popMatrix();
     this.materialStack.pop();
     this.textureStack.pop();
+    this.scene.popMatrix();
 
     return 0;
 }

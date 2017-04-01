@@ -2,8 +2,7 @@
 function XMLscene(myInterface) {
   CGFscene.call(this);
 
-  this.interface=myInterface;
-
+  this.interface = myInterface;
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -27,14 +26,23 @@ XMLscene.prototype.init = function (application) {
 
   this.axis=new CGFaxis(this);
 
-  // TODO esfera para ir com o caralho
-  this.sphere = new Triangle(this,new Point3(0,0,0),new Point3(2,0,0),new Point3(1,2,0));
-  this.appearance = new CGFappearance(this);
-
-  //interface
   this.lightsStatus;
   this.viewIndex=0;
   this.materialIndex=0;
+
+  this.setUpdatePeriod(30);
+
+  this.setPickEnabled(true);
+
+  this.blockade= new Blockade(this);
+
+  this.audio = new Audio();
+  this.audio.src = 'resources\\sound\\pina_colada.mp3';
+  this.audio.controls=true;
+  this.audio.loop=true;
+  this.audio.autoplay=true;
+
+  this.currentScene = "Island";
 };
 
 XMLscene.prototype.initLights = function () {
@@ -74,14 +82,15 @@ XMLscene.prototype.onGraphLoaded = function () {
 
 XMLscene.prototype.updateView = function () {
     this.camera = this.graph.perspectives[this.viewIndex];
-    this.interface.setActiveCamera(this.graph.perspectives[this.viewIndex]);
+    
+    if (this.viewIndex !== 0)
+      this.interface.setActiveCamera(this.graph.perspectives[this.viewIndex]);
 
     this.viewIndex = (++this.viewIndex) % this.graph.perspectives.length;
 };
 
 XMLscene.prototype.initGraphLights = function () {
     var index = 0;
-
 
     this.lightsStatus= new Array( this.graph.omniLights.length + this.graph.spotLights.length);
 
@@ -94,7 +103,6 @@ XMLscene.prototype.initGraphLights = function () {
       this.lights[index].setSpecular(omni.specular.r, omni.specular.g, omni.specular.b, omni.specular.a);
 
       this.lightsStatus[index] = omni.enabled;
-      this.interface.addLight("omni",index,omni.id);
 
       if (omni.enabled)
         this.lights[index].enable();
@@ -118,7 +126,6 @@ XMLscene.prototype.initGraphLights = function () {
       this.lights[index].setSpotDirection(spot.direction.x, spot.direction.y, spot.direction.z);
 
       this.lightsStatus[index] = spot.enabled;
-      this.interface.addLight("spot",index,spot.id);
 
       if (spot.enabled)
         this.lights[index].enable();
@@ -128,9 +135,6 @@ XMLscene.prototype.initGraphLights = function () {
       this.lights[index].setVisible(true);
       this.lights[index].update();
     }
-
-
-
 };
 
 
@@ -156,7 +160,7 @@ XMLscene.prototype.updateMaterial = function () {
 
 XMLscene.prototype.display = function () {
   // ---- BEGIN Background, camera and axis setup
-
+  this.blockade.logPicking();
   // Clear image and depth buffer everytime we update the scene
   this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
   this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -178,10 +182,68 @@ XMLscene.prototype.display = function () {
   // it is important that things depending on the proper loading of the graph
   // only get executed after the graph has loaded correctly.
   // This is one possible way to do it
+
+
   if (this.graph.loadedOk)
   {
+
     this.updateLights();
-    if(this.graph.displayGraph())
+
+
+    //jogo
+    this.pushMatrix();
+    this.blockade.display();
+    this.popMatrix();
+
+    if (this.graph.displayGraph())
       return;
-  };
+  }
+
+
+
+};
+
+
+
+XMLscene.prototype.update = function(currTime) {
+  this.blockade.update(currTime);
+
+  if (this.graph.loadedOk){
+    for(var id in this.graph.animations)
+      this.graph.animations[id].update(currTime);
+
+    for(id in this.graph.primitives)
+      if(this.graph.primitives[id] instanceof Vehicle) {
+         this.graph.primitives[id].update(currTime);
+      }
+  }
+
+};
+
+XMLscene.prototype.handleAudio = function() {
+  if(this.audio.paused)
+    this.audio.play();
+  else
+    this.audio.pause();
+};
+
+
+
+
+XMLscene.prototype.setGraph = function(filename) {
+  this.viewIndex = 0;
+  this.graph = new MySceneGraph(filename, this);
+
+  if (filename == "Island.dsx" && this.currentScene != 'Island') {
+    this.audio.src = 'resources\\sound\\pina_colada.mp3';
+    this.currentScene = 'Island';
+  }
+  else if (filename == "Space.dsx" && this.currentScene != 'Space') {
+    this.audio.src = 'resources\\sound\\space.mp3';
+    this.currentScene = 'Space';
+  }
+  else if (filename == "Studio.dsx" && this.currentScene != 'Studio') {
+    this.audio.src = 'resources\\sound\\sotor.mp3';
+    this.currentScene = 'Studio';
+  }
 };

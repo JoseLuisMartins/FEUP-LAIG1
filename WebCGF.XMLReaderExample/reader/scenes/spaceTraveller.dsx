@@ -17,7 +17,7 @@
 
     <!-- deve definir-se um objeto para raiz do grafo , assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
-    <scene root="root" axis_length="0.4" />
+    <scene root="root" axis_length="4" />
 
 
 
@@ -29,22 +29,22 @@
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
         <perspective id="p1" near="0.1" far="1500" angle="22">
-            <from x="15" y="20" z="210" />
-            <to x="5" y="5" z="5" />
+            <from x="60" y="25" z="-20" />
+            <to x="0" y="0" z="0" />
         </perspective>
 
         <perspective id="p2" near="0.1" far="1500" angle="40">
-            <from x="25" y="25" z="25" />
+            <from x="80" y="25" z="75" />
             <to x="0" y="0" z="0" />
         </perspective>
 
         <perspective id="p3" near="0.1" far="1500" angle="40">
-            <from x="100" y="25" z="200" />
-            <to x="0" y="0" z="0" />
+            <from x="-499.5" y="0" z="3" />
+            <to x="-499.5" y="0" z="0" />
         </perspective>
 
         <perspective id="p4" near="0.1" far="1500" angle="25">
-            <from x="300" y="0" z="800" />
+            <from x="300" y="0" z="1000" />
             <to x="3" y="0" z="0" />
         </perspective>
     </views>
@@ -130,6 +130,8 @@
         <!-- objetos respetivos podem a violar esta regra.         -->
         <!-- Nao necessario aplicar fatores de escala em  -->
         <!-- quadricas (esfera, ciclindro...) -->
+        <texture id="boardTex" file="resources\\images\\boardTex.png" length_s="1.0" length_t="1.0" />
+        <texture id="boardTex2" file="resources\\images\\boardTex2.jpg" length_s="1.0" length_t="1.0" />
         <texture id="earthTex" file="resources\\images\\earth.jpg" length_s="1.0" length_t="1.0" />
         <texture id="jupiterTex" file="resources\\images\\jupiter.jpg" length_s="1.0" length_t="1.0" />
         <texture id="neptuneTex" file="resources\\images\\neptune.jpg" length_s="1.0" length_t="1.0" />
@@ -212,6 +214,96 @@
     </transformations>
 
 
+    <animations>
+
+
+      <animation id="robot_circ" span="10" type="circular"
+          centerx = "-70" centery="8" centerz="0"
+          radius = "82" startang="0" rotang="270" />
+
+      <animation id="robot_linear1" span="7.5" type="linear">
+          <controlpoint xx="-70" yy="8" zz="82" />
+          <controlpoint xx="-70" yy="8" zz="55" />
+        </animation>
+
+      <animation id="robot_linear2" span="10" type="linear">
+          <controlpoint xx="-70" yy="8" zz="55" />
+          <controlpoint xx="-350" yy="5" zz="350" />
+        </animation>
+
+      <animation id="mercury" span="60" type="circular"
+          centerx="-70" centery="0" centerz="0"
+          radius="50" startang="0" rotang="360" />
+
+      <animation id="earth" span="100" type="circular"
+          centerx="-70" centery="0" centerz="0"
+          radius="70" startang="0" rotang="360" />
+
+
+      <animation id="venus" span="120" type="circular"
+          centerx="-70" centery="0" centerz="0"
+          radius="60" startang="0" rotang="360" />
+
+
+      <animation id="mars" span="35" type="circular"
+          centerx="-70" centery="0" centerz="0"
+          radius="75" startang="0" rotang="360" />
+
+
+      <animation id="jupiter" span="70" type="circular"
+          centerx="-70" centery="0" centerz="0"
+          radius="85" startang="0" rotang="360" />
+
+
+      <animation id="saturn" span="150" type="circular"
+          centerx="-70" centery="0" centerz="0"
+          radius="105" startang="0" rotang="360" />
+
+
+      <animation id="uranus" span="92" type="circular"
+          centerx="-70" centery="0" centerz="0"
+          radius="120" startang="0" rotang="360" />
+
+
+
+      <animation id="neptune" span="120" type="circular"
+          centerx="-70" centery="0" centerz="0"
+          radius="130" startang="0" rotang="360" />
+
+
+      <animation id="rocket_launch" span="2" type="linear">
+        <controlpoint xx="0" yy="0" zz="0" />
+        <controlpoint xx="0" yy="30" zz="0" />
+    </animation>
+
+      <animation id="rocket_circ" span="10" type="circular"
+          centerx = "-70" centery="30" centerz="0"
+          radius = "74" startang="0" rotang="-360" />
+
+      <animation id="rocket_linear1" span="4" type="linear">
+            <controlpoint xx="12" yy="30" zz="0" />
+            <controlpoint xx="-10" yy="8" zz="18.86" />
+        </animation>
+
+      <animation id="rocket_linear2" span="2" type="linear">
+            <controlpoint xx="-10" yy="8" zz="18.86" />
+            <controlpoint xx="-60" yy="8" zz="55" />
+        </animation>
+
+        <animation id="rocket_circ2" span="2" type="circular"
+            centerx = "-60" centery="8" centerz="55"
+            radius = "0" startang="200" rotang="90" />
+
+        <animation id="rocket_linear3" span="2" type="linear">
+              <controlpoint xx="-60" yy="8" zz="55" />
+              <controlpoint xx="40" yy="8" zz="55" />
+              <controlpoint xx="45" yy="12" zz="55" />
+          </animation>
+
+
+
+    </animations>
+
     <primitives>
 
         <!-- Deve existir um ou mais blocos "primitive" -->
@@ -238,7 +330,7 @@
         </primitive>
 
 		<primitive id="sphere">
-            <sphere radius="0.5" slices="40" stacks="40" />
+            <sphere radius="0.5" coverage="360" slices="40" stacks="40" />
         </primitive>
 
 		<primitive id="torus">
@@ -249,6 +341,52 @@
               <torus inner="5.33" outer="7.87" slices="40" loops="40" />
           </primitive>
 
+
+      <primitive id="plane">
+         <plane dimX="5" dimY="5" partsX="20" partsY="20"/>
+      </primitive>
+
+      <primitive id="patch">
+           <patch orderU="2" orderV="3" partsU="20" partsV="20" >
+               <controlpoint x="-2.0" y="-2.0" z="1.0" />
+               <controlpoint x="-2.0" y="-1.0" z="-2.0" />
+               <controlpoint x="-2.0" y="1.0" z="5.0" />
+               <controlpoint x="-2.0" y="2.0" z="-1.0" />
+               <controlpoint x="0" y="-2.0" z="0" />
+               <controlpoint x="0" y="-1.0" z="-1.0" />
+               <controlpoint x="0" y="1.0" z="1.5" />
+               <controlpoint x="0" y="2.0" z="0" />
+               <controlpoint x="2.0" y="-2.0" z="-1.0" />
+               <controlpoint x="2.0" y="-1.0" z="2.0" />
+               <controlpoint x="2.0" y="1.0" z="-5.0" />
+               <controlpoint x="2.0" y="2.0" z="1.0" />
+          </patch>
+      </primitive>
+
+      <primitive id="chessboard1">
+        <chessboard du="3" dv="7" textureref="boardTex" su="2" sv="6">
+                   <c1 r="0" g="0.4" b="0.2" a="1.0" />
+                   <c2 r="0.7" g="0.6" b="0.0" a="1.0" />
+                   <cs r="1.0" g="0.0" b="1.0" a="1.0" />
+        </chessboard>
+      </primitive>
+
+      <primitive id="chessboard2">
+        <chessboard du="7" dv="3" textureref="boardTex2" su="6" sv="2">
+                   <c1 r="1.0" g="0.4" b="0.2" a="1.0" />
+                   <c2 r="0.1" g="0.6" b="0.5" a="1.0" />
+                   <cs r="0.5" g="1.0" b="1.0" a="1.0" />
+        </chessboard>
+      </primitive>
+
+
+      <primitive id="vehicle">
+        <vehicle />
+      </primitive>
+
+      <primitive id="board">
+        <board />
+      </primitive>
 
 
     </primitives>
@@ -289,7 +427,7 @@
             <!-- id="none" remove a textura recebida do pai -->
             <!-- a textura declarada sobrepoe a textura recebida do -->
             <!-- objecto "pai" -->
-            <texture id="eye" />
+            <texture id="abstract_orange" />
 
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
@@ -298,6 +436,11 @@
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
 
+<!--
+                <componentref id="plane" />
+                <componentref id="patch" />
+                <componentref id="chessboard1" />
+                <componentref id="chessboard2" />
                 <componentref id="universe" />
                 <componentref id="sun" />
                 <componentref id="mercury" />
@@ -309,7 +452,91 @@
                 <componentref id="uranus" />
                 <componentref id="neptune" />
                 <componentref id="robot" />
+                <componentref id="rocket" /> -->
 
+            </children>
+
+        </component>
+
+
+        <component id="plane">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+              <translate x="-510" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="inherit"  />
+            </materials>
+
+
+            <texture id="marsTex" />
+
+            <children>
+                <primitiveref id="plane" />
+            </children>
+
+        </component>
+
+        <component id="chessboard1">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+              <translate x="-500" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="inherit"  />
+            </materials>
+
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="chessboard1" />
+            </children>
+
+        </component>
+
+
+        <component id="chessboard2">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+              <translate x="-499" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="inherit"  />
+            </materials>
+
+
+            <texture id="none" />
+
+            <children>
+                <primitiveref id="chessboard2" />
+            </children>
+
+        </component>
+
+
+        <component id="patch">
+
+            <!-- bloco "transformation" obrigatorio -->
+            <transformation>
+              <translate x="-505" y="0" z="0" />
+            </transformation>
+
+            <materials>
+                <material id="inherit"  />
+            </materials>
+
+
+            <texture id="boardTex" />
+
+            <children>
+                <primitiveref id="patch" />
             </children>
 
         </component>
@@ -319,7 +546,7 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
 
-              <scale x="7" y="7" z="7" />
+              <scale x="10" y="10" z="10" />
             </transformation>
 
             <materials>
@@ -339,7 +566,7 @@
                 <componentref id="side1" />
                 <componentref id="side2" />
                 <componentref id="side3" />
-                <componentref id="side4" /> -->
+                <componentref id="side4" />
             </children>
 
         </component>
@@ -506,15 +733,18 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
                 <translate x="-70" y="1" z="0" />
-                <rotate axis="z" angle="90" />
                 <scale x="50" y="50" z="50" />
             </transformation>
+
+            <!-- bloco opcional -->
+
 
             <materials>
                 <material id="inherit" />
                 <material id="inherit" />
                 <material id="m1" />
             </materials>
+
 
 
             <texture id="sunTex" />
@@ -532,9 +762,7 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="-20" y="1" z="0" />
-                <rotate axis="z" angle="90" />
-                <scale x="1.77" y="1.77" z="1.77" />
+              <scale x="1.77" y="1.77" z="1.77" />
             </transformation>
 
             <materials>
@@ -543,6 +771,9 @@
                 <material id="m1" />
             </materials>
 
+            <animation>
+                <animationref id="mercury" />
+            </animation>
 
             <texture id="mercuryTex" />
 
@@ -558,7 +789,7 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="-10" y="1" z="0" />
+
                 <rotate axis="z" angle="90" />
                 <scale x="2.77" y="2.77" z="2.77" />
             </transformation>
@@ -569,6 +800,9 @@
                 <material id="m1" />
             </materials>
 
+            <animation>
+                <animationref id="venus" />
+            </animation>
 
             <texture id="venusTex" />
 
@@ -587,9 +821,12 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
                 <translate x="0" y="1" z="0" />
-                <rotate axis="z" angle="180" />
                 <scale x="3" y="3" z="3" />
             </transformation>
+
+            <animation>
+                <animationref id="earth" />
+            </animation>
 
             <materials>
                 <material id="inherit" />
@@ -613,10 +850,15 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="5" y="1" z="0" />
+
                 <rotate axis="z" angle="90" />
                 <scale x="1.51" y="1.51" z="1.51" />
             </transformation>
+
+            <animation>
+                <animationref id="mars" />
+            </animation>
+
 
             <materials>
                 <material id="inherit" />
@@ -640,10 +882,14 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="15" y="1" z="0" />
+
                 <rotate axis="z" angle="90" />
                 <scale x="11.21" y="11.21" z="11.21" />
             </transformation>
+
+            <animation>
+                <animationref id="jupiter" />
+            </animation>
 
             <materials>
                 <material id="inherit" />
@@ -667,9 +913,13 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="35" y="1" z="0" />
+
                 <rotate axis="z" angle="50" />
             </transformation>
+
+            <animation>
+                <animationref id="saturn" />
+            </animation>
 
             <materials>
                 <material id="inherit" />
@@ -743,10 +993,14 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="50" y="1" z="0" />
+
                 <rotate axis="z" angle="90" />
                 <scale x="4.01" y="4.01" z="4.01" />
             </transformation>
+
+            <animation>
+                <animationref id="uranus" />
+            </animation>
 
             <materials>
                 <material id="inherit" />
@@ -770,10 +1024,14 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
-                <translate x="60" y="1" z="0" />
+
                 <rotate axis="z" angle="90" />
                 <scale x="3.88" y="3.88" z="3.88" />
             </transformation>
+
+            <animation>
+                <animationref id="neptune" />
+            </animation>
 
             <materials>
                 <material id="inherit" />
@@ -798,9 +1056,14 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
                 <scale x="2" y="2" z="2" />
-                <translate x="15" y="2" z="60" />
-                <rotate axis="y" angle="-20" />
+                <rotate axis="x" angle="80" />
             </transformation>
+
+            <animation>
+                <animationref id="robot_circ" />
+                <animationref id="robot_linear1" />
+                <animationref id="robot_linear2" />
+            </animation>
 
             <materials>
                 <material id="m1" />
@@ -1239,6 +1502,46 @@
         </children>
 
     </component>
+
+
+
+
+    <component id="rocket">
+
+        <!-- bloco "transformation" obrigatorio -->
+        <transformation>
+            <scale x="3" y="3" z="3" />
+        </transformation>
+
+
+        <materials>
+            <material id="inherit"  />
+            <material id="m2"/>
+            <material id="m1"/>
+            <material id="inherit"  />
+        </materials>
+
+
+        <animation>
+            <animationref id="rocket_launch" />
+            <animationref id="rocket_circ" />
+            <animationref id="rocket_linear1" />
+            <animationref id="rocket_linear2" />
+            <animationref id="rocket_circ2" />
+            <animationref id="rocket_linear3" />
+        </animation>
+
+
+        <texture id="inherit" />
+
+
+        <children>
+            <primitiveref id="vehicle" />
+        </children>
+
+    </component>
+
+
 
 </components>
 

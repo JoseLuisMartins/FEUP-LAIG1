@@ -11,8 +11,15 @@ function getUrlVars() {
     return vars;
 }
 
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js','utils.js', 'Sphere.js', 'Rectangle.js', 'Triangle.js',
-    'Cylinder.js', 'CylinderSurface.js', 'CylinderBase.js', 'Torus.js', 'DataStructures.js','MyInterface.js',
+serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js','utils.js', 'primitives/Sphere.js', 'primitives/Rectangle.js', 'primitives/Triangle.js',
+    'primitives/Cylinder.js', 'primitives/CylinderSurface.js', 'primitives/CylinderBase.js', 'primitives/Torus.js', 'primitives/RoundTable.js',
+    'DataStructures.js','MyInterface.js', 'animations/Animation.js','animations/LinearAnimation.js', 'animations/CircularAnimation.js',
+    'animations/Animated.js','primitives/Patch.js','primitives/Plane.js', 'primitives/Vehicle.js','primitives/Chessboard.js','primitives/Propellant.js',
+    'gameJs/Pawn.js','gameJs/BoardElement.js', 'primitives/Cube.js','gameJs/Board.js','network/client.js','gameJs/Blockade.js','gameJs/PlayingState.js',
+    'gameJs/MenuState.js', 'primitives/SunUmbrella.js', 'primitives/Chair.js', 'gameJs/WallBoard.js','gameJs/Wall.js', 'primitives/SquareTable.js',
+    'primitives/Studio.js', 'primitives/DebateTable.js', 'primitives/Lamp.js', 'primitives/CylinderTwoSidedSurface.js', 'primitives/CylinderTwoSided.js',
+    'primitives/SpaceStation.js', 'animations/KeyframeAnimation.js', 'gameJs/Displayer.js', 'gameJs/ScoreBoard.js','primitives/Box.js', 'gameJs/Button.js',
+    'primitives/Universe.js',
 
 main=function()
 {
@@ -31,11 +38,12 @@ main=function()
 	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml
 	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor)
 
-	var filename=getUrlVars()['file'] || "spaceTraveller.dsx";
+	var filename=getUrlVars()['file'] || "Island.dsx";
 
 	// create and load graph, and associate it to scene.
 	// Check console for loading errors
 	var myGraph = new MySceneGraph(filename, myScene);
+
 
 	// start
     app.run();

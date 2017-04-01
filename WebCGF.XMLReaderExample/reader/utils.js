@@ -16,6 +16,12 @@ class Point3 {
 	toArray() {
 		return [this.x, this.y, this.z];
 	}
+
+	set(x, y, z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
 }
 
 
@@ -93,12 +99,76 @@ class Texture {
 
 
 class  Component {
-  constructor(id, transformationID, materialIDs, textureID, componentIds,primitiveIds) {
+  constructor(id, transformationID, materialIDs, textureID, componentIds, primitiveIds, animated) {
 		this.id = id;
 		this.transformationID = transformationID;
 		this.materialIDs = materialIDs;
 		this.textureID = textureID;
-		this.componentIds = componentIds ;
-		this.primitiveIds = primitiveIds ;
+		this.componentIds = componentIds;
+		this.primitiveIds = primitiveIds;
+		this.animated = animated;
   }
+}
+
+
+class  CircularAnimationInfo {
+  constructor(id, center, radius, phiDeg, thetaDeg, span) {
+		this.id = id;
+		this.center=center;
+		this.radius=radius;
+		this.phiDeg=phiDeg;
+		this.thetaDeg=thetaDeg;
+		this.span=span;
+  }
+}
+
+class  LinearAnimationInfo {
+  constructor(id, controlPoints, span) {
+		this.id = id;
+		this.controlPoints= controlPoints;
+		this.span=span;
+  }
+}
+
+class Play{
+	constructor(id) {
+		this.id=id;
+		this.start1=null;
+		this.end1=null;
+		this.pawn=null;
+		this.start2=null;
+		this.end2=null;
+		this.wallCoords=null;
+		this.wallOrientation=null;
+  }
+
+	setPlayerData1(start1,end1,pawn){
+		this.start1=start1;
+		this.end1=end1;
+		this.pawn=pawn;
+	}
+
+	setPlayerData2(start2,end2){
+		this.start2=start2;
+		this.end2=end2;
+	}
+
+	setWallData(wallCoords,wallOrientation){
+		this.wallCoords=wallCoords;
+		this.wallOrientation=wallOrientation;
+	}
+
+	resetMove1(){
+		this.start1=null;
+		this.end1=null;
+	}
+
+	resetMove2(){
+		this.start2=null;
+		this.end2=null;
+	}
+	resetWall(){
+		this.wallCoords=null;
+		this.wallOrientation=null;
+	}
 }
